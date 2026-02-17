@@ -373,6 +373,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
   max-height: 50vh; overflow-y: auto;
 }
 .builder-drawer.visible { transform: translateY(0); }
+.content.builder-active { padding-bottom: 360px; }
 .builder-drawer.full-width { left: 0; }
 .builder-header {
   display: flex; justify-content: space-between;
@@ -401,6 +402,66 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 .empty .icon { font-size: 40px; margin-bottom: 10px; opacity: 0.5; }
 .empty .title { font-size: 15px; color: var(--text-secondary); }
 .empty .sub { font-size: 12px; margin-top: 4px; }
+
+/* How to Use Guide */
+.guide-toggle {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer; margin-bottom: 20px;
+  transition: all 0.2s;
+}
+.guide-toggle:hover { border-color: var(--accent); background: var(--accent-glow); }
+.guide-toggle .guide-icon { font-size: 18px; }
+.guide-toggle .guide-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.guide-toggle .guide-sub { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+.guide-toggle .guide-chevron { color: var(--text-dim); transition: transform 0.2s; }
+.guide-toggle.open .guide-chevron { transform: rotate(90deg); }
+.guide-panel {
+  display: none; background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 24px; margin-bottom: 24px; margin-top: -12px;
+  animation: slideDown 0.2s ease;
+}
+.guide-panel.visible { display: block; }
+.guide-panel h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 12px; }
+.guide-panel h4 { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 16px 0 8px; }
+.guide-panel p, .guide-panel li { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+.guide-panel ul { padding-left: 18px; }
+.guide-panel li { margin-bottom: 4px; }
+.guide-panel code { font-family: var(--font-mono); font-size: 12px; background: var(--bg-code); padding: 2px 6px; border-radius: 4px; color: var(--green); }
+.guide-panel .guide-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 12px; }
+.guide-panel .guide-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+.guide-panel .guide-card .num { font-size: 20px; font-weight: 700; color: var(--accent); opacity: 0.5; }
+.guide-panel .guide-card .gc-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 4px 0; }
+.guide-panel .guide-card .gc-text { font-size: 12px; color: var(--text-dim); }
+
+/* Doc links */
+.doc-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--accent); text-decoration: none;
+  padding: 3px 8px; border-radius: 4px; background: var(--accent-glow);
+  transition: all 0.2s; margin-left: 6px;
+}
+.doc-link:hover { background: rgba(59,130,246,0.25); color: #60a5fa; }
+.doc-link svg { flex-shrink: 0; }
+
+/* Builder mode indicator */
+.builder-indicator {
+  display: none; padding: 8px 16px; background: rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2); border-radius: var(--radius-sm);
+  margin-bottom: 16px; font-size: 12px; color: var(--accent);
+  align-items: center; gap: 8px;
+}
+.builder-indicator.visible { display: flex; }
+.builder-indicator .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+/* Footer */
+.app-footer {
+  padding: 24px; border-top: 1px solid var(--border);
+  text-align: center; font-size: 11px; color: var(--text-dim);
+}
+.app-footer a { color: var(--text-secondary); text-decoration: none; }
+.app-footer a:hover { color: var(--accent); }
 
 /* Animations */
 @keyframes slideDown {
@@ -476,7 +537,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
       </button>
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" id="searchInput" placeholder="Search commands..." oninput="onSearch()">
+        <input class="search-input" id="searchInput" placeholder="Search commands... (Ctrl+K)" oninput="onSearch()">
       </div>
       <div class="toolbar-actions">
         <button class="tool-btn" id="paramToggle" onclick="toggleParams()">
@@ -492,9 +553,57 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 
     <!-- Content -->
     <div class="content" id="content">
+      <!-- How to Use Guide -->
+      <div class="guide-toggle" id="guideToggle" onclick="toggleGuide()">
+        <span class="guide-icon">📖</span>
+        <span class="guide-label">Getting Started</span>
+        <span class="guide-sub">How to use this toolkit</span>
+        <svg class="guide-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="guide-panel" id="guidePanel">
+        <h3>Welcome to the M365 PowerShell Toolkit</h3>
+        <p>A comprehensive reference for managing Microsoft 365 via PowerShell. All commands work with <strong>PowerShell 7+</strong> and the latest Graph / Exchange modules.</p>
+        <div class="guide-grid">
+          <div class="guide-card"><div class="num">01</div><div class="gc-title">Install Modules</div><div class="gc-text">Click any module badge → copy the <code>Install</code> command. Run in an elevated PowerShell session.</div></div>
+          <div class="guide-card"><div class="num">02</div><div class="gc-title">Connect</div><div class="gc-text">Use the <code>Connect</code> button on any module card, or set your domain in the ⚙️ Parameters bar first.</div></div>
+          <div class="guide-card"><div class="num">03</div><div class="gc-title">Run Commands</div><div class="gc-text">Search or browse by category. Expand any command to see the full syntax, then copy with one click.</div></div>
+          <div class="guide-card"><div class="num">04</div><div class="gc-title">Build Scripts</div><div class="gc-text">Toggle <strong>Script Builder</strong> to select multiple commands and generate a complete .ps1 file.</div></div>
+        </div>
+        <h4>💡 Tips</h4>
+        <ul>
+          <li>Press <code>Ctrl+K</code> to jump to search from anywhere</li>
+          <li>Use the <strong>⚙️ Parameters</strong> button to set your domain — it auto-replaces placeholders in all commands</li>
+          <li>⭐ Star your most-used commands for quick access in the <strong>Favorites</strong> view</li>
+          <li>Use the <strong>Workflow templates</strong> (sidebar) for step-by-step guides like onboarding and offboarding</li>
+          <li>Each expanded command has a <strong>"Copy as Full Script"</strong> button that includes Install + Connect + Disconnect</li>
+        </ul>
+        <h4>📚 Microsoft Documentation</h4>
+        <ul>
+          <li><a href="https://learn.microsoft.com/en-us/powershell/microsoftgraph/overview" target="_blank" class="doc-link">Microsoft Graph PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell" target="_blank" class="doc-link">Exchange Online PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-overview" target="_blank" class="doc-link">Microsoft Teams PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/powershell/sharepoint/sharepoint-online/connect-sharepoint-online" target="_blank" class="doc-link">SharePoint Online PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-pnp" target="_blank" class="doc-link">PnP PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/mem/intune/developer/intune-graph-apis" target="_blank" class="doc-link">Intune Graph APIs <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+        </ul>
+      </div>
+
+      <!-- Builder Mode Indicator -->
+      <div class="builder-indicator" id="builderIndicator">
+        <span class="pulse"></span>
+        <span><strong>Script Builder active</strong> — Check commands to add them to your script. View the script in the panel below.</span>
+      </div>
+
       <div class="module-panel" id="modulePanel"></div>
       <div class="workflow-banner" id="workflowBanner"></div>
       <div id="commandsContainer"></div>
+
+      <!-- Footer -->
+      <div class="app-footer">
+        M365 PowerShell Toolkit v1.1 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
+        Built by <a href="https://github.com/Great-IT-Nordic" target="_blank">Great IT Nordic</a> · 
+        MIT License
+      </div>
     </div>
 
     <!-- Builder Drawer -->
@@ -529,15 +638,15 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 // ═══════════════════════════════════════════════
 
 const MODULES = {
-  "ExchangeOnlineManagement": { install: "Install-Module -Name ExchangeOnlineManagement -Force", connect: "Connect-ExchangeOnline -UserPrincipalName {{admin}}", disconnect: "Disconnect-ExchangeOnline -Confirm:$false", color: "#0078D4", short: "EXO" },
-  "Microsoft.Graph": { install: "Install-Module -Name Microsoft.Graph -Force", connect: "Connect-MgGraph -Scopes 'User.ReadWrite.All','Group.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#6264A7", short: "Graph" },
-  "MicrosoftTeams": { install: "Install-Module -Name MicrosoftTeams -Force", connect: "Connect-MicrosoftTeams", disconnect: "Disconnect-MicrosoftTeams", color: "#464EB8", short: "Teams" },
-  "Microsoft.Online.SharePoint.PowerShell": { install: "Install-Module -Name Microsoft.Online.SharePoint.PowerShell -Force", connect: "Connect-SPOService -Url https://{{spo}}", disconnect: "Disconnect-SPOService", color: "#038387", short: "SPO" },
-  "PnP.PowerShell": { install: "Install-Module -Name PnP.PowerShell -Force", connect: "Connect-PnPOnline -Url https://{{domain}}.sharepoint.com -Interactive", disconnect: "Disconnect-PnPOnline", color: "#B4009E", short: "PnP" },
-  "AzureAD (Graph)": { install: "Install-Module -Name Microsoft.Graph.Identity.DirectoryManagement -Force", connect: "Connect-MgGraph -Scopes 'Directory.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#00BCF2", short: "Entra" },
-  "Microsoft.Graph.Intune": { install: "Install-Module -Name Microsoft.Graph.DeviceManagement -Force", connect: "Connect-MgGraph -Scopes 'DeviceManagementManagedDevices.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#D83B01", short: "Intune" },
-  "MSCommerce": { install: "Install-Module -Name MSCommerce -Force", connect: "Connect-MSCommerce", disconnect: "", color: "#FFB900", short: "Commerce" },
-  "ExchangeOnlineProtection": { install: "# Included in ExchangeOnlineManagement", connect: "Connect-IPPSSession -UserPrincipalName {{admin}}", disconnect: "Disconnect-ExchangeOnline", color: "#E74856", short: "EOP/SCC" }
+  "ExchangeOnlineManagement": { install: "Install-Module -Name ExchangeOnlineManagement -Force", connect: "Connect-ExchangeOnline -UserPrincipalName {{admin}}", disconnect: "Disconnect-ExchangeOnline -Confirm:$false", color: "#0078D4", short: "EXO", docs: "https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell" },
+  "Microsoft.Graph": { install: "Install-Module -Name Microsoft.Graph -Force", connect: "Connect-MgGraph -Scopes 'User.ReadWrite.All','Group.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#6264A7", short: "Graph", docs: "https://learn.microsoft.com/en-us/powershell/microsoftgraph/overview" },
+  "MicrosoftTeams": { install: "Install-Module -Name MicrosoftTeams -Force", connect: "Connect-MicrosoftTeams", disconnect: "Disconnect-MicrosoftTeams", color: "#464EB8", short: "Teams", docs: "https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-overview" },
+  "Microsoft.Online.SharePoint.PowerShell": { install: "Install-Module -Name Microsoft.Online.SharePoint.PowerShell -Force", connect: "Connect-SPOService -Url https://{{spo}}", disconnect: "Disconnect-SPOService", color: "#038387", short: "SPO", docs: "https://learn.microsoft.com/en-us/powershell/sharepoint/sharepoint-online/connect-sharepoint-online" },
+  "PnP.PowerShell": { install: "Install-Module -Name PnP.PowerShell -Force", connect: "Connect-PnPOnline -Url https://{{domain}}.sharepoint.com -Interactive", disconnect: "Disconnect-PnPOnline", color: "#B4009E", short: "PnP", docs: "https://pnp.github.io/powershell/" },
+  "AzureAD (Graph)": { install: "Install-Module -Name Microsoft.Graph.Identity.DirectoryManagement -Force", connect: "Connect-MgGraph -Scopes 'Directory.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#00BCF2", short: "Entra", docs: "https://learn.microsoft.com/en-us/entra/identity/role-based-access-control/permissions-reference" },
+  "Microsoft.Graph.Intune": { install: "Install-Module -Name Microsoft.Graph.DeviceManagement -Force", connect: "Connect-MgGraph -Scopes 'DeviceManagementManagedDevices.ReadWrite.All'", disconnect: "Disconnect-MgGraph", color: "#D83B01", short: "Intune", docs: "https://learn.microsoft.com/en-us/mem/intune/developer/intune-graph-apis" },
+  "MSCommerce": { install: "Install-Module -Name MSCommerce -Force", connect: "Connect-MSCommerce", disconnect: "", color: "#FFB900", short: "Commerce", docs: "https://learn.microsoft.com/en-us/microsoft-365/commerce/subscriptions/allowselfservicepurchase-powershell" },
+  "ExchangeOnlineProtection": { install: "# Included in ExchangeOnlineManagement", connect: "Connect-IPPSSession -UserPrincipalName {{admin}}", disconnect: "Disconnect-ExchangeOnline", color: "#E74856", short: "EOP/SCC", docs: "https://learn.microsoft.com/en-us/powershell/exchange/connect-to-scc-powershell" }
 };
 
 const CATEGORIES = [
@@ -787,6 +896,40 @@ const COMMANDS = [
   { cat: "Tenant Configuration", name: "Get SPO tenant settings", cmd: "Get-SPOTenant | Select SharingCapability,OneDriveStorageQuota,RequireAcceptingAccountMatchInvitedAccount,NotifyOwnersWhenItemsReshared", module: "Microsoft.Online.SharePoint.PowerShell", desc: "SharePoint & OneDrive tenant settings" },
   { cat: "Tenant Configuration", name: "Get password expiration policy", cmd: "(Get-MgOrganization).PasswordPolicies", module: "Microsoft.Graph", desc: "Check tenant password policy" },
   { cat: "Tenant Configuration", name: "Get directory sync status", cmd: "Get-MgOrganization | Select OnPremisesSyncEnabled,OnPremisesLastSyncDateTime", module: "Microsoft.Graph", desc: "Check if AAD Connect / Cloud Sync is active" },
+
+  // ── CONDITIONAL ACCESS (extended) (5 new) ──
+  { cat: "Conditional Access", name: "Create CA policy (block legacy auth)", cmd: "$params = @{\n  DisplayName = 'Block Legacy Authentication'\n  State = 'enabledForReportingButNotEnforced'\n  Conditions = @{\n    ClientAppTypes = @('exchangeActiveSync','other')\n    Applications = @{ IncludeApplications = @('All') }\n    Users = @{ IncludeUsers = @('All') }\n  }\n  GrantControls = @{ Operator = 'OR'; BuiltInControls = @('block') }\n}\nNew-MgIdentityConditionalAccessPolicy -BodyParameter $params", module: "Microsoft.Graph", desc: "Create a policy to block legacy auth (report-only)" },
+  { cat: "Conditional Access", name: "Delete CA policy", cmd: 'Remove-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a Conditional Access policy" },
+  { cat: "Conditional Access", name: "Set CA policy to report-only", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabledForReportingButNotEnforced"', module: "Microsoft.Graph", desc: "Switch a policy to report-only mode" },
+  { cat: "Conditional Access", name: "Enable CA policy", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabled"', module: "Microsoft.Graph", desc: "Enable (enforce) a CA policy" },
+  { cat: "Conditional Access", name: "Get CA policy sign-in gaps", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Where { -not $_.IsMfaRegistered } | Select UserPrincipalName,MethodsRegistered", module: "Microsoft.Graph", desc: "Users who may bypass MFA CA policies" },
+
+  // ── SECURITY & COMPLIANCE (extended) (8 new) ──
+  { cat: "Security & Compliance", name: "Get PIM eligible role assignments", cmd: "Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance | Select @{N='Role';E={(Get-MgDirectoryRoleTemplate -DirectoryRoleTemplateId $_.RoleDefinitionId).DisplayName}},PrincipalId,StartDateTime,EndDateTime", module: "Microsoft.Graph", desc: "List PIM eligible role assignments" },
+  { cat: "Security & Compliance", name: "Get PIM active role assignments", cmd: "Get-MgRoleManagementDirectoryRoleAssignmentScheduleInstance -All | Select RoleDefinitionId,PrincipalId,StartDateTime", module: "Microsoft.Graph", desc: "List PIM activated role assignments" },
+  { cat: "Security & Compliance", name: "Get access reviews", cmd: "Get-MgIdentityGovernanceAccessReviewDefinition | Select DisplayName,Status,Scope", module: "Microsoft.Graph", desc: "List access review campaigns" },
+  { cat: "Security & Compliance", name: "Get Safe Links policies", cmd: "Get-SafeLinksPolicy | Select Name,IsEnabled,DoNotRewriteUrls,EnableForInternalSenders", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Links config" },
+  { cat: "Security & Compliance", name: "Get Safe Attachments policies", cmd: "Get-SafeAttachmentPolicy | Select Name,Action,Enable,Redirect", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Attachments config" },
+  { cat: "Security & Compliance", name: "Get anti-phishing policies", cmd: "Get-AntiPhishPolicy | Select Name,Enabled,EnableMailboxIntelligence,EnableSpoofIntelligence", module: "ExchangeOnlineProtection", desc: "View anti-phishing protection policies" },
+  { cat: "Security & Compliance", name: "Get service principal credentials", cmd: "Get-MgServicePrincipal -All | ForEach { $sp=$_; $_.PasswordCredentials | Select @{N='App';E={$sp.DisplayName}},EndDateTime,DisplayName } | Where { $_.EndDateTime } | Sort EndDateTime", module: "Microsoft.Graph", desc: "Find expiring service principal secrets" },
+  { cat: "Security & Compliance", name: "Get consent grants (admin)", cmd: "Get-MgOauth2PermissionGrant -All -Filter \"consentType eq 'AllPrincipals'\" | Select ClientId,Scope,ConsentType", module: "Microsoft.Graph", desc: "Find admin-consented API permissions" },
+
+  // ── EXCHANGE ONLINE (extended) (4 new) ──
+  { cat: "Exchange Online", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" },
+  { cat: "Exchange Online", name: "Get DL members", cmd: 'Get-DistributionGroupMember -Identity "dl@{{domain}}" | Select DisplayName,PrimarySmtpAddress', module: "ExchangeOnlineManagement", desc: "List members of a distribution list" },
+  { cat: "Exchange Online", name: "Set mailbox archive", cmd: 'Enable-Mailbox -Identity "user@{{domain}}" -Archive', module: "ExchangeOnlineManagement", desc: "Enable online archive for a mailbox" },
+  { cat: "Exchange Online", name: "Get mailbox archive status", cmd: 'Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,ArchiveStatus,ArchiveQuota | Where { $_.ArchiveStatus -eq "Active" }', module: "ExchangeOnlineManagement", desc: "List mailboxes with active archive" },
+
+  // ── DEVICE MANAGEMENT (extended) (4 new) ──
+  { cat: "Device Management", name: "Get app protection policies", cmd: "Get-MgDeviceAppManagementManagedAppPolicy | Select DisplayName,@{N='Type';E={$_.AdditionalProperties.'@odata.type'}}", module: "Microsoft.Graph.Intune", desc: "List Intune app protection policies (MAM)" },
+  { cat: "Device Management", name: "Get detected apps", cmd: "Get-MgDeviceManagementDetectedApp -All | Select DisplayName,Version,DeviceCount | Sort DeviceCount -Descending | Select -First 30", module: "Microsoft.Graph.Intune", desc: "Top 30 detected apps across managed devices" },
+  { cat: "Device Management", name: "Get Windows Update rings", cmd: "Get-MgDeviceManagementDeviceConfiguration -Filter \"isof('microsoft.graph.windowsUpdateForBusinessConfiguration')\" | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Windows Update for Business ring policies" },
+  { cat: "Device Management", name: "Get Autopilot profiles", cmd: "Get-MgDeviceManagementWindowsAutopilotDeploymentProfile | Select DisplayName,Description,Language", module: "Microsoft.Graph.Intune", desc: "List Autopilot deployment profiles" },
+
+  // ── REPORTS & AUDITING (extended) (3 new) ──
+  { cat: "Reports & Auditing", name: "Get Yammer activity report", cmd: "Get-MgReportYammerActivityUserDetail -Period 'D30' -OutFile 'YammerActivity.csv'", module: "Microsoft.Graph", desc: "Yammer/Viva Engage activity per user" },
+  { cat: "Reports & Auditing", name: "Get Groups activity report", cmd: "Get-MgReportOffice365GroupsActivityDetail -Period 'D30' -OutFile 'GroupsActivity.csv'", module: "Microsoft.Graph", desc: "M365 Groups activity and usage" },
+  { cat: "Reports & Auditing", name: "Get browser usage report", cmd: "Get-MgReportBrowserUserDetail -Period 'D30' -OutFile 'BrowserUsage.csv'", module: "Microsoft.Graph", desc: "Browser distribution for M365 access" },
 ];
 
 // ═══════════════════════════════════════════════
@@ -891,7 +1034,8 @@ function buildModulePanel() {
   let h = `<h3>Module Installation & Connection</h3><p class="sub">Run in an elevated PowerShell 7 session.</p>`;
   h += `<div class="mod-card"><div class="mod-card-header"><span class="mod-card-name" style="color:var(--accent)">Install All Modules</span>${cb(all,'Copy All')}</div><pre>${esc(all)}</pre></div>`;
   Object.entries(MODULES).forEach(([n,m]) => {
-    h += `<div class="mod-card" style="border-left:3px solid ${m.color}"><div class="mod-card-header"><span class="mod-card-name" style="color:${m.color}">${m.short} <span class="dim">— ${n}</span></span></div><div class="mod-btns">${cb(applyParams(m.install),'Install')} ${cb(applyParams(m.connect),'Connect')} ${m.disconnect?cb(m.disconnect,'Disconnect'):''}</div></div>`;
+    const docBtn = m.docs ? `<a href="${m.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>` : '';
+    h += `<div class="mod-card" style="border-left:3px solid ${m.color}"><div class="mod-card-header"><span class="mod-card-name" style="color:${m.color}">${m.short} <span class="dim">— ${n}</span></span>${docBtn}</div><div class="mod-btns">${cb(applyParams(m.install),'Install')} ${cb(applyParams(m.connect),'Connect')} ${m.disconnect?cb(m.disconnect,'Disconnect'):''}</div></div>`;
   });
   p.innerHTML = h;
 }
@@ -915,6 +1059,8 @@ function toggleParams() {
 function toggleBuilderMode() {
   builderMode = !builderMode;
   document.getElementById('builderToggle').classList.toggle('active', builderMode);
+  document.getElementById('content').classList.toggle('builder-active', builderMode);
+  document.getElementById('builderIndicator').classList.toggle('visible', builderMode);
   if(builderMode) { document.getElementById('builderDrawer').classList.add('visible'); }
   else { document.getElementById('builderDrawer').classList.remove('visible'); }
   renderCommands();
@@ -1100,7 +1246,7 @@ function renderCommands() {
 
       // Detail
       html += `<div class="cmd-detail"><div class="cmd-code"><span class="copy-float">${cb(cmdText)}</span>${esc(cmdText)}</div>`;
-      html += `<div class="cmd-mod-row"><span class="lbl">Module:</span><code style="color:${mod.color}">${c.module}</code>${cb(applyParams(mod.install),'Install')} ${cb(applyParams(mod.connect),'Connect')}</div>`;
+      html += `<div class="cmd-mod-row"><span class="lbl">Module:</span><code style="color:${mod.color}">${c.module}</code>${cb(applyParams(mod.install),'Install')} ${cb(applyParams(mod.connect),'Connect')}${mod.docs?` <a href="${mod.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>`:''}</div>`;
 
       // Copy as full script
       const fullScript = `# ${c.name}\n${applyParams(mod.install)}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
@@ -1136,10 +1282,31 @@ function toggleSidebar() {
 // ═══════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════
+function toggleGuide() {
+  const toggle = document.getElementById('guideToggle');
+  const panel = document.getElementById('guidePanel');
+  toggle.classList.toggle('open');
+  panel.classList.toggle('visible');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   buildSidebar();
   buildModulePanel();
   renderCommands();
+
+  // Keyboard shortcut: Ctrl+K to focus search
+  document.addEventListener('keydown', (e) => {
+    if((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      document.getElementById('searchInput').focus();
+    }
+    // Escape to close guide / blur search
+    if(e.key === 'Escape') {
+      document.getElementById('searchInput').blur();
+      document.getElementById('guidePanel').classList.remove('visible');
+      document.getElementById('guideToggle').classList.remove('open');
+    }
+  });
 
   // Responsive: hide sidebar by default on mobile
   if(window.innerWidth <= 860) {
