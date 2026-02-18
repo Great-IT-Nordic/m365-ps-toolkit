@@ -22,13 +22,13 @@ Open the file in any text editor (VS Code recommended). Search for `const COMMAN
 Follow this format:
 
 ```javascript
-{ cat: "Category", name: "Short name", cmd: 'The-PowerShell-Command -With "parameters"', module: "ModuleName", desc: "One-line description" },
+{ cat: "Category", name: "Short name", cmd: 'The-PowerShell-Command -With "parameters"', module: "ModuleName", desc: "One-line description", risk: "read", perms: "Scope.Name" },
 ```
 
 **Example:**
 
 ```javascript
-{ cat: "Exchange Online", name: "Get mailbox audit settings", cmd: 'Get-Mailbox -Identity "user@{{domain}}" | Select AuditEnabled,AuditLogAgeLimit', module: "ExchangeOnlineManagement", desc: "Check if mailbox auditing is enabled" },
+{ cat: "Exchange Online", name: "Get mailbox audit settings", cmd: 'Get-Mailbox -Identity "user@{{domain}}" | Select AuditEnabled,AuditLogAgeLimit', module: "ExchangeOnlineManagement", desc: "Check if mailbox auditing is enabled", risk: "read" },
 ```
 
 ### Rules
@@ -78,6 +78,27 @@ Want to add a new category? Open an issue first so we can discuss.
 - `Microsoft.Graph.Intune`
 - `MSCommerce`
 - `ExchangeOnlineProtection`
+
+### Risk Levels (required)
+
+Every command must have a `risk` field:
+
+| Value | Badge | When to use |
+|---|---|---|
+| `"read"` | 🟢 Read | Only retrieves data, no changes |
+| `"modify"` | 🟡 Modify | Creates or changes settings |
+| `"destructive"` | 🔴 Destructive | Deletes, wipes, or removes permanently |
+
+### Permissions (optional)
+
+For Microsoft Graph commands, add a `perms` field with the required Graph API scope(s):
+
+```javascript
+perms: "User.Read.All"              // single scope
+perms: "AuditLog.Read.All, User.Read.All"  // multiple scopes
+```
+
+Omit `perms` for non-Graph modules (EXO, Teams, SPO) — they use role-based access instead of Graph scopes.
 
 ### 4. Test locally
 
