@@ -8,14 +8,16 @@ An interactive, browser-based reference tool for Microsoft 365 PowerShell comman
 
 | Feature | Description |
 |---|---|
-| **170+ Commands** | Covering Users, Groups, Exchange, SharePoint, Teams, Intune, Conditional Access, Security & more |
+| **176 Commands** | Covering Users, Groups, Exchange, SharePoint, Teams, Intune, Conditional Access, Security, PIM & more |
 | **9 Modules** | Microsoft Graph, Exchange Online, Teams, SharePoint, PnP, Intune, Entra ID, MSCommerce, EOP/SCC |
 | **Editable Parameters** | Set your domain once — every command updates automatically |
-| **Script Builder** | Check commands → generate a complete `.ps1` script with install, connect, commands, disconnect |
-| **Workflow Templates** | Pre-built checklists: User Onboarding, Offboarding, Security Audit, Tenant Health Review |
+| **Script Builder** | Check commands → generate a complete `.ps1` with safe import, error handling, transcript logging |
+| **7 Workflow Templates** | Onboarding, Offboarding, Security Audit, Tenant Review, License Cleanup, Mail Hygiene, Guest Audit |
+| **Risk Indicators** | 🟢 Read / 🟡 Modify / 🔴 Destructive badges on every command |
+| **Graph Permissions** | Shows required API permissions (scopes) for each Graph command |
+| **Admin Portal Links** | Quick-access links to all 10 M365 admin centers |
 | **Favorites** | Star commands you use often — persisted in your browser |
-| **Copy as Full Script** | One-click copy of install + connect + command for any entry |
-| **Search & Filter** | Filter by category, module, or free-text search |
+| **Search & Filter** | Filter by category, module, risk level, or free-text search (Ctrl+K) |
 | **Fully Offline** | Single HTML file, no dependencies, works without internet |
 
 ## 🚀 Quick Start
@@ -70,7 +72,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions, but the short 
 3. Find the `COMMANDS` array (search for `const COMMANDS`)
 4. Add your command following the existing format:
    ```javascript
-   { cat: "Category", name: "Command name", cmd: 'Your-Command -Here', module: "ModuleName", desc: "What it does" },
+   { cat: "Category", name: "Command name", cmd: 'Your-Command -Here', module: "ModuleName", desc: "What it does", risk: "read", perms: "User.Read.All" },
    ```
 5. Submit a Pull Request
 
@@ -126,6 +128,15 @@ Check: Global Admins → MFA status → CA policies → risky sign-ins → app c
 
 ### 📊 Tenant Health Review
 Review: license usage → unlicensed users → active users → mailbox sizes → SharePoint storage → stale devices → tenant config
+
+### 💰 License Cleanup
+Find: all SKUs → unlicensed users → disabled users with licenses → license paths → inactive licensed users → reclaim unused
+
+### 📧 Mail Hygiene Review
+Audit: SMTP forwarding → inbox rules → transport rules → DKIM → anti-spam → quarantine → Safe Links → Safe Attachments → anti-phishing
+
+### 👥 Guest Access Audit
+Review: guest users → stale guests → group memberships → external sharing → OAuth consents → CA policies for guests → remove stale
 
 ## 📄 License
 
