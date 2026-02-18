@@ -463,6 +463,90 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 .app-footer a { color: var(--text-secondary); text-decoration: none; }
 .app-footer a:hover { color: var(--accent); }
 
+/* Risk indicators */
+.risk-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 600; padding: 2px 7px;
+  border-radius: 4px; letter-spacing: 0.3px; text-transform: uppercase;
+  flex-shrink: 0;
+}
+.risk-read { background: rgba(52,211,153,0.12); color: #34d399; border: 1px solid rgba(52,211,153,0.25); }
+.risk-modify { background: rgba(245,158,11,0.1); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+.risk-destructive { background: rgba(239,68,68,0.1); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+.risk-dot { width: 6px; height: 6px; border-radius: 50%; }
+.risk-read .risk-dot { background: #34d399; }
+.risk-modify .risk-dot { background: #f59e0b; }
+.risk-destructive .risk-dot { background: #ef4444; }
+
+/* Permissions badge */
+.perm-row {
+  display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px;
+  align-items: center;
+}
+.perm-row .lbl { font-size: 11px; color: var(--text-dim); margin-right: 2px; }
+.perm-tag {
+  font-size: 10px; font-family: var(--font-mono);
+  padding: 2px 8px; border-radius: 4px;
+  background: rgba(98,100,167,0.12); color: #8b8ece;
+  border: 1px solid rgba(98,100,167,0.2);
+}
+
+/* Builder options */
+.builder-opts {
+  display: flex; flex-wrap: wrap; gap: 12px; padding: 10px 0;
+  margin-bottom: 10px; border-bottom: 1px solid var(--border);
+}
+.builder-opt {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--text-secondary); cursor: pointer;
+  user-select: none;
+}
+.builder-opt input[type="checkbox"] {
+  accent-color: var(--accent); width: 14px; height: 14px; cursor: pointer;
+}
+.builder-opt:hover { color: var(--text-primary); }
+.builder-opt .opt-hint {
+  font-size: 10px; color: var(--text-dim); font-style: italic;
+}
+
+/* Admin portals grid */
+.portals-section {
+  margin-bottom: 20px;
+}
+.portals-toggle {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer;
+  transition: all 0.2s;
+}
+.portals-toggle:hover { border-color: var(--accent); background: var(--accent-glow); }
+.portals-toggle .portals-icon { font-size: 18px; }
+.portals-toggle .portals-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.portals-toggle .portals-sub { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+.portals-toggle .portals-chevron { color: var(--text-dim); transition: transform 0.2s; }
+.portals-toggle.open .portals-chevron { transform: rotate(90deg); }
+.portals-panel {
+  display: none; margin-top: -1px; margin-bottom: 20px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 16px; animation: slideDown 0.2s ease;
+}
+.portals-panel.visible { display: block; }
+.portals-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+.portal-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 12px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  text-decoration: none; transition: all 0.2s;
+}
+.portal-card:hover { border-color: var(--accent); background: var(--accent-glow); transform: translateY(-1px); }
+.portal-card .p-icon { font-size: 20px; flex-shrink: 0; }
+.portal-card .p-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
+.portal-card .p-url { font-size: 10px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* Animations */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
@@ -588,7 +672,29 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
         </ul>
       </div>
 
-      <!-- Builder Mode Indicator -->
+      <!-- Admin Portals -->
+      <div class="portals-section">
+        <div class="portals-toggle" id="portalsToggle" onclick="togglePortals()">
+          <span class="portals-icon">🌐</span>
+          <span class="portals-label">Admin Portals</span>
+          <span class="portals-sub">Quick links to all M365 admin centers</span>
+          <svg class="portals-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        </div>
+        <div class="portals-panel" id="portalsPanel">
+          <div class="portals-grid">
+            <a href="https://admin.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">🏢</span><div><div class="p-name">Microsoft 365 Admin</div><div class="p-url">admin.microsoft.com</div></div></a>
+            <a href="https://entra.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">🔑</span><div><div class="p-name">Microsoft Entra</div><div class="p-url">entra.microsoft.com</div></div></a>
+            <a href="https://admin.exchange.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">📧</span><div><div class="p-name">Exchange Admin</div><div class="p-url">admin.exchange.microsoft.com</div></div></a>
+            <a href="https://admin.teams.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">💬</span><div><div class="p-name">Teams Admin</div><div class="p-url">admin.teams.microsoft.com</div></div></a>
+            <a href="https://intune.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">📱</span><div><div class="p-name">Intune / Endpoint</div><div class="p-url">intune.microsoft.com</div></div></a>
+            <a href="https://security.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">🛡️</span><div><div class="p-name">Security Center</div><div class="p-url">security.microsoft.com</div></div></a>
+            <a href="https://compliance.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">📋</span><div><div class="p-name">Compliance / Purview</div><div class="p-url">compliance.microsoft.com</div></div></a>
+            <a href="https://admin.powerplatform.microsoft.com" target="_blank" class="portal-card"><span class="p-icon">⚡</span><div><div class="p-name">Power Platform</div><div class="p-url">admin.powerplatform.microsoft.com</div></div></a>
+            <a href="https://portal.azure.com" target="_blank" class="portal-card"><span class="p-icon">☁️</span><div><div class="p-name">Azure Portal</div><div class="p-url">portal.azure.com</div></div></a>
+            <a href="https://developer.microsoft.com/en-us/graph/graph-explorer" target="_blank" class="portal-card"><span class="p-icon">📊</span><div><div class="p-name">Graph Explorer</div><div class="p-url">developer.microsoft.com</div></div></a>
+          </div>
+        </div>
+      </div>
       <div class="builder-indicator" id="builderIndicator">
         <span class="pulse"></span>
         <span><strong>Script Builder active</strong> — Check commands to add them to your script. View the script in the panel below.</span>
@@ -600,7 +706,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 
       <!-- Footer -->
       <div class="app-footer">
-        M365 PowerShell Toolkit v1.1 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
+        M365 PowerShell Toolkit v1.2 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
         Built by <a href="https://github.com/Great-IT-Nordic" target="_blank">Great IT Nordic</a> · 
         MIT License
       </div>
@@ -618,6 +724,13 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
         </div>
       </div>
       <div class="builder-preview" id="builderPreview">No commands selected yet. Enable Script Builder mode and check the commands you want to include.</div>
+      <div class="builder-opts" id="builderOpts">
+        <label class="builder-opt"><input type="checkbox" id="optSafeImport" checked onchange="updateBuilder()"> Safe import <span class="opt-hint">(check before install)</span></label>
+        <label class="builder-opt"><input type="checkbox" id="optDisconnect" checked onchange="updateBuilder()"> Disconnect at end</label>
+        <label class="builder-opt"><input type="checkbox" id="optErrorHandling" onchange="updateBuilder()"> Error handling <span class="opt-hint">(try/catch)</span></label>
+        <label class="builder-opt"><input type="checkbox" id="optRequires" onchange="updateBuilder()"> #Requires -Version 7</label>
+        <label class="builder-opt"><input type="checkbox" id="optTranscript" onchange="updateBuilder()"> Transcript logging</label>
+      </div>
       <div class="builder-actions">
         <button class="tool-btn green" onclick="downloadScript()">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -717,219 +830,265 @@ const WORKFLOWS = {
       "Check verified domains and tenant config"
     ],
     commands: ["Get all licenses in tenant","Get unlicensed users","Get active users report","Get all mailbox sizes","Get site storage usage","Get stale devices","Disable self-service purchases","Get organization details","Get verified domains"]
+  },
+  "wf-license-cleanup": {
+    name: "💰 License Cleanup",
+    desc: "Find and reclaim unused licenses to reduce costs.",
+    steps: [
+      "Review all license SKUs and available counts",
+      "Find unlicensed users who may need licenses",
+      "Identify disabled users still consuming licenses",
+      "Check license assignment paths (direct vs group-based)",
+      "Review users with specific high-cost licenses",
+      "Block self-service purchases",
+      "Get user sign-in activity to find inactive licensed users",
+      "Remove licenses from disabled/inactive accounts"
+    ],
+    commands: ["Get all licenses in tenant","Get unlicensed users","Get disabled users","Get license assignment paths","Get users with specific license","Disable self-service purchases","Get user sign-in activity","Remove license from user","Get tenant SKUs overview"]
+  },
+  "wf-mail-hygiene": {
+    name: "📧 Mail Hygiene Review",
+    desc: "Audit mail flow security — forwarding, transport rules, and protection.",
+    steps: [
+      "Check for mailboxes with SMTP forwarding enabled",
+      "Audit inbox rules across users for suspicious forwards",
+      "Review transport rules and priorities",
+      "Check DKIM signing status per domain",
+      "Review anti-spam policy settings",
+      "Review quarantined messages",
+      "Check blocked senders list",
+      "Review Safe Links and Safe Attachments policies",
+      "Review anti-phishing policies"
+    ],
+    commands: ["Get forwarding rules","Get inbox rules (user)","Get transport rules","Get DKIM config","Get anti-spam policy","Get quarantined messages","Get blocked senders","Get Safe Links policies","Get Safe Attachments policies","Get anti-phishing policies"]
+  },
+  "wf-guest-audit": {
+    name: "👥 Guest Access Audit",
+    desc: "Review external/guest user access across your tenant.",
+    steps: [
+      "List all guest users in the tenant",
+      "Check guest user sign-in activity (find stale guests)",
+      "Review which groups guests belong to",
+      "Check SharePoint external sharing settings",
+      "Review sites with external sharing enabled",
+      "Check OAuth consent grants from external apps",
+      "Review Conditional Access policies for guests",
+      "Remove stale or unauthorized guest accounts"
+    ],
+    commands: ["Get guest users","Get user sign-in activity","Get all groups","Get tenant sharing settings","Get external sharing status","Get consent grants (admin)","Get all CA policies","Remove guest user"]
   }
 };
 
 const COMMANDS = [
-  // ── USER MANAGEMENT (17) ──
-  { cat: "User Management", name: "Get all users", cmd: "Get-MgUser -All", module: "Microsoft.Graph", desc: "List all users in the tenant" },
-  { cat: "User Management", name: "Get specific user", cmd: 'Get-MgUser -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Get details for a specific user" },
-  { cat: "User Management", name: "Get user properties", cmd: 'Get-MgUser -UserId "user@{{domain}}" -Property DisplayName,Mail,AccountEnabled,UserPrincipalName', module: "Microsoft.Graph", desc: "Get specific user properties" },
-  { cat: "User Management", name: "Create new user", cmd: "$PasswordProfile = @{ Password = 'TempP@ss123!'; ForceChangePasswordNextSignIn = $true }\nNew-MgUser -DisplayName \"John Doe\" -MailNickname \"jdoe\" -UserPrincipalName \"jdoe@{{domain}}\" -PasswordProfile $PasswordProfile -AccountEnabled", module: "Microsoft.Graph", desc: "Create a new user with temporary password" },
-  { cat: "User Management", name: "Delete user", cmd: 'Remove-MgUser -UserId "user@{{domain}}" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a user (soft delete to recycle bin)" },
-  { cat: "User Management", name: "Disable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$false', module: "Microsoft.Graph", desc: "Disable a user's sign-in" },
-  { cat: "User Management", name: "Enable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$true', module: "Microsoft.Graph", desc: "Re-enable a user's sign-in" },
-  { cat: "User Management", name: "Reset user password", cmd: "$params = @{ PasswordProfile = @{ Password = \"NewP@ss123!\"; ForceChangePasswordNextSignIn = $true } }\nUpdate-MgUser -UserId \"user@{{domain}}\" -BodyParameter $params", module: "Microsoft.Graph", desc: "Reset a user's password" },
-  { cat: "User Management", name: "Update user properties", cmd: 'Update-MgUser -UserId "user@{{domain}}" -JobTitle "IT Administrator" -Department "IT" -OfficeLocation "Stockholm"', module: "Microsoft.Graph", desc: "Update job title, department, office" },
-  { cat: "User Management", name: "Get disabled users", cmd: 'Get-MgUser -All -Filter "AccountEnabled eq false" | Select DisplayName,UserPrincipalName', module: "Microsoft.Graph", desc: "List all disabled user accounts" },
-  { cat: "User Management", name: "Get guest users", cmd: "Get-MgUser -All -Filter \"UserType eq 'Guest'\" | Select DisplayName,Mail,CreatedDateTime", module: "Microsoft.Graph", desc: "List all external/guest users" },
-  { cat: "User Management", name: "Remove guest user", cmd: 'Remove-MgUser -UserId "guest-object-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Remove a guest user from the tenant" },
-  { cat: "User Management", name: "Get users without MFA", cmd: "Get-MgUser -All | ForEach-Object { $methods = Get-MgUserAuthenticationMethod -UserId $_.Id; if($methods.Count -le 1){ $_ } } | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with only password auth (no MFA)" },
-  { cat: "User Management", name: "Get user sign-in activity", cmd: 'Get-MgUser -All -Property DisplayName,SignInActivity | Select DisplayName,@{N="LastSignIn";E={$_.SignInActivity.LastSignInDateTime}} | Sort LastSignIn', module: "Microsoft.Graph", desc: "Get last sign-in date for all users" },
-  { cat: "User Management", name: "Get user manager", cmd: 'Get-MgUserManager -UserId "user@{{domain}}" | Select -ExpandProperty AdditionalProperties', module: "Microsoft.Graph", desc: "Get a user's manager" },
-  { cat: "User Management", name: "Set user manager", cmd: "$mgr = @{ \"@odata.id\" = \"https://graph.microsoft.com/v1.0/users/{manager-id}\" }\nSet-MgUserManagerByRef -UserId \"user@{{domain}}\" -BodyParameter $mgr", module: "Microsoft.Graph", desc: "Assign a manager to a user" },
-  { cat: "User Management", name: "Bulk export users to CSV", cmd: 'Get-MgUser -All -Property DisplayName,UserPrincipalName,Mail,JobTitle,Department,AccountEnabled | Export-Csv -Path "C:\\Temp\\AllUsers.csv" -NoTypeInformation', module: "Microsoft.Graph", desc: "Export all users to CSV" },
-  { cat: "User Management", name: "Revoke user sessions", cmd: 'Invoke-MgInvalidateUserRefreshToken -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Revoke all refresh tokens / force re-auth" },
-  { cat: "User Management", name: "Get user auth methods", cmd: 'Get-MgUserAuthenticationMethod -UserId "user@{{domain}}" | Select Id,@{N="Type";E={$_.AdditionalProperties."@odata.type"}}', module: "Microsoft.Graph", desc: "List registered authentication methods" },
-  { cat: "User Management", name: "Get deleted users", cmd: 'Get-MgDirectoryDeletedItemAsUser | Select DisplayName,UserPrincipalName,DeletedDateTime', module: "Microsoft.Graph", desc: "List soft-deleted users (recycle bin)" },
-  { cat: "User Management", name: "Restore deleted user", cmd: 'Restore-MgDirectoryDeletedItem -DirectoryObjectId "object-id"', module: "Microsoft.Graph", desc: "Restore a user from the recycle bin" },
+  // ── USER MANAGEMENT ──
+  { cat: "User Management", name: "Get all users", cmd: "Get-MgUser -All", module: "Microsoft.Graph", desc: "List all users in the tenant", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Get specific user", cmd: 'Get-MgUser -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Get details for a specific user", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Get user properties", cmd: 'Get-MgUser -UserId "user@{{domain}}" -Property DisplayName,Mail,AccountEnabled,UserPrincipalName', module: "Microsoft.Graph", desc: "Get specific user properties", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Create new user", cmd: "$PasswordProfile = @{ Password = 'TempP@ss123!'; ForceChangePasswordNextSignIn = $true }\nNew-MgUser -DisplayName \"John Doe\" -MailNickname \"jdoe\" -UserPrincipalName \"jdoe@{{domain}}\" -PasswordProfile $PasswordProfile -AccountEnabled", module: "Microsoft.Graph", desc: "Create a new user with temporary password", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Delete user", cmd: 'Remove-MgUser -UserId "user@{{domain}}" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a user (soft delete to recycle bin)", risk: "destructive", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Disable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$false', module: "Microsoft.Graph", desc: "Disable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Enable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$true', module: "Microsoft.Graph", desc: "Re-enable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Reset user password", cmd: "$params = @{ PasswordProfile = @{ Password = \"NewP@ss123!\"; ForceChangePasswordNextSignIn = $true } }\nUpdate-MgUser -UserId \"user@{{domain}}\" -BodyParameter $params", module: "Microsoft.Graph", desc: "Reset a user's password", risk: "modify", perms: "UserAuthenticationMethod.ReadWrite.All" },
+  { cat: "User Management", name: "Update user properties", cmd: 'Update-MgUser -UserId "user@{{domain}}" -JobTitle "IT Administrator" -Department "IT" -OfficeLocation "Stockholm"', module: "Microsoft.Graph", desc: "Update job title, department, office", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Get disabled users", cmd: 'Get-MgUser -All -Filter "AccountEnabled eq false" | Select DisplayName,UserPrincipalName', module: "Microsoft.Graph", desc: "List all disabled user accounts", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Get guest users", cmd: "Get-MgUser -All -Filter \"UserType eq 'Guest'\" | Select DisplayName,Mail,CreatedDateTime", module: "Microsoft.Graph", desc: "List all external/guest users", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Remove guest user", cmd: 'Remove-MgUser -UserId "guest-object-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Remove a guest user from the tenant", risk: "destructive", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Get users without MFA", cmd: "Get-MgUser -All | ForEach-Object { $methods = Get-MgUserAuthenticationMethod -UserId $_.Id; if($methods.Count -le 1){ $_ } } | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with only password auth (no MFA)", risk: "read", perms: "UserAuthenticationMethod.Read.All" },
+  { cat: "User Management", name: "Get user sign-in activity", cmd: 'Get-MgUser -All -Property DisplayName,SignInActivity | Select DisplayName,@{N="LastSignIn";E={$_.SignInActivity.LastSignInDateTime}} | Sort LastSignIn', module: "Microsoft.Graph", desc: "Get last sign-in date for all users", risk: "read", perms: "AuditLog.Read.All, User.Read.All" },
+  { cat: "User Management", name: "Get user manager", cmd: 'Get-MgUserManager -UserId "user@{{domain}}" | Select -ExpandProperty AdditionalProperties', module: "Microsoft.Graph", desc: "Get a user's manager", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Set user manager", cmd: "$mgr = @{ \"@odata.id\" = \"https://graph.microsoft.com/v1.0/users/{manager-id}\" }\nSet-MgUserManagerByRef -UserId \"user@{{domain}}\" -BodyParameter $mgr", module: "Microsoft.Graph", desc: "Assign a manager to a user", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Bulk export users to CSV", cmd: 'Get-MgUser -All -Property DisplayName,UserPrincipalName,Mail,JobTitle,Department,AccountEnabled | Export-Csv -Path "C:\\Temp\\AllUsers.csv" -NoTypeInformation', module: "Microsoft.Graph", desc: "Export all users to CSV", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Revoke user sessions", cmd: 'Invoke-MgInvalidateUserRefreshToken -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Revoke all refresh tokens / force re-auth", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Get user auth methods", cmd: 'Get-MgUserAuthenticationMethod -UserId "user@{{domain}}" | Select Id,@{N="Type";E={$_.AdditionalProperties."@odata.type"}}', module: "Microsoft.Graph", desc: "List registered authentication methods", risk: "read", perms: "UserAuthenticationMethod.Read.All" },
+  { cat: "User Management", name: "Get deleted users", cmd: 'Get-MgDirectoryDeletedItemAsUser | Select DisplayName,UserPrincipalName,DeletedDateTime', module: "Microsoft.Graph", desc: "List soft-deleted users (recycle bin)", risk: "read", perms: "Directory.Read.All" },
+  { cat: "User Management", name: "Restore deleted user", cmd: 'Restore-MgDirectoryDeletedItem -DirectoryObjectId "object-id"', module: "Microsoft.Graph", desc: "Restore a user from the recycle bin", risk: "modify", perms: "User.ReadWrite.All" },
 
   // ── GROUP MANAGEMENT (14) ──
-  { cat: "Group Management", name: "Get all groups", cmd: "Get-MgGroup -All | Select DisplayName,GroupTypes,MailEnabled,SecurityEnabled", module: "Microsoft.Graph", desc: "List all groups in the tenant" },
-  { cat: "Group Management", name: "Get M365 groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'Unified')\"", module: "Microsoft.Graph", desc: "List only Microsoft 365 groups" },
-  { cat: "Group Management", name: "Get security groups", cmd: 'Get-MgGroup -All -Filter "securityEnabled eq true and mailEnabled eq false"', module: "Microsoft.Graph", desc: "List security groups (non-mail-enabled)" },
-  { cat: "Group Management", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" },
-  { cat: "Group Management", name: "Get group members", cmd: "Get-MgGroupMember -GroupId (Get-MgGroup -Filter \"DisplayName eq 'GroupName'\").Id -All | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List members of a specific group" },
-  { cat: "Group Management", name: "Get group member count", cmd: "Get-MgGroup -All -Property DisplayName,Id | ForEach { $cnt=(Get-MgGroupMember -GroupId $_.Id -All).Count; [pscustomobject]@{Group=$_.DisplayName;Members=$cnt} } | Sort Members -Desc", module: "Microsoft.Graph", desc: "Member count for every group" },
-  { cat: "Group Management", name: "Add user to group", cmd: 'New-MgGroupMember -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Add a user to a group" },
-  { cat: "Group Management", name: "Remove user from group", cmd: 'Remove-MgGroupMemberByRef -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Remove a user from a group" },
-  { cat: "Group Management", name: "Create security group", cmd: 'New-MgGroup -DisplayName "SG-ProjectX" -MailEnabled:$false -MailNickname "sg-projectx" -SecurityEnabled', module: "Microsoft.Graph", desc: "Create a new security group" },
-  { cat: "Group Management", name: "Create M365 group", cmd: 'New-MgGroup -DisplayName "Team Project" -MailEnabled -MailNickname "teamproject" -SecurityEnabled:$false -GroupTypes "Unified"', module: "Microsoft.Graph", desc: "Create a new Microsoft 365 group" },
-  { cat: "Group Management", name: "Get dynamic groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'DynamicMembership')\" | Select DisplayName,MembershipRule", module: "Microsoft.Graph", desc: "List dynamic membership groups with rules" },
-  { cat: "Group Management", name: "Delete group", cmd: 'Remove-MgGroup -GroupId "group-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a group" },
-  { cat: "Group Management", name: "Get group owners", cmd: 'Get-MgGroupOwner -GroupId "group-id" -All', module: "Microsoft.Graph", desc: "List owners of a group" },
-  { cat: "Group Management", name: "Get groups without owners", cmd: "Get-MgGroup -All | Where { (Get-MgGroupOwner -GroupId $_.Id -All).Count -eq 0 } | Select DisplayName,Id", module: "Microsoft.Graph", desc: "Find orphaned groups with no owners" },
+  { cat: "Group Management", name: "Get all groups", cmd: "Get-MgGroup -All | Select DisplayName,GroupTypes,MailEnabled,SecurityEnabled", module: "Microsoft.Graph", desc: "List all groups in the tenant" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get M365 groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'Unified')\"", module: "Microsoft.Graph", desc: "List only Microsoft 365 groups" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get security groups", cmd: 'Get-MgGroup -All -Filter "securityEnabled eq true and mailEnabled eq false"', module: "Microsoft.Graph", desc: "List security groups (non-mail-enabled)" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" , risk: "read" },
+  { cat: "Group Management", name: "Get group members", cmd: "Get-MgGroupMember -GroupId (Get-MgGroup -Filter \"DisplayName eq 'GroupName'\").Id -All | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List members of a specific group" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get group member count", cmd: "Get-MgGroup -All -Property DisplayName,Id | ForEach { $cnt=(Get-MgGroupMember -GroupId $_.Id -All).Count; [pscustomobject]@{Group=$_.DisplayName;Members=$cnt} } | Sort Members -Desc", module: "Microsoft.Graph", desc: "Member count for every group" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Add user to group", cmd: 'New-MgGroupMember -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Add a user to a group" , risk: "modify", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Remove user from group", cmd: 'Remove-MgGroupMemberByRef -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Remove a user from a group" , risk: "destructive", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Create security group", cmd: 'New-MgGroup -DisplayName "SG-ProjectX" -MailEnabled:$false -MailNickname "sg-projectx" -SecurityEnabled', module: "Microsoft.Graph", desc: "Create a new security group" , risk: "modify", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Create M365 group", cmd: 'New-MgGroup -DisplayName "Team Project" -MailEnabled -MailNickname "teamproject" -SecurityEnabled:$false -GroupTypes "Unified"', module: "Microsoft.Graph", desc: "Create a new Microsoft 365 group" , risk: "modify", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Get dynamic groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'DynamicMembership')\" | Select DisplayName,MembershipRule", module: "Microsoft.Graph", desc: "List dynamic membership groups with rules" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Delete group", cmd: 'Remove-MgGroup -GroupId "group-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a group" , risk: "destructive", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Get group owners", cmd: 'Get-MgGroupOwner -GroupId "group-id" -All', module: "Microsoft.Graph", desc: "List owners of a group" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get groups without owners", cmd: "Get-MgGroup -All | Where { (Get-MgGroupOwner -GroupId $_.Id -All).Count -eq 0 } | Select DisplayName,Id", module: "Microsoft.Graph", desc: "Find orphaned groups with no owners" , risk: "read", perms: "Group.Read.All" },
 
   // ── LICENSING (8) ──
-  { cat: "Licensing", name: "Get all licenses in tenant", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}},@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}}", module: "Microsoft.Graph", desc: "Overview of all license SKUs with availability" },
-  { cat: "Licensing", name: "Get user licenses", cmd: 'Get-MgUserLicenseDetail -UserId "user@{{domain}}" | Select SkuPartNumber,SkuId', module: "Microsoft.Graph", desc: "Show licenses assigned to a user" },
-  { cat: "Licensing", name: "Assign license to user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @(@{SkuId="sku-id"}) -RemoveLicenses @()', module: "Microsoft.Graph", desc: "Assign a license SKU to a user" },
-  { cat: "Licensing", name: "Remove license from user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @() -RemoveLicenses @("sku-id")', module: "Microsoft.Graph", desc: "Remove a license from a user" },
-  { cat: "Licensing", name: "Get unlicensed users", cmd: "Get-MgUser -All -Filter \"assignedLicenses/\\$count eq 0\" -ConsistencyLevel eventual -CountVariable c | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with no licenses assigned" },
-  { cat: "Licensing", name: "Get users with specific license", cmd: "Get-MgUser -All -Filter \"assignedLicenses/any(l:l/skuId eq 'sku-id')\" | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find all users with a specific SKU" },
-  { cat: "Licensing", name: "Disable self-service purchases", cmd: "Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | ForEach { Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $_.ProductId -Value \"Disabled\" }", module: "MSCommerce", desc: "Block users from self-service license purchases" },
-  { cat: "Licensing", name: "Get license assignment paths", cmd: "Get-MgUser -All -Property DisplayName,LicenseAssignmentStates | Select DisplayName,@{N='Assignments';E={$_.LicenseAssignmentStates | Select AssignedByGroup,SkuId}}", module: "Microsoft.Graph", desc: "Check if licenses are direct or group-based" },
+  { cat: "Licensing", name: "Get all licenses in tenant", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}},@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}}", module: "Microsoft.Graph", desc: "Overview of all license SKUs with availability" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Licensing", name: "Get user licenses", cmd: 'Get-MgUserLicenseDetail -UserId "user@{{domain}}" | Select SkuPartNumber,SkuId', module: "Microsoft.Graph", desc: "Show licenses assigned to a user" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Licensing", name: "Assign license to user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @(@{SkuId="sku-id"}) -RemoveLicenses @()', module: "Microsoft.Graph", desc: "Assign a license SKU to a user" , risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "Licensing", name: "Remove license from user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @() -RemoveLicenses @("sku-id")', module: "Microsoft.Graph", desc: "Remove a license from a user" , risk: "destructive", perms: "User.ReadWrite.All" },
+  { cat: "Licensing", name: "Get unlicensed users", cmd: "Get-MgUser -All -Filter \"assignedLicenses/\\$count eq 0\" -ConsistencyLevel eventual -CountVariable c | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with no licenses assigned" , risk: "read", perms: "User.ReadWrite.All" },
+  { cat: "Licensing", name: "Get users with specific license", cmd: "Get-MgUser -All -Filter \"assignedLicenses/any(l:l/skuId eq 'sku-id')\" | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find all users with a specific SKU" , risk: "read", perms: "User.ReadWrite.All" },
+  { cat: "Licensing", name: "Disable self-service purchases", cmd: "Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | ForEach { Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $_.ProductId -Value \"Disabled\" }", module: "MSCommerce", desc: "Block users from self-service license purchases" , risk: "read" },
+  { cat: "Licensing", name: "Get license assignment paths", cmd: "Get-MgUser -All -Property DisplayName,LicenseAssignmentStates | Select DisplayName,@{N='Assignments';E={$_.LicenseAssignmentStates | Select AssignedByGroup,SkuId}}", module: "Microsoft.Graph", desc: "Check if licenses are direct or group-based" , risk: "read", perms: "User.ReadWrite.All" },
 
   // ── EXCHANGE ONLINE (22) ──
-  { cat: "Exchange Online", name: "Get all mailboxes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,RecipientTypeDetails", module: "ExchangeOnlineManagement", desc: "List all mailboxes" },
-  { cat: "Exchange Online", name: "Get shared mailboxes", cmd: "Get-EXOMailbox -RecipientTypeDetails SharedMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress", module: "ExchangeOnlineManagement", desc: "List only shared mailboxes" },
-  { cat: "Exchange Online", name: "Create shared mailbox", cmd: 'New-Mailbox -Shared -Name "Info" -DisplayName "Info Mailbox" -PrimarySmtpAddress info@{{domain}}', module: "ExchangeOnlineManagement", desc: "Create a new shared mailbox" },
-  { cat: "Exchange Online", name: "Get mailbox permissions", cmd: 'Get-MailboxPermission -Identity "shared@{{domain}}" | Where { $_.User -ne "NT AUTHORITY\\SELF" }', module: "ExchangeOnlineManagement", desc: "See who has access to a mailbox" },
-  { cat: "Exchange Online", name: "Grant Full Access", cmd: 'Add-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -AutoMapping $true', module: "ExchangeOnlineManagement", desc: "Give full access to a mailbox" },
-  { cat: "Exchange Online", name: "Remove Full Access", cmd: 'Remove-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Remove full access from a mailbox" },
-  { cat: "Exchange Online", name: "Grant Send As", cmd: 'Add-RecipientPermission -Identity "shared@{{domain}}" -Trustee "user@{{domain}}" -AccessRights SendAs -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Give Send As permission" },
-  { cat: "Exchange Online", name: "Grant Send on Behalf", cmd: 'Set-Mailbox -Identity "shared@{{domain}}" -GrantSendOnBehalfTo "user@{{domain}}"', module: "ExchangeOnlineManagement", desc: "Give Send on Behalf permission" },
-  { cat: "Exchange Online", name: "Get mailbox size", cmd: 'Get-EXOMailboxStatistics -Identity "user@{{domain}}" | Select DisplayName,TotalItemSize,ItemCount', module: "ExchangeOnlineManagement", desc: "Check mailbox size and item count" },
-  { cat: "Exchange Online", name: "Get all mailbox sizes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Get-EXOMailboxStatistics | Select DisplayName,TotalItemSize,ItemCount | Sort TotalItemSize -Descending", module: "ExchangeOnlineManagement", desc: "All mailboxes sorted by size" },
-  { cat: "Exchange Online", name: "Set mailbox timezone", cmd: 'Set-MailboxRegionalConfiguration -Identity "user@{{domain}}" -TimeZone "W. Europe Standard Time" -Language sv-SE -LocalizeDefaultFolderName', module: "ExchangeOnlineManagement", desc: "Set timezone and language on mailbox" },
-  { cat: "Exchange Online", name: "Bulk set timezone", cmd: "Get-EXOMailbox -ResultSize Unlimited | ForEach { Set-MailboxRegionalConfiguration -Identity $_.PrimarySmtpAddress -TimeZone \"W. Europe Standard Time\" -Language sv-SE }", module: "ExchangeOnlineManagement", desc: "Set timezone for all mailboxes" },
-  { cat: "Exchange Online", name: "Get forwarding rules", cmd: "Get-EXOMailbox -ResultSize Unlimited | Where { $_.ForwardingSmtpAddress -ne $null } | Select DisplayName,ForwardingSmtpAddress,DeliverToMailboxAndForward", module: "ExchangeOnlineManagement", desc: "Find mailboxes with forwarding enabled" },
-  { cat: "Exchange Online", name: "Remove forwarding", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -ForwardingSmtpAddress $null -DeliverToMailboxAndForward $false', module: "ExchangeOnlineManagement", desc: "Remove SMTP forwarding from a mailbox" },
-  { cat: "Exchange Online", name: "Get inbox rules (user)", cmd: 'Get-InboxRule -Mailbox "user@{{domain}}" | Select Name,Description,Enabled', module: "ExchangeOnlineManagement", desc: "List inbox rules for a user" },
-  { cat: "Exchange Online", name: "Convert to shared mailbox", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -Type Shared', module: "ExchangeOnlineManagement", desc: "Convert user mailbox to shared" },
-  { cat: "Exchange Online", name: "Set Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Enabled -InternalMessage "I am currently out of office." -ExternalMessage "I am currently out of office."', module: "ExchangeOnlineManagement", desc: "Enable auto-reply / out of office" },
-  { cat: "Exchange Online", name: "Disable Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Disabled', module: "ExchangeOnlineManagement", desc: "Turn off auto-reply" },
-  { cat: "Exchange Online", name: "Get calendar permissions", cmd: 'Get-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar"', module: "ExchangeOnlineManagement", desc: "Check calendar sharing permissions" },
-  { cat: "Exchange Online", name: "Set calendar permissions", cmd: 'Set-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar" -User Default -AccessRights Reviewer', module: "ExchangeOnlineManagement", desc: "Set default calendar visibility" },
-  { cat: "Exchange Online", name: "Get resource mailboxes", cmd: "Get-EXOMailbox -RecipientTypeDetails RoomMailbox,EquipmentMailbox | Select DisplayName,RecipientTypeDetails,PrimarySmtpAddress", module: "ExchangeOnlineManagement", desc: "List room and equipment mailboxes" },
-  { cat: "Exchange Online", name: "Get mail contacts", cmd: "Get-MailContact -ResultSize Unlimited | Select DisplayName,ExternalEmailAddress", module: "ExchangeOnlineManagement", desc: "List external mail contacts" },
-  { cat: "Exchange Online", name: "Set mailbox litigation hold", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -LitigationHoldEnabled $true -LitigationHoldDuration 365', module: "ExchangeOnlineManagement", desc: "Enable litigation hold (365 days)" },
-  { cat: "Exchange Online", name: "Get mailbox hold status", cmd: 'Get-Mailbox -Identity "user@{{domain}}" | Select DisplayName,LitigationHoldEnabled,InPlaceHolds', module: "ExchangeOnlineManagement", desc: "Check if mailbox is on hold" },
+  { cat: "Exchange Online", name: "Get all mailboxes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,RecipientTypeDetails", module: "ExchangeOnlineManagement", desc: "List all mailboxes" , risk: "read" },
+  { cat: "Exchange Online", name: "Get shared mailboxes", cmd: "Get-EXOMailbox -RecipientTypeDetails SharedMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress", module: "ExchangeOnlineManagement", desc: "List only shared mailboxes" , risk: "read" },
+  { cat: "Exchange Online", name: "Create shared mailbox", cmd: 'New-Mailbox -Shared -Name "Info" -DisplayName "Info Mailbox" -PrimarySmtpAddress info@{{domain}}', module: "ExchangeOnlineManagement", desc: "Create a new shared mailbox" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get mailbox permissions", cmd: 'Get-MailboxPermission -Identity "shared@{{domain}}" | Where { $_.User -ne "NT AUTHORITY\\SELF" }', module: "ExchangeOnlineManagement", desc: "See who has access to a mailbox" , risk: "read" },
+  { cat: "Exchange Online", name: "Grant Full Access", cmd: 'Add-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -AutoMapping $true', module: "ExchangeOnlineManagement", desc: "Give full access to a mailbox" , risk: "modify" },
+  { cat: "Exchange Online", name: "Remove Full Access", cmd: 'Remove-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Remove full access from a mailbox" , risk: "destructive" },
+  { cat: "Exchange Online", name: "Grant Send As", cmd: 'Add-RecipientPermission -Identity "shared@{{domain}}" -Trustee "user@{{domain}}" -AccessRights SendAs -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Give Send As permission" , risk: "modify" },
+  { cat: "Exchange Online", name: "Grant Send on Behalf", cmd: 'Set-Mailbox -Identity "shared@{{domain}}" -GrantSendOnBehalfTo "user@{{domain}}"', module: "ExchangeOnlineManagement", desc: "Give Send on Behalf permission" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get mailbox size", cmd: 'Get-EXOMailboxStatistics -Identity "user@{{domain}}" | Select DisplayName,TotalItemSize,ItemCount', module: "ExchangeOnlineManagement", desc: "Check mailbox size and item count" , risk: "read" },
+  { cat: "Exchange Online", name: "Get all mailbox sizes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Get-EXOMailboxStatistics | Select DisplayName,TotalItemSize,ItemCount | Sort TotalItemSize -Descending", module: "ExchangeOnlineManagement", desc: "All mailboxes sorted by size" , risk: "read" },
+  { cat: "Exchange Online", name: "Set mailbox timezone", cmd: 'Set-MailboxRegionalConfiguration -Identity "user@{{domain}}" -TimeZone "W. Europe Standard Time" -Language sv-SE -LocalizeDefaultFolderName', module: "ExchangeOnlineManagement", desc: "Set timezone and language on mailbox" , risk: "modify" },
+  { cat: "Exchange Online", name: "Bulk set timezone", cmd: "Get-EXOMailbox -ResultSize Unlimited | ForEach { Set-MailboxRegionalConfiguration -Identity $_.PrimarySmtpAddress -TimeZone \"W. Europe Standard Time\" -Language sv-SE }", module: "ExchangeOnlineManagement", desc: "Set timezone for all mailboxes" , risk: "read" },
+  { cat: "Exchange Online", name: "Get forwarding rules", cmd: "Get-EXOMailbox -ResultSize Unlimited | Where { $_.ForwardingSmtpAddress -ne $null } | Select DisplayName,ForwardingSmtpAddress,DeliverToMailboxAndForward", module: "ExchangeOnlineManagement", desc: "Find mailboxes with forwarding enabled" , risk: "read" },
+  { cat: "Exchange Online", name: "Remove forwarding", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -ForwardingSmtpAddress $null -DeliverToMailboxAndForward $false', module: "ExchangeOnlineManagement", desc: "Remove SMTP forwarding from a mailbox" , risk: "destructive" },
+  { cat: "Exchange Online", name: "Get inbox rules (user)", cmd: 'Get-InboxRule -Mailbox "user@{{domain}}" | Select Name,Description,Enabled', module: "ExchangeOnlineManagement", desc: "List inbox rules for a user" , risk: "read" },
+  { cat: "Exchange Online", name: "Convert to shared mailbox", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -Type Shared', module: "ExchangeOnlineManagement", desc: "Convert user mailbox to shared" , risk: "modify" },
+  { cat: "Exchange Online", name: "Set Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Enabled -InternalMessage "I am currently out of office." -ExternalMessage "I am currently out of office."', module: "ExchangeOnlineManagement", desc: "Enable auto-reply / out of office" , risk: "modify" },
+  { cat: "Exchange Online", name: "Disable Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Disabled', module: "ExchangeOnlineManagement", desc: "Turn off auto-reply" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get calendar permissions", cmd: 'Get-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar"', module: "ExchangeOnlineManagement", desc: "Check calendar sharing permissions" , risk: "read" },
+  { cat: "Exchange Online", name: "Set calendar permissions", cmd: 'Set-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar" -User Default -AccessRights Reviewer', module: "ExchangeOnlineManagement", desc: "Set default calendar visibility" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get resource mailboxes", cmd: "Get-EXOMailbox -RecipientTypeDetails RoomMailbox,EquipmentMailbox | Select DisplayName,RecipientTypeDetails,PrimarySmtpAddress", module: "ExchangeOnlineManagement", desc: "List room and equipment mailboxes" , risk: "read" },
+  { cat: "Exchange Online", name: "Get mail contacts", cmd: "Get-MailContact -ResultSize Unlimited | Select DisplayName,ExternalEmailAddress", module: "ExchangeOnlineManagement", desc: "List external mail contacts" , risk: "read" },
+  { cat: "Exchange Online", name: "Set mailbox litigation hold", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -LitigationHoldEnabled $true -LitigationHoldDuration 365', module: "ExchangeOnlineManagement", desc: "Enable litigation hold (365 days)" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get mailbox hold status", cmd: 'Get-Mailbox -Identity "user@{{domain}}" | Select DisplayName,LitigationHoldEnabled,InPlaceHolds', module: "ExchangeOnlineManagement", desc: "Check if mailbox is on hold" , risk: "read" },
 
   // ── MAIL FLOW & TRANSPORT (10) ──
-  { cat: "Mail Flow & Transport", name: "Get transport rules", cmd: "Get-TransportRule | Select Name,State,Priority", module: "ExchangeOnlineManagement", desc: "List all mail flow rules" },
-  { cat: "Mail Flow & Transport", name: "Get accepted domains", cmd: "Get-AcceptedDomain | Select DomainName,DomainType,Default", module: "ExchangeOnlineManagement", desc: "List verified domains in Exchange" },
-  { cat: "Mail Flow & Transport", name: "Get connectors", cmd: "Get-InboundConnector | Select Name,Enabled; Get-OutboundConnector | Select Name,Enabled", module: "ExchangeOnlineManagement", desc: "List inbound and outbound connectors" },
-  { cat: "Mail Flow & Transport", name: "Message trace", cmd: 'Get-MessageTrace -SenderAddress "user@{{domain}}" -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) | Select Received,SenderAddress,RecipientAddress,Subject,Status', module: "ExchangeOnlineManagement", desc: "Trace messages from a sender (last 7 days)" },
-  { cat: "Mail Flow & Transport", name: "Message trace by recipient", cmd: 'Get-MessageTrace -RecipientAddress "user@{{domain}}" -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) | Select Received,SenderAddress,Subject,Status', module: "ExchangeOnlineManagement", desc: "Trace messages TO a recipient" },
-  { cat: "Mail Flow & Transport", name: "Get quarantined messages", cmd: "Get-QuarantineMessage -StartReceivedDate (Get-Date).AddDays(-7) | Select Subject,SenderAddress,RecipientAddress,Type", module: "ExchangeOnlineManagement", desc: "View quarantined emails" },
-  { cat: "Mail Flow & Transport", name: "Release quarantined message", cmd: 'Release-QuarantineMessage -Identity "quarantine-id" -ReleaseToAll', module: "ExchangeOnlineManagement", desc: "Release a message from quarantine" },
-  { cat: "Mail Flow & Transport", name: "Get anti-spam policy", cmd: "Get-HostedContentFilterPolicy | Select Name,BulkThreshold,SpamAction,HighConfidenceSpamAction", module: "ExchangeOnlineManagement", desc: "View spam filter settings" },
-  { cat: "Mail Flow & Transport", name: "Get DKIM config", cmd: "Get-DkimSigningConfig | Select Domain,Enabled,Status", module: "ExchangeOnlineManagement", desc: "Check DKIM signing status per domain" },
-  { cat: "Mail Flow & Transport", name: "Get blocked senders", cmd: "Get-HostedContentFilterPolicy | Select -ExpandProperty BlockedSenders", module: "ExchangeOnlineManagement", desc: "List globally blocked senders" },
+  { cat: "Mail Flow & Transport", name: "Get transport rules", cmd: "Get-TransportRule | Select Name,State,Priority", module: "ExchangeOnlineManagement", desc: "List all mail flow rules" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Get accepted domains", cmd: "Get-AcceptedDomain | Select DomainName,DomainType,Default", module: "ExchangeOnlineManagement", desc: "List verified domains in Exchange" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Get connectors", cmd: "Get-InboundConnector | Select Name,Enabled; Get-OutboundConnector | Select Name,Enabled", module: "ExchangeOnlineManagement", desc: "List inbound and outbound connectors" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Message trace", cmd: 'Get-MessageTrace -SenderAddress "user@{{domain}}" -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) | Select Received,SenderAddress,RecipientAddress,Subject,Status', module: "ExchangeOnlineManagement", desc: "Trace messages from a sender (last 7 days)" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Message trace by recipient", cmd: 'Get-MessageTrace -RecipientAddress "user@{{domain}}" -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) | Select Received,SenderAddress,Subject,Status', module: "ExchangeOnlineManagement", desc: "Trace messages TO a recipient" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Get quarantined messages", cmd: "Get-QuarantineMessage -StartReceivedDate (Get-Date).AddDays(-7) | Select Subject,SenderAddress,RecipientAddress,Type", module: "ExchangeOnlineManagement", desc: "View quarantined emails" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Release quarantined message", cmd: 'Release-QuarantineMessage -Identity "quarantine-id" -ReleaseToAll', module: "ExchangeOnlineManagement", desc: "Release a message from quarantine" , risk: "modify" },
+  { cat: "Mail Flow & Transport", name: "Get anti-spam policy", cmd: "Get-HostedContentFilterPolicy | Select Name,BulkThreshold,SpamAction,HighConfidenceSpamAction", module: "ExchangeOnlineManagement", desc: "View spam filter settings" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Get DKIM config", cmd: "Get-DkimSigningConfig | Select Domain,Enabled,Status", module: "ExchangeOnlineManagement", desc: "Check DKIM signing status per domain" , risk: "read" },
+  { cat: "Mail Flow & Transport", name: "Get blocked senders", cmd: "Get-HostedContentFilterPolicy | Select -ExpandProperty BlockedSenders", module: "ExchangeOnlineManagement", desc: "List globally blocked senders" , risk: "read" },
 
   // ── SHAREPOINT ONLINE (14) ──
-  { cat: "SharePoint Online", name: "Get all site collections", cmd: "Get-SPOSite -Limit All | Select Title,Url,StorageUsageCurrent", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List all SharePoint site collections" },
-  { cat: "SharePoint Online", name: "Get site details", cmd: 'Get-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -Detailed', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Detailed info about a site" },
-  { cat: "SharePoint Online", name: "Get site storage usage", cmd: "Get-SPOSite -Limit All | Select Title,Url,@{N='StorageGB';E={[math]::Round($_.StorageUsageCurrent/1024,2)}} | Sort StorageGB -Descending", module: "Microsoft.Online.SharePoint.PowerShell", desc: "Storage usage per site in GB, sorted" },
-  { cat: "SharePoint Online", name: "Set site storage quota", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -StorageQuota 5120', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Set storage quota (MB) on a site" },
-  { cat: "SharePoint Online", name: "Add site collection admin", cmd: 'Set-SPOUser -Site "https://{{domain}}.sharepoint.com/sites/sitename" -LoginName "user@{{domain}}" -IsSiteCollectionAdmin $true', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Make someone a site collection admin" },
-  { cat: "SharePoint Online", name: "Get external sharing status", cmd: "Get-SPOSite -Limit All | Select Title,Url,SharingCapability | Where { $_.SharingCapability -ne 'Disabled' }", module: "Microsoft.Online.SharePoint.PowerShell", desc: "Sites with external sharing enabled" },
-  { cat: "SharePoint Online", name: "Disable external sharing on site", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -SharingCapability Disabled', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Block external sharing on a site" },
-  { cat: "SharePoint Online", name: "Get OneDrive URLs", cmd: "Get-SPOSite -IncludePersonalSite $true -Limit All -Filter \"Url -like '-my.sharepoint.com'\" | Select Owner,Url,StorageUsageCurrent", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List all OneDrive for Business sites" },
-  { cat: "SharePoint Online", name: "Get deleted sites", cmd: "Get-SPODeletedSite | Select Url,DeletionTime", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List sites in the recycle bin" },
-  { cat: "SharePoint Online", name: "Restore deleted site", cmd: 'Restore-SPODeletedSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename"', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Restore a site from recycle bin" },
-  { cat: "SharePoint Online", name: "Get SharePoint lists (PnP)", cmd: "Get-PnPList | Select Title,ItemCount,BaseTemplate", module: "PnP.PowerShell", desc: "List all lists/libraries on connected site" },
-  { cat: "SharePoint Online", name: "Export list items (PnP)", cmd: 'Get-PnPListItem -List "Documents" -PageSize 500 | Select -ExpandProperty FieldValues | Export-Csv "items.csv" -NoTypeInformation', module: "PnP.PowerShell", desc: "Export list/library items to CSV" },
-  { cat: "SharePoint Online", name: "Get tenant sharing settings", cmd: "Get-SPOTenant | Select SharingCapability,DefaultSharingLinkType,PreventExternalUsersFromResharing", module: "Microsoft.Online.SharePoint.PowerShell", desc: "View tenant-level sharing config" },
-  { cat: "SharePoint Online", name: "Lock a site (read only)", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -LockState ReadOnly', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Set a site to read-only mode" },
+  { cat: "SharePoint Online", name: "Get all site collections", cmd: "Get-SPOSite -Limit All | Select Title,Url,StorageUsageCurrent", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List all SharePoint site collections" , risk: "read" },
+  { cat: "SharePoint Online", name: "Get site details", cmd: 'Get-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -Detailed', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Detailed info about a site" , risk: "read" },
+  { cat: "SharePoint Online", name: "Get site storage usage", cmd: "Get-SPOSite -Limit All | Select Title,Url,@{N='StorageGB';E={[math]::Round($_.StorageUsageCurrent/1024,2)}} | Sort StorageGB -Descending", module: "Microsoft.Online.SharePoint.PowerShell", desc: "Storage usage per site in GB, sorted" , risk: "read" },
+  { cat: "SharePoint Online", name: "Set site storage quota", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -StorageQuota 5120', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Set storage quota (MB) on a site" , risk: "modify" },
+  { cat: "SharePoint Online", name: "Add site collection admin", cmd: 'Set-SPOUser -Site "https://{{domain}}.sharepoint.com/sites/sitename" -LoginName "user@{{domain}}" -IsSiteCollectionAdmin $true', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Make someone a site collection admin" , risk: "modify" },
+  { cat: "SharePoint Online", name: "Get external sharing status", cmd: "Get-SPOSite -Limit All | Select Title,Url,SharingCapability | Where { $_.SharingCapability -ne 'Disabled' }", module: "Microsoft.Online.SharePoint.PowerShell", desc: "Sites with external sharing enabled" , risk: "read" },
+  { cat: "SharePoint Online", name: "Disable external sharing on site", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -SharingCapability Disabled', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Block external sharing on a site" , risk: "modify" },
+  { cat: "SharePoint Online", name: "Get OneDrive URLs", cmd: "Get-SPOSite -IncludePersonalSite $true -Limit All -Filter \"Url -like '-my.sharepoint.com'\" | Select Owner,Url,StorageUsageCurrent", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List all OneDrive for Business sites" , risk: "read" },
+  { cat: "SharePoint Online", name: "Get deleted sites", cmd: "Get-SPODeletedSite | Select Url,DeletionTime", module: "Microsoft.Online.SharePoint.PowerShell", desc: "List sites in the recycle bin" , risk: "destructive" },
+  { cat: "SharePoint Online", name: "Restore deleted site", cmd: 'Restore-SPODeletedSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename"', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Restore a site from recycle bin" , risk: "destructive" },
+  { cat: "SharePoint Online", name: "Get SharePoint lists (PnP)", cmd: "Get-PnPList | Select Title,ItemCount,BaseTemplate", module: "PnP.PowerShell", desc: "List all lists/libraries on connected site" , risk: "read" },
+  { cat: "SharePoint Online", name: "Export list items (PnP)", cmd: 'Get-PnPListItem -List "Documents" -PageSize 500 | Select -ExpandProperty FieldValues | Export-Csv "items.csv" -NoTypeInformation', module: "PnP.PowerShell", desc: "Export list/library items to CSV" , risk: "read" },
+  { cat: "SharePoint Online", name: "Get tenant sharing settings", cmd: "Get-SPOTenant | Select SharingCapability,DefaultSharingLinkType,PreventExternalUsersFromResharing", module: "Microsoft.Online.SharePoint.PowerShell", desc: "View tenant-level sharing config" , risk: "read" },
+  { cat: "SharePoint Online", name: "Lock a site (read only)", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -LockState ReadOnly', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Set a site to read-only mode" , risk: "modify" },
 
   // ── TEAMS (11) ──
-  { cat: "Teams", name: "Get all teams", cmd: "Get-Team | Select DisplayName,GroupId,Visibility,Archived", module: "MicrosoftTeams", desc: "List all Teams" },
-  { cat: "Teams", name: "Get team members", cmd: 'Get-TeamUser -GroupId "group-id" | Select Name,User,Role', module: "MicrosoftTeams", desc: "List members and their roles" },
-  { cat: "Teams", name: "Add team member", cmd: 'Add-TeamUser -GroupId "group-id" -User "user@{{domain}}" -Role Member', module: "MicrosoftTeams", desc: "Add a user to a team" },
-  { cat: "Teams", name: "Remove team member", cmd: 'Remove-TeamUser -GroupId "group-id" -User "user@{{domain}}"', module: "MicrosoftTeams", desc: "Remove a user from a team" },
-  { cat: "Teams", name: "Create new team", cmd: 'New-Team -DisplayName "Project Alpha" -Description "Project team" -Visibility Private', module: "MicrosoftTeams", desc: "Create a new team" },
-  { cat: "Teams", name: "Get team channels", cmd: 'Get-TeamChannel -GroupId "group-id" | Select DisplayName,MembershipType', module: "MicrosoftTeams", desc: "List channels in a team" },
-  { cat: "Teams", name: "Create team channel", cmd: 'New-TeamChannel -GroupId "group-id" -DisplayName "Design" -MembershipType Standard', module: "MicrosoftTeams", desc: "Add a channel to a team" },
-  { cat: "Teams", name: "Remove team channel", cmd: 'Remove-TeamChannel -GroupId "group-id" -DisplayName "Old Channel"', module: "MicrosoftTeams", desc: "Delete a channel from a team" },
-  { cat: "Teams", name: "Get Teams policies", cmd: "Get-CsTeamsMeetingPolicy | Select Identity,AllowTranscription,AllowRecording,AllowIPVideo", module: "MicrosoftTeams", desc: "View Teams meeting policies" },
-  { cat: "Teams", name: "Archive a team", cmd: 'Set-TeamArchivedState -GroupId "group-id" -Archived $true', module: "MicrosoftTeams", desc: "Archive a team (read-only)" },
-  { cat: "Teams", name: "Get Teams apps", cmd: "Get-TeamsApp | Select DisplayName,DistributionMethod,ExternalId", module: "MicrosoftTeams", desc: "List installed Teams apps" },
+  { cat: "Teams", name: "Get all teams", cmd: "Get-Team | Select DisplayName,GroupId,Visibility,Archived", module: "MicrosoftTeams", desc: "List all Teams" , risk: "read" },
+  { cat: "Teams", name: "Get team members", cmd: 'Get-TeamUser -GroupId "group-id" | Select Name,User,Role', module: "MicrosoftTeams", desc: "List members and their roles" , risk: "read" },
+  { cat: "Teams", name: "Add team member", cmd: 'Add-TeamUser -GroupId "group-id" -User "user@{{domain}}" -Role Member', module: "MicrosoftTeams", desc: "Add a user to a team" , risk: "modify" },
+  { cat: "Teams", name: "Remove team member", cmd: 'Remove-TeamUser -GroupId "group-id" -User "user@{{domain}}"', module: "MicrosoftTeams", desc: "Remove a user from a team" , risk: "destructive" },
+  { cat: "Teams", name: "Create new team", cmd: 'New-Team -DisplayName "Project Alpha" -Description "Project team" -Visibility Private', module: "MicrosoftTeams", desc: "Create a new team" , risk: "modify" },
+  { cat: "Teams", name: "Get team channels", cmd: 'Get-TeamChannel -GroupId "group-id" | Select DisplayName,MembershipType', module: "MicrosoftTeams", desc: "List channels in a team" , risk: "read" },
+  { cat: "Teams", name: "Create team channel", cmd: 'New-TeamChannel -GroupId "group-id" -DisplayName "Design" -MembershipType Standard', module: "MicrosoftTeams", desc: "Add a channel to a team" , risk: "modify" },
+  { cat: "Teams", name: "Remove team channel", cmd: 'Remove-TeamChannel -GroupId "group-id" -DisplayName "Old Channel"', module: "MicrosoftTeams", desc: "Delete a channel from a team" , risk: "destructive" },
+  { cat: "Teams", name: "Get Teams policies", cmd: "Get-CsTeamsMeetingPolicy | Select Identity,AllowTranscription,AllowRecording,AllowIPVideo", module: "MicrosoftTeams", desc: "View Teams meeting policies" , risk: "read" },
+  { cat: "Teams", name: "Archive a team", cmd: 'Set-TeamArchivedState -GroupId "group-id" -Archived $true', module: "MicrosoftTeams", desc: "Archive a team (read-only)" , risk: "modify" },
+  { cat: "Teams", name: "Get Teams apps", cmd: "Get-TeamsApp | Select DisplayName,DistributionMethod,ExternalId", module: "MicrosoftTeams", desc: "List installed Teams apps" , risk: "read" },
 
   // ── SECURITY & COMPLIANCE (15) ──
-  { cat: "Security & Compliance", name: "Get admin role members", cmd: "Get-MgDirectoryRoleMember -DirectoryRoleId (Get-MgDirectoryRole -Filter \"DisplayName eq 'Global Administrator'\").Id | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List all Global Admins" },
-  { cat: "Security & Compliance", name: "Get all directory roles", cmd: "Get-MgDirectoryRole | Select DisplayName,Id", module: "Microsoft.Graph", desc: "List all activated admin roles" },
-  { cat: "Security & Compliance", name: "Get role assignments for user", cmd: "Get-MgUserMemberOf -UserId \"user@{{domain}}\" | Where { $_.AdditionalProperties.\"@odata.type\" -eq \"#microsoft.graph.directoryRole\" } | Select @{N='Role';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "Check what admin roles a user has" },
-  { cat: "Security & Compliance", name: "Get MFA registration details", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Select UserPrincipalName,IsMfaRegistered,MethodsRegistered | Sort IsMfaRegistered", module: "Microsoft.Graph", desc: "MFA registration status per user" },
-  { cat: "Security & Compliance", name: "Get risky users", cmd: "Get-MgRiskyUser -Filter \"RiskLevel eq 'high'\" | Select UserDisplayName,RiskLevel,RiskState,RiskLastUpdatedDateTime", module: "Microsoft.Graph", desc: "List high-risk users (Identity Protection)" },
-  { cat: "Security & Compliance", name: "Get risky sign-ins", cmd: "Get-MgRiskySignIn -Top 50 | Select UserDisplayName,RiskLevel,RiskDetail,IPAddress,CreatedDateTime", module: "Microsoft.Graph", desc: "Recent risky sign-in events" },
-  { cat: "Security & Compliance", name: "Get sign-in logs", cmd: "Get-MgAuditLogSignIn -Top 100 | Select UserDisplayName,AppDisplayName,Status,ConditionalAccessStatus,IPAddress", module: "Microsoft.Graph", desc: "Recent sign-in audit logs" },
-  { cat: "Security & Compliance", name: "Get audit logs", cmd: "Get-MgAuditLogDirectoryAudit -Top 50 | Select ActivityDisplayName,InitiatedBy,TargetResources,ActivityDateTime", module: "Microsoft.Graph", desc: "Recent directory audit events" },
-  { cat: "Security & Compliance", name: "Get app registrations", cmd: "Get-MgApplication -All | Select DisplayName,AppId,CreatedDateTime,SignInAudience", module: "Microsoft.Graph", desc: "List all app registrations" },
-  { cat: "Security & Compliance", name: "Get enterprise apps", cmd: "Get-MgServicePrincipal -All | Select DisplayName,AppId,AccountEnabled,ServicePrincipalType", module: "Microsoft.Graph", desc: "List enterprise applications" },
-  { cat: "Security & Compliance", name: "Get app credentials expiring", cmd: "Get-MgApplication -All | ForEach { $app=$_; $_.PasswordCredentials | Where { $_.EndDateTime -lt (Get-Date).AddDays(30) } | Select @{N='App';E={$app.DisplayName}},EndDateTime,DisplayName }", module: "Microsoft.Graph", desc: "Find app secrets expiring within 30 days" },
-  { cat: "Security & Compliance", name: "Search unified audit log", cmd: "Search-UnifiedAuditLog -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -RecordType AzureActiveDirectory -ResultSize 100 | Select CreationDate,UserIds,Operations", module: "ExchangeOnlineManagement", desc: "Search audit log for Entra ID events" },
-  { cat: "Security & Compliance", name: "Get DLP policies", cmd: "Get-DlpCompliancePolicy | Select Name,Mode,Enabled", module: "ExchangeOnlineProtection", desc: "List Data Loss Prevention policies" },
-  { cat: "Security & Compliance", name: "Get retention policies", cmd: "Get-RetentionCompliancePolicy | Select Name,Enabled,Mode", module: "ExchangeOnlineProtection", desc: "List retention policies" },
-  { cat: "Security & Compliance", name: "Get sensitivity labels", cmd: "Get-Label | Select DisplayName,Guid,ContentType,Enabled", module: "ExchangeOnlineProtection", desc: "List sensitivity / information protection labels" },
+  { cat: "Security & Compliance", name: "Get admin role members", cmd: "Get-MgDirectoryRoleMember -DirectoryRoleId (Get-MgDirectoryRole -Filter \"DisplayName eq 'Global Administrator'\").Id | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List all Global Admins" , risk: "read", perms: "RoleManagement.Read.Directory" },
+  { cat: "Security & Compliance", name: "Get all directory roles", cmd: "Get-MgDirectoryRole | Select DisplayName,Id", module: "Microsoft.Graph", desc: "List all activated admin roles" , risk: "read", perms: "RoleManagement.Read.Directory" },
+  { cat: "Security & Compliance", name: "Get role assignments for user", cmd: "Get-MgUserMemberOf -UserId \"user@{{domain}}\" | Where { $_.AdditionalProperties.\"@odata.type\" -eq \"#microsoft.graph.directoryRole\" } | Select @{N='Role';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "Check what admin roles a user has" , risk: "read", perms: "RoleManagement.Read.Directory" },
+  { cat: "Security & Compliance", name: "Get MFA registration details", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Select UserPrincipalName,IsMfaRegistered,MethodsRegistered | Sort IsMfaRegistered", module: "Microsoft.Graph", desc: "MFA registration status per user" , risk: "read", perms: "UserAuthenticationMethod.Read.All" },
+  { cat: "Security & Compliance", name: "Get risky users", cmd: "Get-MgRiskyUser -Filter \"RiskLevel eq 'high'\" | Select UserDisplayName,RiskLevel,RiskState,RiskLastUpdatedDateTime", module: "Microsoft.Graph", desc: "List high-risk users (Identity Protection)" , risk: "read", perms: "IdentityRiskyUser.Read.All" },
+  { cat: "Security & Compliance", name: "Get risky sign-ins", cmd: "Get-MgRiskySignIn -Top 50 | Select UserDisplayName,RiskLevel,RiskDetail,IPAddress,CreatedDateTime", module: "Microsoft.Graph", desc: "Recent risky sign-in events" , risk: "read", perms: "IdentityRiskyUser.Read.All" },
+  { cat: "Security & Compliance", name: "Get sign-in logs", cmd: "Get-MgAuditLogSignIn -Top 100 | Select UserDisplayName,AppDisplayName,Status,ConditionalAccessStatus,IPAddress", module: "Microsoft.Graph", desc: "Recent sign-in audit logs" , risk: "read", perms: "AuditLog.Read.All" },
+  { cat: "Security & Compliance", name: "Get audit logs", cmd: "Get-MgAuditLogDirectoryAudit -Top 50 | Select ActivityDisplayName,InitiatedBy,TargetResources,ActivityDateTime", module: "Microsoft.Graph", desc: "Recent directory audit events" , risk: "read", perms: "AuditLog.Read.All" },
+  { cat: "Security & Compliance", name: "Get app registrations", cmd: "Get-MgApplication -All | Select DisplayName,AppId,CreatedDateTime,SignInAudience", module: "Microsoft.Graph", desc: "List all app registrations" , risk: "read", perms: "Application.Read.All" },
+  { cat: "Security & Compliance", name: "Get enterprise apps", cmd: "Get-MgServicePrincipal -All | Select DisplayName,AppId,AccountEnabled,ServicePrincipalType", module: "Microsoft.Graph", desc: "List enterprise applications" , risk: "read", perms: "Application.Read.All" },
+  { cat: "Security & Compliance", name: "Get app credentials expiring", cmd: "Get-MgApplication -All | ForEach { $app=$_; $_.PasswordCredentials | Where { $_.EndDateTime -lt (Get-Date).AddDays(30) } | Select @{N='App';E={$app.DisplayName}},EndDateTime,DisplayName }", module: "Microsoft.Graph", desc: "Find app secrets expiring within 30 days" , risk: "read", perms: "Application.Read.All" },
+  { cat: "Security & Compliance", name: "Search unified audit log", cmd: "Search-UnifiedAuditLog -StartDate (Get-Date).AddDays(-7) -EndDate (Get-Date) -RecordType AzureActiveDirectory -ResultSize 100 | Select CreationDate,UserIds,Operations", module: "ExchangeOnlineManagement", desc: "Search audit log for Entra ID events" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get DLP policies", cmd: "Get-DlpCompliancePolicy | Select Name,Mode,Enabled", module: "ExchangeOnlineProtection", desc: "List Data Loss Prevention policies" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get retention policies", cmd: "Get-RetentionCompliancePolicy | Select Name,Enabled,Mode", module: "ExchangeOnlineProtection", desc: "List retention policies" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get sensitivity labels", cmd: "Get-Label | Select DisplayName,Guid,ContentType,Enabled", module: "ExchangeOnlineProtection", desc: "List sensitivity / information protection labels" , risk: "read" },
 
   // ── CONDITIONAL ACCESS (7) ──
-  { cat: "Conditional Access", name: "Get all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | Select DisplayName,State,CreatedDateTime,ModifiedDateTime", module: "Microsoft.Graph", desc: "List all Conditional Access policies" },
-  { cat: "Conditional Access", name: "Get CA policy details", cmd: 'Get-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" | ConvertTo-Json -Depth 10', module: "Microsoft.Graph", desc: "Full JSON details of a specific CA policy" },
-  { cat: "Conditional Access", name: "Get enabled CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabled'\" | Select DisplayName,State", module: "Microsoft.Graph", desc: "List only active CA policies" },
-  { cat: "Conditional Access", name: "Get report-only CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabledForReportingButNotEnforced'\" | Select DisplayName", module: "Microsoft.Graph", desc: "List policies in report-only mode" },
-  { cat: "Conditional Access", name: "Get disabled CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'disabled'\" | Select DisplayName", module: "Microsoft.Graph", desc: "List disabled CA policies" },
-  { cat: "Conditional Access", name: "Get named locations", cmd: "Get-MgIdentityConditionalAccessNamedLocation | Select DisplayName,@{N='Type';E={$_.AdditionalProperties.'@odata.type'}}", module: "Microsoft.Graph", desc: "List trusted/named network locations" },
-  { cat: "Conditional Access", name: "Export all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | ConvertTo-Json -Depth 10 | Out-File 'CA-Policies-Backup.json'", module: "Microsoft.Graph", desc: "Backup/export all CA policies to JSON" },
+  { cat: "Conditional Access", name: "Get all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | Select DisplayName,State,CreatedDateTime,ModifiedDateTime", module: "Microsoft.Graph", desc: "List all Conditional Access policies" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get CA policy details", cmd: 'Get-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" | ConvertTo-Json -Depth 10', module: "Microsoft.Graph", desc: "Full JSON details of a specific CA policy" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get enabled CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabled'\" | Select DisplayName,State", module: "Microsoft.Graph", desc: "List only active CA policies" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get report-only CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabledForReportingButNotEnforced'\" | Select DisplayName", module: "Microsoft.Graph", desc: "List policies in report-only mode" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get disabled CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'disabled'\" | Select DisplayName", module: "Microsoft.Graph", desc: "List disabled CA policies" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get named locations", cmd: "Get-MgIdentityConditionalAccessNamedLocation | Select DisplayName,@{N='Type';E={$_.AdditionalProperties.'@odata.type'}}", module: "Microsoft.Graph", desc: "List trusted/named network locations" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Export all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | ConvertTo-Json -Depth 10 | Out-File 'CA-Policies-Backup.json'", module: "Microsoft.Graph", desc: "Backup/export all CA policies to JSON" , risk: "read", perms: "Policy.Read.All" },
 
   // ── DEVICE MANAGEMENT (11) ──
-  { cat: "Device Management", name: "Get all managed devices", cmd: "Get-MgDeviceManagementManagedDevice -All | Select DeviceName,OperatingSystem,ComplianceState,LastSyncDateTime", module: "Microsoft.Graph.Intune", desc: "List all Intune-managed devices" },
-  { cat: "Device Management", name: "Get non-compliant devices", cmd: "Get-MgDeviceManagementManagedDevice -Filter \"complianceState eq 'noncompliant'\" | Select DeviceName,UserDisplayName,ComplianceState", module: "Microsoft.Graph.Intune", desc: "Find devices that fail compliance" },
-  { cat: "Device Management", name: "Get device compliance policies", cmd: "Get-MgDeviceManagementDeviceCompliancePolicy | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune compliance policies" },
-  { cat: "Device Management", name: "Get device config profiles", cmd: "Get-MgDeviceManagementDeviceConfiguration | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune configuration profiles" },
-  { cat: "Device Management", name: "Get Entra ID devices", cmd: "Get-MgDevice -All | Select DisplayName,OperatingSystem,TrustType,ApproximateLastSignInDateTime", module: "Microsoft.Graph", desc: "List devices registered in Entra ID" },
-  { cat: "Device Management", name: "Get stale devices", cmd: "Get-MgDevice -All | Where { $_.ApproximateLastSignInDateTime -lt (Get-Date).AddDays(-90) } | Select DisplayName,OperatingSystem,ApproximateLastSignInDateTime", module: "Microsoft.Graph", desc: "Devices inactive for 90+ days" },
-  { cat: "Device Management", name: "Delete stale device", cmd: 'Remove-MgDevice -DeviceId "device-object-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Remove a stale device from Entra ID" },
-  { cat: "Device Management", name: "Remote sync device", cmd: 'Invoke-MgDeviceManagementManagedDeviceSyncDevice -ManagedDeviceId "device-id"', module: "Microsoft.Graph.Intune", desc: "Trigger a sync on a managed device" },
-  { cat: "Device Management", name: "Remote wipe device", cmd: 'Invoke-MgDeviceManagementManagedDeviceWipe -ManagedDeviceId "device-id"', module: "Microsoft.Graph.Intune", desc: "Factory reset a managed device" },
-  { cat: "Device Management", name: "Get Autopilot devices", cmd: "Get-MgDeviceManagementWindowsAutopilotDeviceIdentity -All | Select SerialNumber,Model,GroupTag,EnrollmentState", module: "Microsoft.Graph.Intune", desc: "List Windows Autopilot devices" },
-  { cat: "Device Management", name: "Get device categories", cmd: "Get-MgDeviceManagementDeviceCategory | Select DisplayName,Id", module: "Microsoft.Graph.Intune", desc: "List Intune device categories" },
+  { cat: "Device Management", name: "Get all managed devices", cmd: "Get-MgDeviceManagementManagedDevice -All | Select DeviceName,OperatingSystem,ComplianceState,LastSyncDateTime", module: "Microsoft.Graph.Intune", desc: "List all Intune-managed devices" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get non-compliant devices", cmd: "Get-MgDeviceManagementManagedDevice -Filter \"complianceState eq 'noncompliant'\" | Select DeviceName,UserDisplayName,ComplianceState", module: "Microsoft.Graph.Intune", desc: "Find devices that fail compliance" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get device compliance policies", cmd: "Get-MgDeviceManagementDeviceCompliancePolicy | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune compliance policies" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get device config profiles", cmd: "Get-MgDeviceManagementDeviceConfiguration | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune configuration profiles" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get Entra ID devices", cmd: "Get-MgDevice -All | Select DisplayName,OperatingSystem,TrustType,ApproximateLastSignInDateTime", module: "Microsoft.Graph", desc: "List devices registered in Entra ID" , risk: "read", perms: "Device.Read.All" },
+  { cat: "Device Management", name: "Get stale devices", cmd: "Get-MgDevice -All | Where { $_.ApproximateLastSignInDateTime -lt (Get-Date).AddDays(-90) } | Select DisplayName,OperatingSystem,ApproximateLastSignInDateTime", module: "Microsoft.Graph", desc: "Devices inactive for 90+ days" , risk: "read", perms: "Device.Read.All" },
+  { cat: "Device Management", name: "Delete stale device", cmd: 'Remove-MgDevice -DeviceId "device-object-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Remove a stale device from Entra ID" , risk: "destructive", perms: "Device.ReadWrite.All" },
+  { cat: "Device Management", name: "Remote sync device", cmd: 'Invoke-MgDeviceManagementManagedDeviceSyncDevice -ManagedDeviceId "device-id"', module: "Microsoft.Graph.Intune", desc: "Trigger a sync on a managed device" , risk: "modify", perms: "DeviceManagementManagedDevices.ReadWrite.All" },
+  { cat: "Device Management", name: "Remote wipe device", cmd: 'Invoke-MgDeviceManagementManagedDeviceWipe -ManagedDeviceId "device-id"', module: "Microsoft.Graph.Intune", desc: "Factory reset a managed device" , risk: "destructive", perms: "DeviceManagementManagedDevices.ReadWrite.All" },
+  { cat: "Device Management", name: "Get Autopilot devices", cmd: "Get-MgDeviceManagementWindowsAutopilotDeviceIdentity -All | Select SerialNumber,Model,GroupTag,EnrollmentState", module: "Microsoft.Graph.Intune", desc: "List Windows Autopilot devices" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get device categories", cmd: "Get-MgDeviceManagementDeviceCategory | Select DisplayName,Id", module: "Microsoft.Graph.Intune", desc: "List Intune device categories" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
 
   // ── REPORTS & AUDITING (8) ──
-  { cat: "Reports & Auditing", name: "Get mailbox usage report", cmd: "Get-MgReportMailboxUsageDetail -Period 'D30' -OutFile 'MailboxUsage.csv'", module: "Microsoft.Graph", desc: "Mailbox usage over last 30 days" },
-  { cat: "Reports & Auditing", name: "Get OneDrive usage report", cmd: "Get-MgReportOneDriveUsageAccountDetail -Period 'D30' -OutFile 'OneDriveUsage.csv'", module: "Microsoft.Graph", desc: "OneDrive usage per user" },
-  { cat: "Reports & Auditing", name: "Get SharePoint usage report", cmd: "Get-MgReportSharePointSiteUsageDetail -Period 'D30' -OutFile 'SPOUsage.csv'", module: "Microsoft.Graph", desc: "SharePoint site usage report" },
-  { cat: "Reports & Auditing", name: "Get Teams usage report", cmd: "Get-MgReportTeamUserActivityUserDetail -Period 'D30' -OutFile 'TeamsUsage.csv'", module: "Microsoft.Graph", desc: "Teams activity per user" },
-  { cat: "Reports & Auditing", name: "Get active users report", cmd: "Get-MgReportOffice365ActiveUserDetail -Period 'D30' -OutFile 'ActiveUsers.csv'", module: "Microsoft.Graph", desc: "Active user counts across all services" },
-  { cat: "Reports & Auditing", name: "Get email activity report", cmd: "Get-MgReportEmailActivityUserDetail -Period 'D30' -OutFile 'EmailActivity.csv'", module: "Microsoft.Graph", desc: "Email send/receive activity per user" },
-  { cat: "Reports & Auditing", name: "Get M365 app usage report", cmd: "Get-MgReportOffice365ActiveUserDetail -Period 'D30' -OutFile 'AppUsage.csv'", module: "Microsoft.Graph", desc: "Which M365 apps each user is active in" },
-  { cat: "Reports & Auditing", name: "Get credential user registration", cmd: "Get-MgReportCredentialUserRegistrationDetail | Select UserPrincipalName,AuthMethods,IsRegistered,IsEnabled", module: "Microsoft.Graph", desc: "SSPR and MFA registration details" },
+  { cat: "Reports & Auditing", name: "Get mailbox usage report", cmd: "Get-MgReportMailboxUsageDetail -Period 'D30' -OutFile 'MailboxUsage.csv'", module: "Microsoft.Graph", desc: "Mailbox usage over last 30 days" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get OneDrive usage report", cmd: "Get-MgReportOneDriveUsageAccountDetail -Period 'D30' -OutFile 'OneDriveUsage.csv'", module: "Microsoft.Graph", desc: "OneDrive usage per user" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get SharePoint usage report", cmd: "Get-MgReportSharePointSiteUsageDetail -Period 'D30' -OutFile 'SPOUsage.csv'", module: "Microsoft.Graph", desc: "SharePoint site usage report" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get Teams usage report", cmd: "Get-MgReportTeamUserActivityUserDetail -Period 'D30' -OutFile 'TeamsUsage.csv'", module: "Microsoft.Graph", desc: "Teams activity per user" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get active users report", cmd: "Get-MgReportOffice365ActiveUserDetail -Period 'D30' -OutFile 'ActiveUsers.csv'", module: "Microsoft.Graph", desc: "Active user counts across all services" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get email activity report", cmd: "Get-MgReportEmailActivityUserDetail -Period 'D30' -OutFile 'EmailActivity.csv'", module: "Microsoft.Graph", desc: "Email send/receive activity per user" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get M365 app usage report", cmd: "Get-MgReportOffice365ActiveUserDetail -Period 'D30' -OutFile 'AppUsage.csv'", module: "Microsoft.Graph", desc: "Which M365 apps each user is active in" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get credential user registration", cmd: "Get-MgReportCredentialUserRegistrationDetail | Select UserPrincipalName,AuthMethods,IsRegistered,IsEnabled", module: "Microsoft.Graph", desc: "SSPR and MFA registration details" , risk: "read", perms: "UserAuthenticationMethod.Read.All" },
 
   // ── TENANT CONFIGURATION (9) ──
-  { cat: "Tenant Configuration", name: "Get organization details", cmd: "Get-MgOrganization | Select DisplayName,VerifiedDomains,TenantType,CountryLetterCode", module: "Microsoft.Graph", desc: "Basic tenant information" },
-  { cat: "Tenant Configuration", name: "Get verified domains", cmd: "(Get-MgOrganization).VerifiedDomains | Select Name,IsDefault,IsInitial", module: "Microsoft.Graph", desc: "List all verified domains" },
-  { cat: "Tenant Configuration", name: "Get auth methods policy", cmd: "Get-MgPolicyAuthenticationMethodPolicy | Select -ExpandProperty AuthenticationMethodConfigurations | Select Id,State", module: "Microsoft.Graph", desc: "View authentication methods configuration" },
-  { cat: "Tenant Configuration", name: "Get SSPR settings", cmd: "Get-MgPolicyAuthorizationPolicy | Select AllowedToSignUpEmailBasedSubscriptions,AllowEmailVerifiedUsersToJoinOrganization", module: "Microsoft.Graph", desc: "Self-service password reset config" },
-  { cat: "Tenant Configuration", name: "Get tenant SKUs overview", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}},ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}}", module: "Microsoft.Graph", desc: "License availability overview" },
-  { cat: "Tenant Configuration", name: "Get OAuth2 permission grants", cmd: "Get-MgOauth2PermissionGrant -All | Select ClientId,ConsentType,Scope | Group ConsentType", module: "Microsoft.Graph", desc: "OAuth consent grants grouped by type" },
-  { cat: "Tenant Configuration", name: "Get SPO tenant settings", cmd: "Get-SPOTenant | Select SharingCapability,OneDriveStorageQuota,RequireAcceptingAccountMatchInvitedAccount,NotifyOwnersWhenItemsReshared", module: "Microsoft.Online.SharePoint.PowerShell", desc: "SharePoint & OneDrive tenant settings" },
-  { cat: "Tenant Configuration", name: "Get password expiration policy", cmd: "(Get-MgOrganization).PasswordPolicies", module: "Microsoft.Graph", desc: "Check tenant password policy" },
-  { cat: "Tenant Configuration", name: "Get directory sync status", cmd: "Get-MgOrganization | Select OnPremisesSyncEnabled,OnPremisesLastSyncDateTime", module: "Microsoft.Graph", desc: "Check if AAD Connect / Cloud Sync is active" },
+  { cat: "Tenant Configuration", name: "Get organization details", cmd: "Get-MgOrganization | Select DisplayName,VerifiedDomains,TenantType,CountryLetterCode", module: "Microsoft.Graph", desc: "Basic tenant information" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Tenant Configuration", name: "Get verified domains", cmd: "(Get-MgOrganization).VerifiedDomains | Select Name,IsDefault,IsInitial", module: "Microsoft.Graph", desc: "List all verified domains" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Tenant Configuration", name: "Get auth methods policy", cmd: "Get-MgPolicyAuthenticationMethodPolicy | Select -ExpandProperty AuthenticationMethodConfigurations | Select Id,State", module: "Microsoft.Graph", desc: "View authentication methods configuration" , risk: "read", perms: "UserAuthenticationMethod.Read.All" },
+  { cat: "Tenant Configuration", name: "Get SSPR settings", cmd: "Get-MgPolicyAuthorizationPolicy | Select AllowedToSignUpEmailBasedSubscriptions,AllowEmailVerifiedUsersToJoinOrganization", module: "Microsoft.Graph", desc: "Self-service password reset config" , risk: "read", perms: "Directory.Read.All" },
+  { cat: "Tenant Configuration", name: "Get tenant SKUs overview", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}},ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}}", module: "Microsoft.Graph", desc: "License availability overview" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Tenant Configuration", name: "Get OAuth2 permission grants", cmd: "Get-MgOauth2PermissionGrant -All | Select ClientId,ConsentType,Scope | Group ConsentType", module: "Microsoft.Graph", desc: "OAuth consent grants grouped by type" , risk: "read", perms: "Directory.Read.All" },
+  { cat: "Tenant Configuration", name: "Get SPO tenant settings", cmd: "Get-SPOTenant | Select SharingCapability,OneDriveStorageQuota,RequireAcceptingAccountMatchInvitedAccount,NotifyOwnersWhenItemsReshared", module: "Microsoft.Online.SharePoint.PowerShell", desc: "SharePoint & OneDrive tenant settings" , risk: "read" },
+  { cat: "Tenant Configuration", name: "Get password expiration policy", cmd: "(Get-MgOrganization).PasswordPolicies", module: "Microsoft.Graph", desc: "Check tenant password policy" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Tenant Configuration", name: "Get directory sync status", cmd: "Get-MgOrganization | Select OnPremisesSyncEnabled,OnPremisesLastSyncDateTime", module: "Microsoft.Graph", desc: "Check if AAD Connect / Cloud Sync is active" , risk: "read", perms: "Organization.Read.All" },
 
   // ── CONDITIONAL ACCESS (extended) (5 new) ──
-  { cat: "Conditional Access", name: "Create CA policy (block legacy auth)", cmd: "$params = @{\n  DisplayName = 'Block Legacy Authentication'\n  State = 'enabledForReportingButNotEnforced'\n  Conditions = @{\n    ClientAppTypes = @('exchangeActiveSync','other')\n    Applications = @{ IncludeApplications = @('All') }\n    Users = @{ IncludeUsers = @('All') }\n  }\n  GrantControls = @{ Operator = 'OR'; BuiltInControls = @('block') }\n}\nNew-MgIdentityConditionalAccessPolicy -BodyParameter $params", module: "Microsoft.Graph", desc: "Create a policy to block legacy auth (report-only)" },
-  { cat: "Conditional Access", name: "Delete CA policy", cmd: 'Remove-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a Conditional Access policy" },
-  { cat: "Conditional Access", name: "Set CA policy to report-only", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabledForReportingButNotEnforced"', module: "Microsoft.Graph", desc: "Switch a policy to report-only mode" },
-  { cat: "Conditional Access", name: "Enable CA policy", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabled"', module: "Microsoft.Graph", desc: "Enable (enforce) a CA policy" },
-  { cat: "Conditional Access", name: "Get CA policy sign-in gaps", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Where { -not $_.IsMfaRegistered } | Select UserPrincipalName,MethodsRegistered", module: "Microsoft.Graph", desc: "Users who may bypass MFA CA policies" },
+  { cat: "Conditional Access", name: "Create CA policy (block legacy auth)", cmd: "$params = @{\n  DisplayName = 'Block Legacy Authentication'\n  State = 'enabledForReportingButNotEnforced'\n  Conditions = @{\n    ClientAppTypes = @('exchangeActiveSync','other')\n    Applications = @{ IncludeApplications = @('All') }\n    Users = @{ IncludeUsers = @('All') }\n  }\n  GrantControls = @{ Operator = 'OR'; BuiltInControls = @('block') }\n}\nNew-MgIdentityConditionalAccessPolicy -BodyParameter $params", module: "Microsoft.Graph", desc: "Create a policy to block legacy auth (report-only)" , risk: "modify", perms: "Policy.ReadWrite.ConditionalAccess" },
+  { cat: "Conditional Access", name: "Delete CA policy", cmd: 'Remove-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a Conditional Access policy" , risk: "destructive", perms: "Policy.ReadWrite.ConditionalAccess" },
+  { cat: "Conditional Access", name: "Set CA policy to report-only", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabledForReportingButNotEnforced"', module: "Microsoft.Graph", desc: "Switch a policy to report-only mode" , risk: "modify", perms: "Policy.ReadWrite.ConditionalAccess" },
+  { cat: "Conditional Access", name: "Enable CA policy", cmd: 'Update-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" -State "enabled"', module: "Microsoft.Graph", desc: "Enable (enforce) a CA policy" , risk: "modify", perms: "Policy.ReadWrite.ConditionalAccess" },
+  { cat: "Conditional Access", name: "Get CA policy sign-in gaps", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Where { -not $_.IsMfaRegistered } | Select UserPrincipalName,MethodsRegistered", module: "Microsoft.Graph", desc: "Users who may bypass MFA CA policies" , risk: "read", perms: "Policy.Read.All" },
 
   // ── SECURITY & COMPLIANCE (extended) (8 new) ──
-  { cat: "Security & Compliance", name: "Get PIM eligible role assignments", cmd: "Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance | Select @{N='Role';E={(Get-MgDirectoryRoleTemplate -DirectoryRoleTemplateId $_.RoleDefinitionId).DisplayName}},PrincipalId,StartDateTime,EndDateTime", module: "Microsoft.Graph", desc: "List PIM eligible role assignments" },
-  { cat: "Security & Compliance", name: "Get PIM active role assignments", cmd: "Get-MgRoleManagementDirectoryRoleAssignmentScheduleInstance -All | Select RoleDefinitionId,PrincipalId,StartDateTime", module: "Microsoft.Graph", desc: "List PIM activated role assignments" },
-  { cat: "Security & Compliance", name: "Get access reviews", cmd: "Get-MgIdentityGovernanceAccessReviewDefinition | Select DisplayName,Status,Scope", module: "Microsoft.Graph", desc: "List access review campaigns" },
-  { cat: "Security & Compliance", name: "Get Safe Links policies", cmd: "Get-SafeLinksPolicy | Select Name,IsEnabled,DoNotRewriteUrls,EnableForInternalSenders", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Links config" },
-  { cat: "Security & Compliance", name: "Get Safe Attachments policies", cmd: "Get-SafeAttachmentPolicy | Select Name,Action,Enable,Redirect", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Attachments config" },
-  { cat: "Security & Compliance", name: "Get anti-phishing policies", cmd: "Get-AntiPhishPolicy | Select Name,Enabled,EnableMailboxIntelligence,EnableSpoofIntelligence", module: "ExchangeOnlineProtection", desc: "View anti-phishing protection policies" },
-  { cat: "Security & Compliance", name: "Get service principal credentials", cmd: "Get-MgServicePrincipal -All | ForEach { $sp=$_; $_.PasswordCredentials | Select @{N='App';E={$sp.DisplayName}},EndDateTime,DisplayName } | Where { $_.EndDateTime } | Sort EndDateTime", module: "Microsoft.Graph", desc: "Find expiring service principal secrets" },
-  { cat: "Security & Compliance", name: "Get consent grants (admin)", cmd: "Get-MgOauth2PermissionGrant -All -Filter \"consentType eq 'AllPrincipals'\" | Select ClientId,Scope,ConsentType", module: "Microsoft.Graph", desc: "Find admin-consented API permissions" },
+  { cat: "Security & Compliance", name: "Get PIM eligible role assignments", cmd: "Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance | Select @{N='Role';E={(Get-MgDirectoryRoleTemplate -DirectoryRoleTemplateId $_.RoleDefinitionId).DisplayName}},PrincipalId,StartDateTime,EndDateTime", module: "Microsoft.Graph", desc: "List PIM eligible role assignments" , risk: "read", perms: "RoleManagement.Read.Directory" },
+  { cat: "Security & Compliance", name: "Get PIM active role assignments", cmd: "Get-MgRoleManagementDirectoryRoleAssignmentScheduleInstance -All | Select RoleDefinitionId,PrincipalId,StartDateTime", module: "Microsoft.Graph", desc: "List PIM activated role assignments" , risk: "read", perms: "RoleManagement.Read.Directory" },
+  { cat: "Security & Compliance", name: "Get access reviews", cmd: "Get-MgIdentityGovernanceAccessReviewDefinition | Select DisplayName,Status,Scope", module: "Microsoft.Graph", desc: "List access review campaigns" , risk: "read", perms: "AccessReview.Read.All" },
+  { cat: "Security & Compliance", name: "Get Safe Links policies", cmd: "Get-SafeLinksPolicy | Select Name,IsEnabled,DoNotRewriteUrls,EnableForInternalSenders", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Links config" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get Safe Attachments policies", cmd: "Get-SafeAttachmentPolicy | Select Name,Action,Enable,Redirect", module: "ExchangeOnlineProtection", desc: "Defender for O365 Safe Attachments config" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get anti-phishing policies", cmd: "Get-AntiPhishPolicy | Select Name,Enabled,EnableMailboxIntelligence,EnableSpoofIntelligence", module: "ExchangeOnlineProtection", desc: "View anti-phishing protection policies" , risk: "read" },
+  { cat: "Security & Compliance", name: "Get service principal credentials", cmd: "Get-MgServicePrincipal -All | ForEach { $sp=$_; $_.PasswordCredentials | Select @{N='App';E={$sp.DisplayName}},EndDateTime,DisplayName } | Where { $_.EndDateTime } | Sort EndDateTime", module: "Microsoft.Graph", desc: "Find expiring service principal secrets" , risk: "read", perms: "Application.Read.All" },
+  { cat: "Security & Compliance", name: "Get consent grants (admin)", cmd: "Get-MgOauth2PermissionGrant -All -Filter \"consentType eq 'AllPrincipals'\" | Select ClientId,Scope,ConsentType", module: "Microsoft.Graph", desc: "Find admin-consented API permissions" , risk: "read", perms: "Directory.Read.All" },
 
   // ── EXCHANGE ONLINE (extended) (4 new) ──
-  { cat: "Exchange Online", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" },
-  { cat: "Exchange Online", name: "Get DL members", cmd: 'Get-DistributionGroupMember -Identity "dl@{{domain}}" | Select DisplayName,PrimarySmtpAddress', module: "ExchangeOnlineManagement", desc: "List members of a distribution list" },
-  { cat: "Exchange Online", name: "Set mailbox archive", cmd: 'Enable-Mailbox -Identity "user@{{domain}}" -Archive', module: "ExchangeOnlineManagement", desc: "Enable online archive for a mailbox" },
-  { cat: "Exchange Online", name: "Get mailbox archive status", cmd: 'Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,ArchiveStatus,ArchiveQuota | Where { $_.ArchiveStatus -eq "Active" }', module: "ExchangeOnlineManagement", desc: "List mailboxes with active archive" },
+  { cat: "Exchange Online", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" , risk: "read" },
+  { cat: "Exchange Online", name: "Get DL members", cmd: 'Get-DistributionGroupMember -Identity "dl@{{domain}}" | Select DisplayName,PrimarySmtpAddress', module: "ExchangeOnlineManagement", desc: "List members of a distribution list" , risk: "read" },
+  { cat: "Exchange Online", name: "Set mailbox archive", cmd: 'Enable-Mailbox -Identity "user@{{domain}}" -Archive', module: "ExchangeOnlineManagement", desc: "Enable online archive for a mailbox" , risk: "modify" },
+  { cat: "Exchange Online", name: "Get mailbox archive status", cmd: 'Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,ArchiveStatus,ArchiveQuota | Where { $_.ArchiveStatus -eq "Active" }', module: "ExchangeOnlineManagement", desc: "List mailboxes with active archive" , risk: "read" },
 
   // ── DEVICE MANAGEMENT (extended) (4 new) ──
-  { cat: "Device Management", name: "Get app protection policies", cmd: "Get-MgDeviceAppManagementManagedAppPolicy | Select DisplayName,@{N='Type';E={$_.AdditionalProperties.'@odata.type'}}", module: "Microsoft.Graph.Intune", desc: "List Intune app protection policies (MAM)" },
-  { cat: "Device Management", name: "Get detected apps", cmd: "Get-MgDeviceManagementDetectedApp -All | Select DisplayName,Version,DeviceCount | Sort DeviceCount -Descending | Select -First 30", module: "Microsoft.Graph.Intune", desc: "Top 30 detected apps across managed devices" },
-  { cat: "Device Management", name: "Get Windows Update rings", cmd: "Get-MgDeviceManagementDeviceConfiguration -Filter \"isof('microsoft.graph.windowsUpdateForBusinessConfiguration')\" | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Windows Update for Business ring policies" },
-  { cat: "Device Management", name: "Get Autopilot profiles", cmd: "Get-MgDeviceManagementWindowsAutopilotDeploymentProfile | Select DisplayName,Description,Language", module: "Microsoft.Graph.Intune", desc: "List Autopilot deployment profiles" },
+  { cat: "Device Management", name: "Get app protection policies", cmd: "Get-MgDeviceAppManagementManagedAppPolicy | Select DisplayName,@{N='Type';E={$_.AdditionalProperties.'@odata.type'}}", module: "Microsoft.Graph.Intune", desc: "List Intune app protection policies (MAM)" , risk: "read", perms: "Directory.Read.All" },
+  { cat: "Device Management", name: "Get detected apps", cmd: "Get-MgDeviceManagementDetectedApp -All | Select DisplayName,Version,DeviceCount | Sort DeviceCount -Descending | Select -First 30", module: "Microsoft.Graph.Intune", desc: "Top 30 detected apps across managed devices" , risk: "read", perms: "Directory.Read.All" },
+  { cat: "Device Management", name: "Get Windows Update rings", cmd: "Get-MgDeviceManagementDeviceConfiguration -Filter \"isof('microsoft.graph.windowsUpdateForBusinessConfiguration')\" | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Windows Update for Business ring policies" , risk: "read", perms: "Directory.Read.All" },
+  { cat: "Device Management", name: "Get Autopilot profiles", cmd: "Get-MgDeviceManagementWindowsAutopilotDeploymentProfile | Select DisplayName,Description,Language", module: "Microsoft.Graph.Intune", desc: "List Autopilot deployment profiles" , risk: "read", perms: "DeviceManagementServiceConfig.Read.All" },
 
   // ── REPORTS & AUDITING (extended) (3 new) ──
-  { cat: "Reports & Auditing", name: "Get Yammer activity report", cmd: "Get-MgReportYammerActivityUserDetail -Period 'D30' -OutFile 'YammerActivity.csv'", module: "Microsoft.Graph", desc: "Yammer/Viva Engage activity per user" },
-  { cat: "Reports & Auditing", name: "Get Groups activity report", cmd: "Get-MgReportOffice365GroupsActivityDetail -Period 'D30' -OutFile 'GroupsActivity.csv'", module: "Microsoft.Graph", desc: "M365 Groups activity and usage" },
-  { cat: "Reports & Auditing", name: "Get browser usage report", cmd: "Get-MgReportBrowserUserDetail -Period 'D30' -OutFile 'BrowserUsage.csv'", module: "Microsoft.Graph", desc: "Browser distribution for M365 access" },
+  { cat: "Reports & Auditing", name: "Get Yammer activity report", cmd: "Get-MgReportYammerActivityUserDetail -Period 'D30' -OutFile 'YammerActivity.csv'", module: "Microsoft.Graph", desc: "Yammer/Viva Engage activity per user" , risk: "read", perms: "Reports.Read.All" },
+  { cat: "Reports & Auditing", name: "Get Groups activity report", cmd: "Get-MgReportOffice365GroupsActivityDetail -Period 'D30' -OutFile 'GroupsActivity.csv'", module: "Microsoft.Graph", desc: "M365 Groups activity and usage" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Reports & Auditing", name: "Get browser usage report", cmd: "Get-MgReportBrowserUserDetail -Period 'D30' -OutFile 'BrowserUsage.csv'", module: "Microsoft.Graph", desc: "Browser distribution for M365 access" , risk: "read", perms: "Reports.Read.All" },
 ];
 
 // ═══════════════════════════════════════════════
@@ -958,6 +1117,12 @@ const svgCopy = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" str
 const svgCheck = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#34d399" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>';
 const svgStar = '<svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
 const svgStarFill = '<svg width="14" height="14" viewBox="0 0 24 24" stroke="#f59e0b" stroke-width="2" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+
+const RISK_LABELS = { read: 'Read', modify: 'Modify', destructive: 'Destructive' };
+function riskBadge(risk) {
+  if (!risk) return '';
+  return `<span class="risk-badge risk-${risk}"><span class="risk-dot"></span>${RISK_LABELS[risk]}</span>`;
+}
 
 let _cc = 0;
 function cb(text, label='Copy') {
@@ -1096,17 +1261,48 @@ function generateScript() {
   const cmds = COMMANDS.filter(c => selectedCmds.has(c.name));
   const mods = [...new Set(cmds.map(c => c.module))];
 
+  const safeImport = document.getElementById('optSafeImport').checked;
+  const disconnect = document.getElementById('optDisconnect').checked;
+  const errorHandling = document.getElementById('optErrorHandling').checked;
+  const requiresHeader = document.getElementById('optRequires').checked;
+  const transcript = document.getElementById('optTranscript').checked;
+
   let lines = [];
+  
+  if(requiresHeader) {
+    lines.push('#Requires -Version 7.0');
+    lines.push('');
+  }
+
   lines.push('#═══════════════════════════════════════════════════');
   lines.push('# M365 PowerShell Script');
   lines.push('# Generated: ' + new Date().toISOString().split('T')[0]);
   lines.push('# Commands: ' + cmds.length);
   lines.push('#═══════════════════════════════════════════════════');
   lines.push('');
+  
+  if(transcript) {
+    lines.push('# ── Transcript Logging ──');
+    lines.push('$transcriptPath = "$env:TEMP\\M365-Script-$(Get-Date -Format yyyyMMdd-HHmmss).log"');
+    lines.push('Start-Transcript -Path $transcriptPath -Append');
+    lines.push('Write-Host "Transcript started: $transcriptPath" -ForegroundColor Cyan');
+    lines.push('');
+  }
+
   lines.push('# ── Required Modules ──');
   mods.forEach(m => {
     const mod = MODULES[m];
-    if(mod && !mod.install.startsWith('#')) lines.push(applyParams(mod.install));
+    if(mod && !mod.install.startsWith('#')) {
+      if(safeImport) {
+        const modName = m.split('.')[0] === 'Microsoft' || m.includes('.') ? m : m;
+        lines.push(`if (-not (Get-Module -ListAvailable -Name ${m})) {`);
+        lines.push(`    ${applyParams(mod.install)}`);
+        lines.push('}');
+        lines.push(`Import-Module ${m} -ErrorAction SilentlyContinue`);
+      } else {
+        lines.push(applyParams(mod.install));
+      }
+    }
   });
   lines.push('');
   lines.push('# ── Connect ──');
@@ -1120,6 +1316,11 @@ function generateScript() {
   });
   lines.push('');
 
+  if(errorHandling) {
+    lines.push('try {');
+    lines.push('');
+  }
+
   let lastCat = '';
   cmds.forEach(c => {
     if(c.cat !== lastCat) {
@@ -1127,19 +1328,40 @@ function generateScript() {
       lastCat = c.cat;
     }
     lines.push(`# ${c.name}: ${c.desc}`);
-    lines.push(applyParams(c.cmd));
+    const indent = errorHandling ? '    ' : '';
+    applyParams(c.cmd).split('\n').forEach(l => lines.push(indent + l));
     lines.push('');
   });
 
-  lines.push('# ── Disconnect ──');
-  const disconnected = new Set();
-  mods.forEach(m => {
-    const mod = MODULES[m];
-    if(mod && mod.disconnect && !disconnected.has(mod.disconnect)) {
-      lines.push(mod.disconnect);
-      disconnected.add(mod.disconnect);
-    }
-  });
+  if(errorHandling) {
+    lines.push('} catch {');
+    lines.push('    Write-Error "Script failed: $_"');
+    lines.push('    Write-Error $_.ScriptStackTrace');
+    lines.push('}');
+    if(disconnect || transcript) lines.push('finally {');
+  }
+
+  if(disconnect) {
+    if(!errorHandling) lines.push('# ── Disconnect ──');
+    const prefix = errorHandling ? '    ' : '';
+    const disconnected = new Set();
+    mods.forEach(m => {
+      const mod = MODULES[m];
+      if(mod && mod.disconnect && !disconnected.has(mod.disconnect)) {
+        lines.push(prefix + mod.disconnect);
+        disconnected.add(mod.disconnect);
+      }
+    });
+  }
+
+  if(transcript) {
+    const prefix = errorHandling ? '    ' : '';
+    lines.push(prefix + 'Stop-Transcript');
+  }
+
+  if(errorHandling && (disconnect || transcript)) {
+    lines.push('}');
+  }
 
   return lines.join('\n');
 }
@@ -1239,7 +1461,7 @@ function renderCommands() {
       html += `<button class="fav-btn${isFav?' active':''}" onclick="event.stopPropagation();toggleFav('${c.name.replace(/'/g,"\\'")}')" title="Toggle favorite">${isFav?svgStarFill:svgStar}</button>`;
 
       html += `<svg class="chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>`;
-      html += `<div class="cmd-info"><div class="cmd-name-row"><span class="cmd-name">${esc(c.name)}</span><span class="cmd-badge" style="background:${mod.color}18;color:${mod.color};border:1px solid ${mod.color}33">${mod.short}</span></div><div class="cmd-desc">${esc(c.desc)}</div></div>`;
+      html += `<div class="cmd-info"><div class="cmd-name-row"><span class="cmd-name">${esc(c.name)}</span><span class="cmd-badge" style="background:${mod.color}18;color:${mod.color};border:1px solid ${mod.color}33">${mod.short}</span>${riskBadge(c.risk)}</div><div class="cmd-desc">${esc(c.desc)}</div></div>`;
 
       if(!exp) html += cb(cmdText);
       html += `</div>`;
@@ -1247,6 +1469,11 @@ function renderCommands() {
       // Detail
       html += `<div class="cmd-detail"><div class="cmd-code"><span class="copy-float">${cb(cmdText)}</span>${esc(cmdText)}</div>`;
       html += `<div class="cmd-mod-row"><span class="lbl">Module:</span><code style="color:${mod.color}">${c.module}</code>${cb(applyParams(mod.install),'Install')} ${cb(applyParams(mod.connect),'Connect')}${mod.docs?` <a href="${mod.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>`:''}</div>`;
+
+      // Permissions
+      if(c.perms) {
+        html += `<div class="perm-row"><span class="lbl">Permissions:</span>${c.perms.split(',').map(p=>`<span class="perm-tag">${p.trim()}</span>`).join('')}</div>`;
+      }
 
       // Copy as full script
       const fullScript = `# ${c.name}\n${applyParams(mod.install)}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
@@ -1289,6 +1516,13 @@ function toggleGuide() {
   panel.classList.toggle('visible');
 }
 
+function togglePortals() {
+  const toggle = document.getElementById('portalsToggle');
+  const panel = document.getElementById('portalsPanel');
+  toggle.classList.toggle('open');
+  panel.classList.toggle('visible');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   buildSidebar();
   buildModulePanel();
@@ -1305,6 +1539,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('searchInput').blur();
       document.getElementById('guidePanel').classList.remove('visible');
       document.getElementById('guideToggle').classList.remove('open');
+      document.getElementById('portalsPanel').classList.remove('visible');
+      document.getElementById('portalsToggle').classList.remove('open');
     }
   });
 
