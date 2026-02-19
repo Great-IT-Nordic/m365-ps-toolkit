@@ -10,12 +10,17 @@ An interactive, browser-based reference tool for Microsoft 365 PowerShell comman
 |---|---|
 | **176 Commands** | Covering Users, Groups, Exchange, SharePoint, Teams, Intune, Conditional Access, Security, PIM & more |
 | **9 Modules** | Microsoft Graph, Exchange Online, Teams, SharePoint, PnP, Intune, Entra ID, MSCommerce, EOP/SCC |
-| **Editable Parameters** | Set your domain once — every command updates automatically |
-| **Script Builder** | Check commands → generate a complete `.ps1` with safe import, error handling, transcript logging |
+| **Tenant Profiles** | Save and switch between client tenants instantly — domain, admin UPN, and SPO URL per profile |
+| **Script Builder** | Check commands → generate a complete `.ps1` with safe import, error handling, transcript logging, download as .ps1 |
 | **7 Workflow Templates** | Onboarding, Offboarding, Security Audit, Tenant Review, License Cleanup, Mail Hygiene, Guest Audit |
 | **Risk Indicators** | 🟢 Read / 🟡 Modify / 🔴 Destructive badges on every command |
 | **Graph Permissions** | Shows required API permissions (scopes) for each Graph command |
+| **Related Commands** | Cross-linked commands in expanded view — discover the full picture for any task |
+| **CSV Templates** | Download pre-built CSV templates for bulk operations (user creation, license assignment, etc.) |
 | **Admin Portal Links** | Quick-access links to all 10 M365 admin centers |
+| **URL Deep Links** | Share specific views with your team — URL updates as you navigate |
+| **Light / Dark Theme** | Toggle between dark (default) and light theme — persisted across sessions |
+| **Expanded How-To Guide** | Tabbed guide with prerequisites, troubleshooting, tips, and common patterns |
 | **Favorites** | Star commands you use often — persisted in your browser |
 | **Search & Filter** | Filter by category, module, risk level, or free-text search (Ctrl+K) |
 | **Fully Offline** | Single HTML file, no dependencies, works without internet |
@@ -85,6 +90,10 @@ Use these in your commands and they'll be replaced by user input:
 | `{{domain}}` | User's domain | `contoso.com` |
 | `{{admin}}` | Admin UPN | `admin@contoso.com` |
 | `{{spo}}` | SPO admin URL | `contoso-admin.sharepoint.com` |
+
+### Tenant profiles
+
+Great for consultancies managing multiple clients. Open Parameters → fill in domain/admin/SPO → click 💾 Save → name it. Switch between clients instantly with the dropdown. Profiles are stored in browser localStorage.
 
 ## 📦 Modules Covered
 
