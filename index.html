@@ -30,6 +30,25 @@
   --radius: 10px;
   --radius-sm: 6px;
 }
+[data-theme="light"] {
+  --bg-root: #f5f7fa;
+  --bg-surface: #ffffff;
+  --bg-card: #ffffff;
+  --bg-elevated: #f0f2f5;
+  --bg-code: #f6f8fa;
+  --border: #d1d9e0;
+  --border-hover: #a8b5c4;
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-dim: #8899aa;
+  --accent: #2563eb;
+  --accent-glow: rgba(37,99,235,0.1);
+  --green: #059669;
+  --green-glow: rgba(5,150,105,0.1);
+  --amber: #d97706;
+  --amber-glow: rgba(217,119,6,0.08);
+  --red: #dc2626;
+}
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { background: var(--bg-root); color: var(--text-primary); font-family: var(--font-body); line-height: 1.5; }
 
@@ -547,6 +566,97 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 .portal-card .p-name { font-size: 12px; font-weight: 600; color: var(--text-primary); }
 .portal-card .p-url { font-size: 10px; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* Tenant Profiles */
+.profile-section {
+  display: flex; align-items: center; gap: 8px; margin-right: 12px;
+  padding-right: 12px; border-right: 1px solid var(--border);
+}
+.profile-select {
+  background: var(--bg-elevated); color: var(--text-primary);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 4px 8px; font-size: 12px; font-family: var(--font-body);
+  cursor: pointer; min-width: 120px;
+}
+.profile-select:focus { outline: none; border-color: var(--accent); }
+.profile-btn {
+  background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-secondary); cursor: pointer; padding: 4px 8px;
+  font-size: 11px; font-family: var(--font-body); transition: all 0.2s;
+  display: flex; align-items: center; gap: 4px;
+}
+.profile-btn:hover { border-color: var(--accent); color: var(--accent); }
+.profile-btn.danger:hover { border-color: var(--red); color: var(--red); }
+
+/* Related commands */
+.related-row {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.related-row .lbl { font-size: 11px; color: var(--text-dim); margin-right: 2px; width: 100%; margin-bottom: 2px; }
+.related-chip {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px;
+  background: var(--accent-glow); color: var(--accent);
+  border: 1px solid rgba(59,130,246,0.2); cursor: pointer;
+  transition: all 0.2s; text-decoration: none;
+}
+.related-chip:hover { background: rgba(59,130,246,0.25); border-color: var(--accent); }
+
+/* CSV template */
+.csv-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; padding: 4px 10px; border-radius: var(--radius-sm);
+  background: var(--green-glow); color: var(--green);
+  border: 1px solid rgba(52,211,153,0.25); cursor: pointer;
+  font-family: var(--font-body); transition: all 0.2s;
+}
+.csv-btn:hover { background: rgba(52,211,153,0.25); }
+
+/* Theme toggle */
+.theme-toggle {
+  background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-secondary); cursor: pointer; padding: 6px 8px;
+  font-size: 14px; transition: all 0.2s; display: flex; align-items: center;
+  margin-left: 8px;
+}
+.theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Guide section expansion */
+.guide-panel h4 { margin-top: 18px; margin-bottom: 8px; color: var(--text-primary); font-size: 14px; }
+.guide-panel h4:first-of-type { margin-top: 20px; }
+.guide-panel .guide-section {
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 14px 16px; margin-bottom: 10px;
+}
+.guide-panel .guide-section h5 {
+  font-size: 13px; color: var(--accent); margin-bottom: 6px;
+}
+.guide-panel .guide-section p, .guide-panel .guide-section li {
+  font-size: 12px; color: var(--text-secondary); line-height: 1.7;
+}
+.guide-panel .guide-section code {
+  background: var(--bg-code); padding: 2px 6px; border-radius: 3px;
+  font-family: var(--font-mono); font-size: 11px;
+}
+.guide-panel .guide-section pre {
+  background: var(--bg-code); padding: 10px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); font-family: var(--font-mono);
+  font-size: 11px; color: var(--text-primary); overflow-x: auto;
+  margin: 8px 0; line-height: 1.6;
+}
+.guide-tabs {
+  display: flex; gap: 0; margin-bottom: 16px; border-bottom: 1px solid var(--border);
+}
+.guide-tab {
+  padding: 8px 16px; font-size: 12px; font-weight: 600; cursor: pointer;
+  color: var(--text-dim); border-bottom: 2px solid transparent;
+  transition: all 0.2s; background: none; border-top: none; border-left: none; border-right: none;
+  font-family: var(--font-body);
+}
+.guide-tab:hover { color: var(--text-secondary); }
+.guide-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.guide-tab-content { display: none; animation: fadeIn 0.2s ease; }
+.guide-tab-content.active { display: block; }
+
 /* Animations */
 @keyframes slideDown {
   from { opacity: 0; transform: translateY(-8px); }
@@ -596,6 +706,13 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
   <div class="main" id="main">
     <!-- Params bar -->
     <div class="params-bar" id="paramsBar">
+      <div class="profile-section">
+        <select class="profile-select" id="profileSelect" onchange="loadProfile()">
+          <option value="">— Select tenant —</option>
+        </select>
+        <button class="profile-btn" onclick="saveProfile()" title="Save current values as profile">💾 Save</button>
+        <button class="profile-btn danger" onclick="deleteProfile()" title="Delete selected profile">🗑️</button>
+      </div>
       <div class="param-group">
         <label>Domain</label>
         <input class="param-input" id="paramDomain" placeholder="contoso.com" oninput="renderCommands()">
@@ -632,6 +749,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Script Builder
         </button>
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark theme">🌙</button>
       </div>
     </div>
 
@@ -647,28 +765,193 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
       <div class="guide-panel" id="guidePanel">
         <h3>Welcome to the M365 PowerShell Toolkit</h3>
         <p>A comprehensive reference for managing Microsoft 365 via PowerShell. All commands work with <strong>PowerShell 7+</strong> and the latest Graph / Exchange modules.</p>
-        <div class="guide-grid">
-          <div class="guide-card"><div class="num">01</div><div class="gc-title">Install Modules</div><div class="gc-text">Click any module badge → copy the <code>Install</code> command. Run in an elevated PowerShell session.</div></div>
-          <div class="guide-card"><div class="num">02</div><div class="gc-title">Connect</div><div class="gc-text">Use the <code>Connect</code> button on any module card, or set your domain in the ⚙️ Parameters bar first.</div></div>
-          <div class="guide-card"><div class="num">03</div><div class="gc-title">Run Commands</div><div class="gc-text">Search or browse by category. Expand any command to see the full syntax, then copy with one click.</div></div>
-          <div class="guide-card"><div class="num">04</div><div class="gc-title">Build Scripts</div><div class="gc-text">Toggle <strong>Script Builder</strong> to select multiple commands and generate a complete .ps1 file.</div></div>
+
+        <div class="guide-tabs">
+          <button class="guide-tab active" onclick="switchGuideTab('quickstart',this)">Quick Start</button>
+          <button class="guide-tab" onclick="switchGuideTab('prerequisites',this)">Prerequisites</button>
+          <button class="guide-tab" onclick="switchGuideTab('features',this)">Features</button>
+          <button class="guide-tab" onclick="switchGuideTab('troubleshooting',this)">Troubleshooting</button>
+          <button class="guide-tab" onclick="switchGuideTab('tips',this)">Tips & Shortcuts</button>
         </div>
-        <h4>💡 Tips</h4>
-        <ul>
-          <li>Press <code>Ctrl+K</code> to jump to search from anywhere</li>
-          <li>Use the <strong>⚙️ Parameters</strong> button to set your domain — it auto-replaces placeholders in all commands</li>
-          <li>⭐ Star your most-used commands for quick access in the <strong>Favorites</strong> view</li>
-          <li>Use the <strong>Workflow templates</strong> (sidebar) for step-by-step guides like onboarding and offboarding</li>
-          <li>Each expanded command has a <strong>"Copy as Full Script"</strong> button that includes Install + Connect + Disconnect</li>
-        </ul>
+
+        <!-- Quick Start Tab -->
+        <div class="guide-tab-content active" id="tab-quickstart">
+          <div class="guide-grid">
+            <div class="guide-card"><div class="num">01</div><div class="gc-title">Install Modules</div><div class="gc-text">Click any module badge → copy the <code>Install</code> command. Run in an elevated PowerShell session.</div></div>
+            <div class="guide-card"><div class="num">02</div><div class="gc-title">Set Parameters</div><div class="gc-text">Click <strong>⚙️ Parameters</strong> and enter your domain. All commands auto-update with your values. Save it as a tenant profile for quick switching.</div></div>
+            <div class="guide-card"><div class="num">03</div><div class="gc-title">Connect</div><div class="gc-text">Use the <code>Connect</code> button on any module card. Most modules support modern auth — a browser window will open.</div></div>
+            <div class="guide-card"><div class="num">04</div><div class="gc-title">Run Commands</div><div class="gc-text">Search or browse by category. Expand any command to see full syntax, permissions required, and related commands.</div></div>
+          </div>
+
+          <div class="guide-section">
+            <h5>Your first script in 60 seconds</h5>
+            <pre># 1. Install the Microsoft Graph module (one-time)
+Install-Module Microsoft.Graph -Scope CurrentUser
+
+# 2. Connect (opens browser auth)
+Connect-MgGraph -Scopes "User.Read.All"
+
+# 3. List all users
+Get-MgUser -All | Select DisplayName, UserPrincipalName, AccountEnabled
+
+# 4. Disconnect when done
+Disconnect-MgGraph</pre>
+          </div>
+        </div>
+
+        <!-- Prerequisites Tab -->
+        <div class="guide-tab-content" id="tab-prerequisites">
+          <div class="guide-section">
+            <h5>System Requirements</h5>
+            <ul>
+              <li><strong>PowerShell 7+</strong> — Download from <a href="https://github.com/PowerShell/PowerShell/releases" target="_blank" class="doc-link">github.com/PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>. Windows PowerShell 5.1 works for most Exchange/SPO cmdlets, but Graph requires PS7.</li>
+              <li><strong>Admin permissions</strong> — Most commands require Global Admin, Exchange Admin, or Teams Admin roles. Check the <em>Permissions</em> shown per command.</li>
+              <li><strong>.NET Runtime</strong> — Comes with PowerShell 7. No separate install needed.</li>
+            </ul>
+          </div>
+          <div class="guide-section">
+            <h5>Module Installation</h5>
+            <p>Install all modules at once (run as administrator):</p>
+            <pre># Core modules
+Install-Module Microsoft.Graph -Scope CurrentUser -Force
+Install-Module ExchangeOnlineManagement -Scope CurrentUser -Force
+Install-Module MicrosoftTeams -Scope CurrentUser -Force
+Install-Module Microsoft.Online.SharePoint.PowerShell -Scope CurrentUser -Force
+Install-Module PnP.PowerShell -Scope CurrentUser -Force</pre>
+            <p style="margin-top:8px">Or click <strong>"Module Setup"</strong> in the sidebar footer for an interactive per-module setup panel with copy buttons.</p>
+          </div>
+          <div class="guide-section">
+            <h5>Authentication Methods</h5>
+            <ul>
+              <li><strong>Interactive (default)</strong> — Opens a browser window for MFA-compatible sign-in. Best for ad-hoc admin tasks.</li>
+              <li><strong>Certificate-based</strong> — For unattended/scheduled scripts. Requires an Entra App Registration with a certificate. Use <code>Connect-MgGraph -ClientId "..." -TenantId "..." -CertificateThumbprint "..."</code></li>
+              <li><strong>Managed Identity</strong> — For Azure Functions or Azure Automation. Use <code>Connect-MgGraph -Identity</code></li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Features Tab -->
+        <div class="guide-tab-content" id="tab-features">
+          <div class="guide-section">
+            <h5>🏢 Tenant Profiles</h5>
+            <p>Working with multiple clients? Open <strong>Parameters</strong>, fill in the domain/admin/SPO for a client, and click <strong>💾 Save</strong> to create a named profile. Switch between tenants instantly with the dropdown.</p>
+          </div>
+          <div class="guide-section">
+            <h5>📋 Script Builder</h5>
+            <p>Toggle <strong>Script Builder</strong> in the toolbar. Check the commands you need → they're combined into a ready-to-run .ps1 script in the panel below. Options include:</p>
+            <ul>
+              <li><strong>Safe import</strong> — Only installs modules if not already present</li>
+              <li><strong>Error handling</strong> — Wraps commands in try/catch/finally</li>
+              <li><strong>Transcript logging</strong> — Logs everything to a timestamped file</li>
+              <li><strong>Download as .ps1</strong> — Save directly as a script file</li>
+            </ul>
+          </div>
+          <div class="guide-section">
+            <h5>📊 Workflow Templates</h5>
+            <p>Pre-built, step-by-step checklists for common admin tasks. Each workflow shows the procedure and links to the exact commands needed. Available workflows: User Onboarding, Offboarding, Security Audit, Tenant Review, License Cleanup, Mail Hygiene, and Guest Access Audit.</p>
+          </div>
+          <div class="guide-section">
+            <h5>🔍 Smart Search</h5>
+            <p>Search finds matches across command names, descriptions, PowerShell syntax, and module names. Use <code>Ctrl+K</code> from anywhere. Filter by category, module, or workflow in the sidebar.</p>
+          </div>
+          <div class="guide-section">
+            <h5>🟢🟡🔴 Risk Indicators</h5>
+            <p>Every command is tagged: <strong style="color:#34d399">Read</strong> (safe), <strong style="color:#f59e0b">Modify</strong> (changes settings), or <strong style="color:#ef4444">Destructive</strong> (deletes data). Know what you're running before you run it.</p>
+          </div>
+          <div class="guide-section">
+            <h5>🔗 Deep Links</h5>
+            <p>Share specific views with your team. The URL updates as you navigate. Copy the URL to link directly to a category, workflow, or search result. Example: <code>?filter=Security%20%26%20Compliance</code></p>
+          </div>
+        </div>
+
+        <!-- Troubleshooting Tab -->
+        <div class="guide-tab-content" id="tab-troubleshooting">
+          <div class="guide-section">
+            <h5>❌ "The term 'Connect-MgGraph' is not recognized"</h5>
+            <p>The Microsoft.Graph module isn't installed. Run:</p>
+            <pre>Install-Module Microsoft.Graph -Scope CurrentUser -Force</pre>
+            <p>Then restart your PowerShell session.</p>
+          </div>
+          <div class="guide-section">
+            <h5>❌ "Insufficient privileges to complete the operation"</h5>
+            <p>Your account doesn't have the required admin role, or the Graph scopes weren't granted. Reconnect with the correct scopes:</p>
+            <pre>Connect-MgGraph -Scopes "User.ReadWrite.All","Directory.ReadWrite.All"</pre>
+            <p>Check the <strong>Permissions</strong> tag on each command to see what scopes are needed.</p>
+          </div>
+          <div class="guide-section">
+            <h5>❌ "Connect-ExchangeOnline: Access Denied"</h5>
+            <p>Common causes: your account needs the Exchange Administrator role (or at minimum a recipient management role), Conditional Access policies may be blocking the connection, or you're connecting from a non-compliant device. Try:</p>
+            <pre># Check your role assignments in Entra
+Get-MgRoleManagement -DirectoryRoleAssignment | Where-Object {$_.PrincipalId -eq "your-object-id"}</pre>
+          </div>
+          <div class="guide-section">
+            <h5>❌ "Get-MgUser: Only returns 100 users"</h5>
+            <p>By default, Graph cmdlets return the first page (100 items). Always use the <code>-All</code> parameter for complete results:</p>
+            <pre>Get-MgUser -All    # Returns ALL users, not just 100</pre>
+          </div>
+          <div class="guide-section">
+            <h5>❌ Module version conflicts</h5>
+            <p>If you see odd errors after an update, clean up old versions:</p>
+            <pre># List all installed versions
+Get-Module Microsoft.Graph -ListAvailable
+
+# Remove old versions
+Get-Module Microsoft.Graph -ListAvailable | Where-Object {$_.Version -ne (Get-Module Microsoft.Graph -ListAvailable | Sort-Object Version -Descending | Select-Object -First 1).Version} | Uninstall-Module -Force</pre>
+          </div>
+          <div class="guide-section">
+            <h5>❌ "Running scripts is disabled on this system"</h5>
+            <p>PowerShell's execution policy is blocking scripts. Run this in an elevated PowerShell:</p>
+            <pre>Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</pre>
+          </div>
+        </div>
+
+        <!-- Tips & Shortcuts Tab -->
+        <div class="guide-tab-content" id="tab-tips">
+          <div class="guide-section">
+            <h5>⌨️ Keyboard Shortcuts</h5>
+            <ul>
+              <li><code>Ctrl+K</code> — Jump to search from anywhere</li>
+              <li><code>Escape</code> — Close panels, blur search</li>
+              <li><code>Ctrl+C</code> — Copy from any code block (native)</li>
+            </ul>
+          </div>
+          <div class="guide-section">
+            <h5>💡 Power User Tips</h5>
+            <ul>
+              <li>⭐ <strong>Star your daily-drivers</strong> — your favorites persist across sessions and show up in the sidebar for instant access</li>
+              <li>🏢 <strong>Save tenant profiles</strong> — if you manage multiple clients, save each as a profile to switch instantly</li>
+              <li>📋 <strong>Use Script Builder for runbooks</strong> — select all commands for a procedure, enable error handling + transcript, and download as .ps1</li>
+              <li>🔗 <strong>Share links</strong> — the URL updates as you navigate. Send a link to a colleague to point them at the exact workflow or category</li>
+              <li>📊 <strong>CSV templates</strong> — for bulk operation commands, click "📥 CSV Template" to download a ready-to-fill template</li>
+              <li>🛡️ <strong>Check risk level</strong> — before running a command, glance at the risk badge. Red = destructive, test in a sandbox first</li>
+            </ul>
+          </div>
+          <div class="guide-section">
+            <h5>🔄 Common Patterns</h5>
+            <pre># Export any command output to CSV
+Get-MgUser -All | Export-Csv "users.csv" -NoTypeInformation
+
+# Filter with Where-Object
+Get-MgUser -All | Where-Object {$_.Department -eq "IT"}
+
+# Select specific properties
+Get-MgUser -All -Property DisplayName,Mail,JobTitle | Select DisplayName,Mail,JobTitle
+
+# Pipe to ForEach for bulk actions
+Import-Csv "users.csv" | ForEach-Object {
+    Update-MgUser -UserId $_.UserPrincipalName -Department $_.Department
+}</pre>
+          </div>
+        </div>
+
         <h4>📚 Microsoft Documentation</h4>
         <ul>
           <li><a href="https://learn.microsoft.com/en-us/powershell/microsoftgraph/overview" target="_blank" class="doc-link">Microsoft Graph PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
           <li><a href="https://learn.microsoft.com/en-us/powershell/exchange/exchange-online-powershell" target="_blank" class="doc-link">Exchange Online PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
           <li><a href="https://learn.microsoft.com/en-us/microsoftteams/teams-powershell-overview" target="_blank" class="doc-link">Microsoft Teams PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
           <li><a href="https://learn.microsoft.com/en-us/powershell/sharepoint/sharepoint-online/connect-sharepoint-online" target="_blank" class="doc-link">SharePoint Online PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
-          <li><a href="https://learn.microsoft.com/en-us/powershell/module/sharepoint-pnp" target="_blank" class="doc-link">PnP PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
-          <li><a href="https://learn.microsoft.com/en-us/mem/intune/developer/intune-graph-apis" target="_blank" class="doc-link">Intune Graph APIs <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://pnp.github.io/powershell/" target="_blank" class="doc-link">PnP PowerShell <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
+          <li><a href="https://learn.microsoft.com/en-us/graph/api/overview" target="_blank" class="doc-link">Microsoft Graph API Reference <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></li>
         </ul>
       </div>
 
@@ -706,7 +989,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 
       <!-- Footer -->
       <div class="app-footer">
-        M365 PowerShell Toolkit v1.2 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
+        M365 PowerShell Toolkit v1.3 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
         Built by <a href="https://github.com/Great-IT-Nordic" target="_blank">Great IT Nordic</a> · 
         MIT License
       </div>
@@ -881,38 +1164,38 @@ const WORKFLOWS = {
 
 const COMMANDS = [
   // ── USER MANAGEMENT ──
-  { cat: "User Management", name: "Get all users", cmd: "Get-MgUser -All", module: "Microsoft.Graph", desc: "List all users in the tenant", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Get all users", cmd: "Get-MgUser -All", module: "Microsoft.Graph", desc: "List all users in the tenant", risk: "read", perms: "User.Read.All" , related: ["Get disabled users", "Get guest users", "Bulk export users to CSV", "Get user sign-in activity"] },
   { cat: "User Management", name: "Get specific user", cmd: 'Get-MgUser -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Get details for a specific user", risk: "read", perms: "User.Read.All" },
   { cat: "User Management", name: "Get user properties", cmd: 'Get-MgUser -UserId "user@{{domain}}" -Property DisplayName,Mail,AccountEnabled,UserPrincipalName', module: "Microsoft.Graph", desc: "Get specific user properties", risk: "read", perms: "User.Read.All" },
-  { cat: "User Management", name: "Create new user", cmd: "$PasswordProfile = @{ Password = 'TempP@ss123!'; ForceChangePasswordNextSignIn = $true }\nNew-MgUser -DisplayName \"John Doe\" -MailNickname \"jdoe\" -UserPrincipalName \"jdoe@{{domain}}\" -PasswordProfile $PasswordProfile -AccountEnabled", module: "Microsoft.Graph", desc: "Create a new user with temporary password", risk: "modify", perms: "User.ReadWrite.All" },
-  { cat: "User Management", name: "Delete user", cmd: 'Remove-MgUser -UserId "user@{{domain}}" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a user (soft delete to recycle bin)", risk: "destructive", perms: "User.ReadWrite.All" },
-  { cat: "User Management", name: "Disable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$false', module: "Microsoft.Graph", desc: "Disable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" },
-  { cat: "User Management", name: "Enable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$true', module: "Microsoft.Graph", desc: "Re-enable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" },
-  { cat: "User Management", name: "Reset user password", cmd: "$params = @{ PasswordProfile = @{ Password = \"NewP@ss123!\"; ForceChangePasswordNextSignIn = $true } }\nUpdate-MgUser -UserId \"user@{{domain}}\" -BodyParameter $params", module: "Microsoft.Graph", desc: "Reset a user's password", risk: "modify", perms: "UserAuthenticationMethod.ReadWrite.All" },
-  { cat: "User Management", name: "Update user properties", cmd: 'Update-MgUser -UserId "user@{{domain}}" -JobTitle "IT Administrator" -Department "IT" -OfficeLocation "Stockholm"', module: "Microsoft.Graph", desc: "Update job title, department, office", risk: "modify", perms: "User.ReadWrite.All" },
-  { cat: "User Management", name: "Get disabled users", cmd: 'Get-MgUser -All -Filter "AccountEnabled eq false" | Select DisplayName,UserPrincipalName', module: "Microsoft.Graph", desc: "List all disabled user accounts", risk: "read", perms: "User.Read.All" },
-  { cat: "User Management", name: "Get guest users", cmd: "Get-MgUser -All -Filter \"UserType eq 'Guest'\" | Select DisplayName,Mail,CreatedDateTime", module: "Microsoft.Graph", desc: "List all external/guest users", risk: "read", perms: "User.Read.All" },
+  { cat: "User Management", name: "Create new user", cmd: "$PasswordProfile = @{ Password = 'TempP@ss123!'; ForceChangePasswordNextSignIn = $true }\nNew-MgUser -DisplayName \"John Doe\" -MailNickname \"jdoe\" -UserPrincipalName \"jdoe@{{domain}}\" -PasswordProfile $PasswordProfile -AccountEnabled", module: "Microsoft.Graph", desc: "Create a new user with temporary password", risk: "modify", perms: "User.ReadWrite.All" , related: ["Assign license to user", "Add member to group", "Set user manager"], csv: "DisplayName,MailNickname,UserPrincipalName,Password,Department,JobTitle,OfficeLocation" },
+  { cat: "User Management", name: "Delete user", cmd: 'Remove-MgUser -UserId "user@{{domain}}" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a user (soft delete to recycle bin)", risk: "destructive", perms: "User.ReadWrite.All" , related: ["Disable user account", "Revoke user sessions", "Remove license from user", "Get deleted users"], csv: "UserPrincipalName" },
+  { cat: "User Management", name: "Disable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$false', module: "Microsoft.Graph", desc: "Disable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" , related: ["Revoke user sessions", "Set Out of Office", "Convert to shared mailbox", "Remove license from user", "Get forwarding rules"], csv: "UserPrincipalName" },
+  { cat: "User Management", name: "Enable user account", cmd: 'Update-MgUser -UserId "user@{{domain}}" -AccountEnabled:$true', module: "Microsoft.Graph", desc: "Re-enable a user's sign-in", risk: "modify", perms: "User.ReadWrite.All" , related: ["Reset user password", "Assign license to user"], csv: "UserPrincipalName" },
+  { cat: "User Management", name: "Reset user password", cmd: "$params = @{ PasswordProfile = @{ Password = \"NewP@ss123!\"; ForceChangePasswordNextSignIn = $true } }\nUpdate-MgUser -UserId \"user@{{domain}}\" -BodyParameter $params", module: "Microsoft.Graph", desc: "Reset a user's password", risk: "modify", perms: "UserAuthenticationMethod.ReadWrite.All" , related: ["Revoke user sessions", "Get user auth methods"], csv: "UserPrincipalName,NewPassword" },
+  { cat: "User Management", name: "Update user properties", cmd: 'Update-MgUser -UserId "user@{{domain}}" -JobTitle "IT Administrator" -Department "IT" -OfficeLocation "Stockholm"', module: "Microsoft.Graph", desc: "Update job title, department, office", risk: "modify", perms: "User.ReadWrite.All" , csv: "UserPrincipalName,JobTitle,Department,OfficeLocation" },
+  { cat: "User Management", name: "Get disabled users", cmd: 'Get-MgUser -All -Filter "AccountEnabled eq false" | Select DisplayName,UserPrincipalName', module: "Microsoft.Graph", desc: "List all disabled user accounts", risk: "read", perms: "User.Read.All" , related: ["Get user sign-in activity", "Remove license from user", "Delete user"] },
+  { cat: "User Management", name: "Get guest users", cmd: "Get-MgUser -All -Filter \"UserType eq 'Guest'\" | Select DisplayName,Mail,CreatedDateTime", module: "Microsoft.Graph", desc: "List all external/guest users", risk: "read", perms: "User.Read.All" , related: ["Remove guest user", "Get user sign-in activity"] },
   { cat: "User Management", name: "Remove guest user", cmd: 'Remove-MgUser -UserId "guest-object-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Remove a guest user from the tenant", risk: "destructive", perms: "User.ReadWrite.All" },
   { cat: "User Management", name: "Get users without MFA", cmd: "Get-MgUser -All | ForEach-Object { $methods = Get-MgUserAuthenticationMethod -UserId $_.Id; if($methods.Count -le 1){ $_ } } | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with only password auth (no MFA)", risk: "read", perms: "UserAuthenticationMethod.Read.All" },
   { cat: "User Management", name: "Get user sign-in activity", cmd: 'Get-MgUser -All -Property DisplayName,SignInActivity | Select DisplayName,@{N="LastSignIn";E={$_.SignInActivity.LastSignInDateTime}} | Sort LastSignIn', module: "Microsoft.Graph", desc: "Get last sign-in date for all users", risk: "read", perms: "AuditLog.Read.All, User.Read.All" },
   { cat: "User Management", name: "Get user manager", cmd: 'Get-MgUserManager -UserId "user@{{domain}}" | Select -ExpandProperty AdditionalProperties', module: "Microsoft.Graph", desc: "Get a user's manager", risk: "read", perms: "User.Read.All" },
-  { cat: "User Management", name: "Set user manager", cmd: "$mgr = @{ \"@odata.id\" = \"https://graph.microsoft.com/v1.0/users/{manager-id}\" }\nSet-MgUserManagerByRef -UserId \"user@{{domain}}\" -BodyParameter $mgr", module: "Microsoft.Graph", desc: "Assign a manager to a user", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Set user manager", cmd: "$mgr = @{ \"@odata.id\" = \"https://graph.microsoft.com/v1.0/users/{manager-id}\" }\nSet-MgUserManagerByRef -UserId \"user@{{domain}}\" -BodyParameter $mgr", module: "Microsoft.Graph", desc: "Assign a manager to a user", risk: "modify", perms: "User.ReadWrite.All" , csv: "UserPrincipalName,ManagerUPN" },
   { cat: "User Management", name: "Bulk export users to CSV", cmd: 'Get-MgUser -All -Property DisplayName,UserPrincipalName,Mail,JobTitle,Department,AccountEnabled | Export-Csv -Path "C:\\Temp\\AllUsers.csv" -NoTypeInformation', module: "Microsoft.Graph", desc: "Export all users to CSV", risk: "read", perms: "User.Read.All" },
-  { cat: "User Management", name: "Revoke user sessions", cmd: 'Invoke-MgInvalidateUserRefreshToken -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Revoke all refresh tokens / force re-auth", risk: "modify", perms: "User.ReadWrite.All" },
+  { cat: "User Management", name: "Revoke user sessions", cmd: 'Invoke-MgInvalidateUserRefreshToken -UserId "user@{{domain}}"', module: "Microsoft.Graph", desc: "Revoke all refresh tokens / force re-auth", risk: "modify", perms: "User.ReadWrite.All" , related: ["Disable user account", "Reset user password"] },
   { cat: "User Management", name: "Get user auth methods", cmd: 'Get-MgUserAuthenticationMethod -UserId "user@{{domain}}" | Select Id,@{N="Type";E={$_.AdditionalProperties."@odata.type"}}', module: "Microsoft.Graph", desc: "List registered authentication methods", risk: "read", perms: "UserAuthenticationMethod.Read.All" },
   { cat: "User Management", name: "Get deleted users", cmd: 'Get-MgDirectoryDeletedItemAsUser | Select DisplayName,UserPrincipalName,DeletedDateTime', module: "Microsoft.Graph", desc: "List soft-deleted users (recycle bin)", risk: "read", perms: "Directory.Read.All" },
   { cat: "User Management", name: "Restore deleted user", cmd: 'Restore-MgDirectoryDeletedItem -DirectoryObjectId "object-id"', module: "Microsoft.Graph", desc: "Restore a user from the recycle bin", risk: "modify", perms: "User.ReadWrite.All" },
 
   // ── GROUP MANAGEMENT (14) ──
-  { cat: "Group Management", name: "Get all groups", cmd: "Get-MgGroup -All | Select DisplayName,GroupTypes,MailEnabled,SecurityEnabled", module: "Microsoft.Graph", desc: "List all groups in the tenant" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get all groups", cmd: "Get-MgGroup -All | Select DisplayName,GroupTypes,MailEnabled,SecurityEnabled", module: "Microsoft.Graph", desc: "List all groups in the tenant" , risk: "read", perms: "Group.Read.All" , related: ["Get group members", "Get group owners", "Create security group"] },
   { cat: "Group Management", name: "Get M365 groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'Unified')\"", module: "Microsoft.Graph", desc: "List only Microsoft 365 groups" , risk: "read", perms: "Group.Read.All" },
   { cat: "Group Management", name: "Get security groups", cmd: 'Get-MgGroup -All -Filter "securityEnabled eq true and mailEnabled eq false"', module: "Microsoft.Graph", desc: "List security groups (non-mail-enabled)" , risk: "read", perms: "Group.Read.All" },
   { cat: "Group Management", name: "Get distribution lists", cmd: "Get-DistributionGroup -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,ManagedBy", module: "ExchangeOnlineManagement", desc: "List all distribution groups" , risk: "read" },
-  { cat: "Group Management", name: "Get group members", cmd: "Get-MgGroupMember -GroupId (Get-MgGroup -Filter \"DisplayName eq 'GroupName'\").Id -All | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List members of a specific group" , risk: "read", perms: "Group.Read.All" },
+  { cat: "Group Management", name: "Get group members", cmd: "Get-MgGroupMember -GroupId (Get-MgGroup -Filter \"DisplayName eq 'GroupName'\").Id -All | Select @{N='Name';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "List members of a specific group" , risk: "read", perms: "Group.Read.All" , related: ["Add member to group", "Remove member from group"] },
   { cat: "Group Management", name: "Get group member count", cmd: "Get-MgGroup -All -Property DisplayName,Id | ForEach { $cnt=(Get-MgGroupMember -GroupId $_.Id -All).Count; [pscustomobject]@{Group=$_.DisplayName;Members=$cnt} } | Sort Members -Desc", module: "Microsoft.Graph", desc: "Member count for every group" , risk: "read", perms: "Group.Read.All" },
   { cat: "Group Management", name: "Add user to group", cmd: 'New-MgGroupMember -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Add a user to a group" , risk: "modify", perms: "Group.ReadWrite.All" },
   { cat: "Group Management", name: "Remove user from group", cmd: 'Remove-MgGroupMemberByRef -GroupId "group-id" -DirectoryObjectId "user-id"', module: "Microsoft.Graph", desc: "Remove a user from a group" , risk: "destructive", perms: "Group.ReadWrite.All" },
-  { cat: "Group Management", name: "Create security group", cmd: 'New-MgGroup -DisplayName "SG-ProjectX" -MailEnabled:$false -MailNickname "sg-projectx" -SecurityEnabled', module: "Microsoft.Graph", desc: "Create a new security group" , risk: "modify", perms: "Group.ReadWrite.All" },
+  { cat: "Group Management", name: "Create security group", cmd: 'New-MgGroup -DisplayName "SG-ProjectX" -MailEnabled:$false -MailNickname "sg-projectx" -SecurityEnabled', module: "Microsoft.Graph", desc: "Create a new security group" , risk: "modify", perms: "Group.ReadWrite.All" , related: ["Add member to group", "Get all groups"] },
   { cat: "Group Management", name: "Create M365 group", cmd: 'New-MgGroup -DisplayName "Team Project" -MailEnabled -MailNickname "teamproject" -SecurityEnabled:$false -GroupTypes "Unified"', module: "Microsoft.Graph", desc: "Create a new Microsoft 365 group" , risk: "modify", perms: "Group.ReadWrite.All" },
   { cat: "Group Management", name: "Get dynamic groups", cmd: "Get-MgGroup -All -Filter \"groupTypes/any(g:g eq 'DynamicMembership')\" | Select DisplayName,MembershipRule", module: "Microsoft.Graph", desc: "List dynamic membership groups with rules" , risk: "read", perms: "Group.Read.All" },
   { cat: "Group Management", name: "Delete group", cmd: 'Remove-MgGroup -GroupId "group-id" -Confirm:$false', module: "Microsoft.Graph", desc: "Delete a group" , risk: "destructive", perms: "Group.ReadWrite.All" },
@@ -920,20 +1203,20 @@ const COMMANDS = [
   { cat: "Group Management", name: "Get groups without owners", cmd: "Get-MgGroup -All | Where { (Get-MgGroupOwner -GroupId $_.Id -All).Count -eq 0 } | Select DisplayName,Id", module: "Microsoft.Graph", desc: "Find orphaned groups with no owners" , risk: "read", perms: "Group.Read.All" },
 
   // ── LICENSING (8) ──
-  { cat: "Licensing", name: "Get all licenses in tenant", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}},@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}}", module: "Microsoft.Graph", desc: "Overview of all license SKUs with availability" , risk: "read", perms: "Organization.Read.All" },
+  { cat: "Licensing", name: "Get all licenses in tenant", cmd: "Get-MgSubscribedSku | Select SkuPartNumber,ConsumedUnits,@{N='Total';E={$_.PrepaidUnits.Enabled}},@{N='Available';E={$_.PrepaidUnits.Enabled - $_.ConsumedUnits}}", module: "Microsoft.Graph", desc: "Overview of all license SKUs with availability" , risk: "read", perms: "Organization.Read.All" , related: ["Get unlicensed users", "Get users with specific license", "Get tenant SKUs overview"] },
   { cat: "Licensing", name: "Get user licenses", cmd: 'Get-MgUserLicenseDetail -UserId "user@{{domain}}" | Select SkuPartNumber,SkuId', module: "Microsoft.Graph", desc: "Show licenses assigned to a user" , risk: "read", perms: "Organization.Read.All" },
-  { cat: "Licensing", name: "Assign license to user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @(@{SkuId="sku-id"}) -RemoveLicenses @()', module: "Microsoft.Graph", desc: "Assign a license SKU to a user" , risk: "modify", perms: "User.ReadWrite.All" },
-  { cat: "Licensing", name: "Remove license from user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @() -RemoveLicenses @("sku-id")', module: "Microsoft.Graph", desc: "Remove a license from a user" , risk: "destructive", perms: "User.ReadWrite.All" },
-  { cat: "Licensing", name: "Get unlicensed users", cmd: "Get-MgUser -All -Filter \"assignedLicenses/\\$count eq 0\" -ConsistencyLevel eventual -CountVariable c | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with no licenses assigned" , risk: "read", perms: "User.ReadWrite.All" },
+  { cat: "Licensing", name: "Assign license to user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @(@{SkuId="sku-id"}) -RemoveLicenses @()', module: "Microsoft.Graph", desc: "Assign a license SKU to a user" , risk: "modify", perms: "User.ReadWrite.All" , related: ["Remove license from user", "Get all licenses in tenant", "Get users with specific license"], csv: "UserPrincipalName,SkuId" },
+  { cat: "Licensing", name: "Remove license from user", cmd: 'Set-MgUserLicense -UserId "user@{{domain}}" -AddLicenses @() -RemoveLicenses @("sku-id")', module: "Microsoft.Graph", desc: "Remove a license from a user" , risk: "destructive", perms: "User.ReadWrite.All" , related: ["Get all licenses in tenant", "Disable user account"], csv: "UserPrincipalName,SkuId" },
+  { cat: "Licensing", name: "Get unlicensed users", cmd: "Get-MgUser -All -Filter \"assignedLicenses/\\$count eq 0\" -ConsistencyLevel eventual -CountVariable c | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find users with no licenses assigned" , risk: "read", perms: "User.ReadWrite.All" , related: ["Assign license to user", "Get all licenses in tenant"] },
   { cat: "Licensing", name: "Get users with specific license", cmd: "Get-MgUser -All -Filter \"assignedLicenses/any(l:l/skuId eq 'sku-id')\" | Select DisplayName,UserPrincipalName", module: "Microsoft.Graph", desc: "Find all users with a specific SKU" , risk: "read", perms: "User.ReadWrite.All" },
   { cat: "Licensing", name: "Disable self-service purchases", cmd: "Get-MSCommerceProductPolicies -PolicyId AllowSelfServicePurchase | ForEach { Update-MSCommerceProductPolicy -PolicyId AllowSelfServicePurchase -ProductId $_.ProductId -Value \"Disabled\" }", module: "MSCommerce", desc: "Block users from self-service license purchases" , risk: "read" },
   { cat: "Licensing", name: "Get license assignment paths", cmd: "Get-MgUser -All -Property DisplayName,LicenseAssignmentStates | Select DisplayName,@{N='Assignments';E={$_.LicenseAssignmentStates | Select AssignedByGroup,SkuId}}", module: "Microsoft.Graph", desc: "Check if licenses are direct or group-based" , risk: "read", perms: "User.ReadWrite.All" },
 
   // ── EXCHANGE ONLINE (22) ──
-  { cat: "Exchange Online", name: "Get all mailboxes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,RecipientTypeDetails", module: "ExchangeOnlineManagement", desc: "List all mailboxes" , risk: "read" },
+  { cat: "Exchange Online", name: "Get all mailboxes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress,RecipientTypeDetails", module: "ExchangeOnlineManagement", desc: "List all mailboxes" , risk: "read" , related: ["Get all mailbox sizes", "Get mailbox permissions"] },
   { cat: "Exchange Online", name: "Get shared mailboxes", cmd: "Get-EXOMailbox -RecipientTypeDetails SharedMailbox -ResultSize Unlimited | Select DisplayName,PrimarySmtpAddress", module: "ExchangeOnlineManagement", desc: "List only shared mailboxes" , risk: "read" },
   { cat: "Exchange Online", name: "Create shared mailbox", cmd: 'New-Mailbox -Shared -Name "Info" -DisplayName "Info Mailbox" -PrimarySmtpAddress info@{{domain}}', module: "ExchangeOnlineManagement", desc: "Create a new shared mailbox" , risk: "modify" },
-  { cat: "Exchange Online", name: "Get mailbox permissions", cmd: 'Get-MailboxPermission -Identity "shared@{{domain}}" | Where { $_.User -ne "NT AUTHORITY\\SELF" }', module: "ExchangeOnlineManagement", desc: "See who has access to a mailbox" , risk: "read" },
+  { cat: "Exchange Online", name: "Get mailbox permissions", cmd: 'Get-MailboxPermission -Identity "shared@{{domain}}" | Where { $_.User -ne "NT AUTHORITY\\SELF" }', module: "ExchangeOnlineManagement", desc: "See who has access to a mailbox" , risk: "read" , related: ["Grant full access to mailbox", "Grant send-as permission"] },
   { cat: "Exchange Online", name: "Grant Full Access", cmd: 'Add-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -AutoMapping $true', module: "ExchangeOnlineManagement", desc: "Give full access to a mailbox" , risk: "modify" },
   { cat: "Exchange Online", name: "Remove Full Access", cmd: 'Remove-MailboxPermission -Identity "shared@{{domain}}" -User "user@{{domain}}" -AccessRights FullAccess -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Remove full access from a mailbox" , risk: "destructive" },
   { cat: "Exchange Online", name: "Grant Send As", cmd: 'Add-RecipientPermission -Identity "shared@{{domain}}" -Trustee "user@{{domain}}" -AccessRights SendAs -Confirm:$false', module: "ExchangeOnlineManagement", desc: "Give Send As permission" , risk: "modify" },
@@ -942,11 +1225,11 @@ const COMMANDS = [
   { cat: "Exchange Online", name: "Get all mailbox sizes", cmd: "Get-EXOMailbox -ResultSize Unlimited | Get-EXOMailboxStatistics | Select DisplayName,TotalItemSize,ItemCount | Sort TotalItemSize -Descending", module: "ExchangeOnlineManagement", desc: "All mailboxes sorted by size" , risk: "read" },
   { cat: "Exchange Online", name: "Set mailbox timezone", cmd: 'Set-MailboxRegionalConfiguration -Identity "user@{{domain}}" -TimeZone "W. Europe Standard Time" -Language sv-SE -LocalizeDefaultFolderName', module: "ExchangeOnlineManagement", desc: "Set timezone and language on mailbox" , risk: "modify" },
   { cat: "Exchange Online", name: "Bulk set timezone", cmd: "Get-EXOMailbox -ResultSize Unlimited | ForEach { Set-MailboxRegionalConfiguration -Identity $_.PrimarySmtpAddress -TimeZone \"W. Europe Standard Time\" -Language sv-SE }", module: "ExchangeOnlineManagement", desc: "Set timezone for all mailboxes" , risk: "read" },
-  { cat: "Exchange Online", name: "Get forwarding rules", cmd: "Get-EXOMailbox -ResultSize Unlimited | Where { $_.ForwardingSmtpAddress -ne $null } | Select DisplayName,ForwardingSmtpAddress,DeliverToMailboxAndForward", module: "ExchangeOnlineManagement", desc: "Find mailboxes with forwarding enabled" , risk: "read" },
+  { cat: "Exchange Online", name: "Get forwarding rules", cmd: "Get-EXOMailbox -ResultSize Unlimited | Where { $_.ForwardingSmtpAddress -ne $null } | Select DisplayName,ForwardingSmtpAddress,DeliverToMailboxAndForward", module: "ExchangeOnlineManagement", desc: "Find mailboxes with forwarding enabled" , risk: "read" , related: ["Get inbox rules (user)", "Get transport rules"] },
   { cat: "Exchange Online", name: "Remove forwarding", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -ForwardingSmtpAddress $null -DeliverToMailboxAndForward $false', module: "ExchangeOnlineManagement", desc: "Remove SMTP forwarding from a mailbox" , risk: "destructive" },
   { cat: "Exchange Online", name: "Get inbox rules (user)", cmd: 'Get-InboxRule -Mailbox "user@{{domain}}" | Select Name,Description,Enabled', module: "ExchangeOnlineManagement", desc: "List inbox rules for a user" , risk: "read" },
-  { cat: "Exchange Online", name: "Convert to shared mailbox", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -Type Shared', module: "ExchangeOnlineManagement", desc: "Convert user mailbox to shared" , risk: "modify" },
-  { cat: "Exchange Online", name: "Set Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Enabled -InternalMessage "I am currently out of office." -ExternalMessage "I am currently out of office."', module: "ExchangeOnlineManagement", desc: "Enable auto-reply / out of office" , risk: "modify" },
+  { cat: "Exchange Online", name: "Convert to shared mailbox", cmd: 'Set-Mailbox -Identity "user@{{domain}}" -Type Shared', module: "ExchangeOnlineManagement", desc: "Convert user mailbox to shared" , risk: "modify" , related: ["Remove license from user", "Grant full access to mailbox", "Set Out of Office"] },
+  { cat: "Exchange Online", name: "Set Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Enabled -InternalMessage "I am currently out of office." -ExternalMessage "I am currently out of office."', module: "ExchangeOnlineManagement", desc: "Enable auto-reply / out of office" , risk: "modify" , related: ["Disable user account", "Convert to shared mailbox", "Get forwarding rules"] },
   { cat: "Exchange Online", name: "Disable Out of Office", cmd: 'Set-MailboxAutoReplyConfiguration -Identity "user@{{domain}}" -AutoReplyState Disabled', module: "ExchangeOnlineManagement", desc: "Turn off auto-reply" , risk: "modify" },
   { cat: "Exchange Online", name: "Get calendar permissions", cmd: 'Get-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar"', module: "ExchangeOnlineManagement", desc: "Check calendar sharing permissions" , risk: "read" },
   { cat: "Exchange Online", name: "Set calendar permissions", cmd: 'Set-MailboxFolderPermission -Identity "user@{{domain}}:\\Calendar" -User Default -AccessRights Reviewer', module: "ExchangeOnlineManagement", desc: "Set default calendar visibility" , risk: "modify" },
@@ -984,7 +1267,7 @@ const COMMANDS = [
   { cat: "SharePoint Online", name: "Lock a site (read only)", cmd: 'Set-SPOSite -Identity "https://{{domain}}.sharepoint.com/sites/sitename" -LockState ReadOnly', module: "Microsoft.Online.SharePoint.PowerShell", desc: "Set a site to read-only mode" , risk: "modify" },
 
   // ── TEAMS (11) ──
-  { cat: "Teams", name: "Get all teams", cmd: "Get-Team | Select DisplayName,GroupId,Visibility,Archived", module: "MicrosoftTeams", desc: "List all Teams" , risk: "read" },
+  { cat: "Teams", name: "Get all teams", cmd: "Get-Team | Select DisplayName,GroupId,Visibility,Archived", module: "MicrosoftTeams", desc: "List all Teams" , risk: "read" , related: ["Get team members", "Get team channels"] },
   { cat: "Teams", name: "Get team members", cmd: 'Get-TeamUser -GroupId "group-id" | Select Name,User,Role', module: "MicrosoftTeams", desc: "List members and their roles" , risk: "read" },
   { cat: "Teams", name: "Add team member", cmd: 'Add-TeamUser -GroupId "group-id" -User "user@{{domain}}" -Role Member', module: "MicrosoftTeams", desc: "Add a user to a team" , risk: "modify" },
   { cat: "Teams", name: "Remove team member", cmd: 'Remove-TeamUser -GroupId "group-id" -User "user@{{domain}}"', module: "MicrosoftTeams", desc: "Remove a user from a team" , risk: "destructive" },
@@ -1001,10 +1284,10 @@ const COMMANDS = [
   { cat: "Security & Compliance", name: "Get all directory roles", cmd: "Get-MgDirectoryRole | Select DisplayName,Id", module: "Microsoft.Graph", desc: "List all activated admin roles" , risk: "read", perms: "RoleManagement.Read.Directory" },
   { cat: "Security & Compliance", name: "Get role assignments for user", cmd: "Get-MgUserMemberOf -UserId \"user@{{domain}}\" | Where { $_.AdditionalProperties.\"@odata.type\" -eq \"#microsoft.graph.directoryRole\" } | Select @{N='Role';E={$_.AdditionalProperties.displayName}}", module: "Microsoft.Graph", desc: "Check what admin roles a user has" , risk: "read", perms: "RoleManagement.Read.Directory" },
   { cat: "Security & Compliance", name: "Get MFA registration details", cmd: "Get-MgReportAuthenticationMethodUserRegistrationDetail | Select UserPrincipalName,IsMfaRegistered,MethodsRegistered | Sort IsMfaRegistered", module: "Microsoft.Graph", desc: "MFA registration status per user" , risk: "read", perms: "UserAuthenticationMethod.Read.All" },
-  { cat: "Security & Compliance", name: "Get risky users", cmd: "Get-MgRiskyUser -Filter \"RiskLevel eq 'high'\" | Select UserDisplayName,RiskLevel,RiskState,RiskLastUpdatedDateTime", module: "Microsoft.Graph", desc: "List high-risk users (Identity Protection)" , risk: "read", perms: "IdentityRiskyUser.Read.All" },
-  { cat: "Security & Compliance", name: "Get risky sign-ins", cmd: "Get-MgRiskySignIn -Top 50 | Select UserDisplayName,RiskLevel,RiskDetail,IPAddress,CreatedDateTime", module: "Microsoft.Graph", desc: "Recent risky sign-in events" , risk: "read", perms: "IdentityRiskyUser.Read.All" },
+  { cat: "Security & Compliance", name: "Get risky users", cmd: "Get-MgRiskyUser -Filter \"RiskLevel eq 'high'\" | Select UserDisplayName,RiskLevel,RiskState,RiskLastUpdatedDateTime", module: "Microsoft.Graph", desc: "List high-risk users (Identity Protection)" , risk: "read", perms: "IdentityRiskyUser.Read.All" , related: ["Get risky sign-ins", "Get user sign-in activity", "Revoke user sessions"] },
+  { cat: "Security & Compliance", name: "Get risky sign-ins", cmd: "Get-MgRiskySignIn -Top 50 | Select UserDisplayName,RiskLevel,RiskDetail,IPAddress,CreatedDateTime", module: "Microsoft.Graph", desc: "Recent risky sign-in events" , risk: "read", perms: "IdentityRiskyUser.Read.All" , related: ["Get risky users", "Get sign-in logs"] },
   { cat: "Security & Compliance", name: "Get sign-in logs", cmd: "Get-MgAuditLogSignIn -Top 100 | Select UserDisplayName,AppDisplayName,Status,ConditionalAccessStatus,IPAddress", module: "Microsoft.Graph", desc: "Recent sign-in audit logs" , risk: "read", perms: "AuditLog.Read.All" },
-  { cat: "Security & Compliance", name: "Get audit logs", cmd: "Get-MgAuditLogDirectoryAudit -Top 50 | Select ActivityDisplayName,InitiatedBy,TargetResources,ActivityDateTime", module: "Microsoft.Graph", desc: "Recent directory audit events" , risk: "read", perms: "AuditLog.Read.All" },
+  { cat: "Security & Compliance", name: "Get audit logs", cmd: "Get-MgAuditLogDirectoryAudit -Top 50 | Select ActivityDisplayName,InitiatedBy,TargetResources,ActivityDateTime", module: "Microsoft.Graph", desc: "Recent directory audit events" , risk: "read", perms: "AuditLog.Read.All" , related: ["Get sign-in logs", "Get mailbox audit logs"] },
   { cat: "Security & Compliance", name: "Get app registrations", cmd: "Get-MgApplication -All | Select DisplayName,AppId,CreatedDateTime,SignInAudience", module: "Microsoft.Graph", desc: "List all app registrations" , risk: "read", perms: "Application.Read.All" },
   { cat: "Security & Compliance", name: "Get enterprise apps", cmd: "Get-MgServicePrincipal -All | Select DisplayName,AppId,AccountEnabled,ServicePrincipalType", module: "Microsoft.Graph", desc: "List enterprise applications" , risk: "read", perms: "Application.Read.All" },
   { cat: "Security & Compliance", name: "Get app credentials expiring", cmd: "Get-MgApplication -All | ForEach { $app=$_; $_.PasswordCredentials | Where { $_.EndDateTime -lt (Get-Date).AddDays(30) } | Select @{N='App';E={$app.DisplayName}},EndDateTime,DisplayName }", module: "Microsoft.Graph", desc: "Find app secrets expiring within 30 days" , risk: "read", perms: "Application.Read.All" },
@@ -1014,7 +1297,7 @@ const COMMANDS = [
   { cat: "Security & Compliance", name: "Get sensitivity labels", cmd: "Get-Label | Select DisplayName,Guid,ContentType,Enabled", module: "ExchangeOnlineProtection", desc: "List sensitivity / information protection labels" , risk: "read" },
 
   // ── CONDITIONAL ACCESS (7) ──
-  { cat: "Conditional Access", name: "Get all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | Select DisplayName,State,CreatedDateTime,ModifiedDateTime", module: "Microsoft.Graph", desc: "List all Conditional Access policies" , risk: "read", perms: "Policy.Read.All" },
+  { cat: "Conditional Access", name: "Get all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | Select DisplayName,State,CreatedDateTime,ModifiedDateTime", module: "Microsoft.Graph", desc: "List all Conditional Access policies" , risk: "read", perms: "Policy.Read.All" , related: ["Enable CA policy", "Disable CA policy", "Export all CA policies to JSON"] },
   { cat: "Conditional Access", name: "Get CA policy details", cmd: 'Get-MgIdentityConditionalAccessPolicy -ConditionalAccessPolicyId "policy-id" | ConvertTo-Json -Depth 10', module: "Microsoft.Graph", desc: "Full JSON details of a specific CA policy" , risk: "read", perms: "Policy.Read.All" },
   { cat: "Conditional Access", name: "Get enabled CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabled'\" | Select DisplayName,State", module: "Microsoft.Graph", desc: "List only active CA policies" , risk: "read", perms: "Policy.Read.All" },
   { cat: "Conditional Access", name: "Get report-only CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy -Filter \"State eq 'enabledForReportingButNotEnforced'\" | Select DisplayName", module: "Microsoft.Graph", desc: "List policies in report-only mode" , risk: "read", perms: "Policy.Read.All" },
@@ -1023,8 +1306,8 @@ const COMMANDS = [
   { cat: "Conditional Access", name: "Export all CA policies", cmd: "Get-MgIdentityConditionalAccessPolicy | ConvertTo-Json -Depth 10 | Out-File 'CA-Policies-Backup.json'", module: "Microsoft.Graph", desc: "Backup/export all CA policies to JSON" , risk: "read", perms: "Policy.Read.All" },
 
   // ── DEVICE MANAGEMENT (11) ──
-  { cat: "Device Management", name: "Get all managed devices", cmd: "Get-MgDeviceManagementManagedDevice -All | Select DeviceName,OperatingSystem,ComplianceState,LastSyncDateTime", module: "Microsoft.Graph.Intune", desc: "List all Intune-managed devices" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
-  { cat: "Device Management", name: "Get non-compliant devices", cmd: "Get-MgDeviceManagementManagedDevice -Filter \"complianceState eq 'noncompliant'\" | Select DeviceName,UserDisplayName,ComplianceState", module: "Microsoft.Graph.Intune", desc: "Find devices that fail compliance" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
+  { cat: "Device Management", name: "Get all managed devices", cmd: "Get-MgDeviceManagementManagedDevice -All | Select DeviceName,OperatingSystem,ComplianceState,LastSyncDateTime", module: "Microsoft.Graph.Intune", desc: "List all Intune-managed devices" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" , related: ["Get non-compliant devices", "Get stale devices", "Wipe device"] },
+  { cat: "Device Management", name: "Get non-compliant devices", cmd: "Get-MgDeviceManagementManagedDevice -Filter \"complianceState eq 'noncompliant'\" | Select DeviceName,UserDisplayName,ComplianceState", module: "Microsoft.Graph.Intune", desc: "Find devices that fail compliance" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" , related: ["Get all managed devices", "Get compliance policies"] },
   { cat: "Device Management", name: "Get device compliance policies", cmd: "Get-MgDeviceManagementDeviceCompliancePolicy | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune compliance policies" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
   { cat: "Device Management", name: "Get device config profiles", cmd: "Get-MgDeviceManagementDeviceConfiguration | Select DisplayName,LastModifiedDateTime", module: "Microsoft.Graph.Intune", desc: "List Intune configuration profiles" , risk: "read", perms: "DeviceManagementManagedDevices.Read.All" },
   { cat: "Device Management", name: "Get Entra ID devices", cmd: "Get-MgDevice -All | Select DisplayName,OperatingSystem,TrustType,ApproximateLastSignInDateTime", module: "Microsoft.Graph", desc: "List devices registered in Entra ID" , risk: "read", perms: "Device.Read.All" },
@@ -1188,6 +1471,31 @@ function setFilter(id) {
   document.getElementById('searchInput').value = '';
   highlightNav();
   renderCommands();
+  updateUrlParams();
+}
+
+function jumpToCommand(name) {
+  // Find the command and expand it
+  document.getElementById('searchInput').value = name;
+  activeFilter = 'All';
+  activeWorkflow = null;
+  highlightNav();
+  
+  // Find the exact command
+  const filtered = COMMANDS.filter(c => c.name === name);
+  if(filtered.length > 0) {
+    const c = filtered[0];
+    const cat = c.cat;
+    const idx = COMMANDS.filter(x => x.cat === cat).indexOf(c);
+    expandedId = cat + '-' + idx;
+  }
+  renderCommands();
+  
+  // Scroll to expanded card
+  setTimeout(() => {
+    const expanded = document.querySelector('.cmd-card.expanded');
+    if(expanded) expanded.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
 }
 
 // ═══════════════════════════════════════════════
@@ -1384,7 +1692,7 @@ function copyScript() {
 // ═══════════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════════
-function onSearch() { expandedId = null; activeFilter = 'All'; activeWorkflow = null; highlightNav(); renderCommands(); }
+function onSearch() { expandedId = null; activeFilter = 'All'; activeWorkflow = null; highlightNav(); renderCommands(); updateUrlParams(); }
 
 function getFiltered() {
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -1475,6 +1783,20 @@ function renderCommands() {
         html += `<div class="perm-row"><span class="lbl">Permissions:</span>${c.perms.split(',').map(p=>`<span class="perm-tag">${p.trim()}</span>`).join('')}</div>`;
       }
 
+      // CSV Template
+      if(c.csv) {
+        html += `<div style="margin-top:8px"><button class="csv-btn" onclick="event.stopPropagation();downloadCsvTemplate('${esc(c.name)}','${c.csv}')">📥 CSV Template <span style="opacity:0.7;font-size:10px">(${c.csv.split(',').length} columns)</span></button></div>`;
+      }
+
+      // Related commands
+      if(c.related && c.related.length > 0) {
+        html += `<div class="related-row"><span class="lbl">🔗 Related commands</span>`;
+        c.related.forEach(r => {
+          html += `<span class="related-chip" onclick="event.stopPropagation();jumpToCommand('${r.replace(/'/g,"\\'")}')">${esc(r)}</span>`;
+        });
+        html += `</div>`;
+      }
+
       // Copy as full script
       const fullScript = `# ${c.name}\n${applyParams(mod.install)}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
       html += `<div style="margin-top:6px">${cb(fullScript,'Copy as Full Script (Install + Connect + Command)')}</div>`;
@@ -1516,6 +1838,13 @@ function toggleGuide() {
   panel.classList.toggle('visible');
 }
 
+function switchGuideTab(tabId, btn) {
+  document.querySelectorAll('.guide-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.guide-tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + tabId).classList.add('active');
+}
+
 function togglePortals() {
   const toggle = document.getElementById('portalsToggle');
   const panel = document.getElementById('portalsPanel');
@@ -1523,9 +1852,137 @@ function togglePortals() {
   panel.classList.toggle('visible');
 }
 
+// ═══════════════════════════════════════════════
+//  THEME
+// ═══════════════════════════════════════════════
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const next = current === 'light' ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('m365_theme', next);
+  document.getElementById('themeToggle').textContent = next === 'light' ? '☀️' : '🌙';
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('m365_theme') || 'dark';
+  if(saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    document.getElementById('themeToggle').textContent = '☀️';
+  }
+}
+
+// ═══════════════════════════════════════════════
+//  TENANT PROFILES
+// ═══════════════════════════════════════════════
+function getProfiles() {
+  try { return JSON.parse(localStorage.getItem('m365_profiles') || '{}'); } catch(e) { return {}; }
+}
+
+function refreshProfiles() {
+  const sel = document.getElementById('profileSelect');
+  const profiles = getProfiles();
+  const current = sel.value;
+  sel.innerHTML = '<option value="">— Select tenant —</option>';
+  Object.keys(profiles).sort().forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = '🏢 ' + name;
+    sel.appendChild(opt);
+  });
+  if(current && profiles[current]) sel.value = current;
+}
+
+function saveProfile() {
+  const domain = document.getElementById('paramDomain').value.trim();
+  const admin = document.getElementById('paramAdmin').value.trim();
+  const spo = document.getElementById('paramSPO').value.trim();
+  if(!domain) { alert('Enter a domain first.'); return; }
+  
+  const name = prompt('Profile name (e.g. client name):', domain.split('.')[0].toUpperCase());
+  if(!name) return;
+  
+  const profiles = getProfiles();
+  profiles[name] = { domain, admin, spo };
+  localStorage.setItem('m365_profiles', JSON.stringify(profiles));
+  refreshProfiles();
+  document.getElementById('profileSelect').value = name;
+}
+
+function loadProfile() {
+  const sel = document.getElementById('profileSelect');
+  const profiles = getProfiles();
+  const profile = profiles[sel.value];
+  if(!profile) return;
+  
+  document.getElementById('paramDomain').value = profile.domain || '';
+  document.getElementById('paramAdmin').value = profile.admin || '';
+  document.getElementById('paramSPO').value = profile.spo || '';
+  renderCommands();
+}
+
+function deleteProfile() {
+  const sel = document.getElementById('profileSelect');
+  if(!sel.value) { alert('Select a profile first.'); return; }
+  if(!confirm('Delete profile "' + sel.value + '"?')) return;
+  
+  const profiles = getProfiles();
+  delete profiles[sel.value];
+  localStorage.setItem('m365_profiles', JSON.stringify(profiles));
+  sel.value = '';
+  refreshProfiles();
+}
+
+// ═══════════════════════════════════════════════
+//  URL DEEP LINKS
+// ═══════════════════════════════════════════════
+function readUrlParams() {
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('filter')) {
+    const f = params.get('filter');
+    // Check if it's a workflow, category, module, or special view
+    if(WORKFLOWS[f]) { activeFilter = f; activeWorkflow = WORKFLOWS[f]; }
+    else if(f === 'Favorites') { activeFilter = 'Favorites'; }
+    else if(CATEGORIES.includes(f)) { activeFilter = f; }
+    else if(f.startsWith('mod:')) { activeFilter = f; }
+    else { activeFilter = f; }
+  }
+  if(params.get('search')) {
+    document.getElementById('searchInput').value = params.get('search');
+    activeFilter = 'All';
+  }
+}
+
+function updateUrlParams() {
+  const params = new URLSearchParams();
+  const q = document.getElementById('searchInput').value;
+  if(q) params.set('search', q);
+  else if(activeFilter && activeFilter !== 'All') params.set('filter', activeFilter);
+  
+  const newUrl = params.toString() ? '?' + params.toString() : window.location.pathname;
+  history.replaceState(null, '', newUrl);
+}
+
+// ═══════════════════════════════════════════════
+//  CSV TEMPLATE
+// ═══════════════════════════════════════════════
+function downloadCsvTemplate(name, columns) {
+  const bom = '\uFEFF';
+  const csv = bom + columns + '\n' + columns.split(',').map(c => '').join(',') + '\n';
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name.replace(/[^a-zA-Z0-9]/g, '-') + '-template.csv';
+  a.click();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  loadTheme();
+  refreshProfiles();
+  readUrlParams();
   buildSidebar();
   buildModulePanel();
+  highlightNav();
   renderCommands();
 
   // Keyboard shortcut: Ctrl+K to focus search
