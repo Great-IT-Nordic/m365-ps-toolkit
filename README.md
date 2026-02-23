@@ -13,16 +13,22 @@ An interactive, browser-based reference tool for Microsoft 365 PowerShell comman
 | **Tenant Profiles** | Save and switch between client tenants instantly — domain, admin UPN, and SPO URL per profile |
 | **Script Builder** | Check commands → generate a complete `.ps1` with safe import, error handling, transcript logging, download as .ps1 |
 | **7 Workflow Templates** | Onboarding, Offboarding, Security Audit, Tenant Review, License Cleanup, Mail Hygiene, Guest Audit |
-| **Risk Indicators** | 🟢 Read / 🟡 Modify / 🔴 Destructive badges on every command |
+| **Workflow Progress** | Click steps to mark complete — progress bar tracks your position. Persisted across sessions. |
+| **Connection Builder** | Select what you need to do → auto-generates `Connect-MgGraph` with the exact scopes required |
+| **Risk Indicators** | 🟢 Read / 🟡 Modify / 🔴 Destructive badges on every command — filter by risk level in sidebar |
 | **Graph Permissions** | Shows required API permissions (scopes) for each Graph command |
 | **Related Commands** | Cross-linked commands in expanded view — discover the full picture for any task |
+| **Personal Notes** | Add your own notes to any command — "We use this for Client X quarterly". Persisted in localStorage |
 | **CSV Templates** | Download pre-built CSV templates for bulk operations (user creation, license assignment, etc.) |
+| **Bulk Script Generator** | One-click generated `Import-Csv \| ForEach-Object` wrapper scripts for bulk operations |
 | **Admin Portal Links** | Quick-access links to all 10 M365 admin centers |
 | **URL Deep Links** | Share specific views with your team — URL updates as you navigate |
 | **Light / Dark Theme** | Toggle between dark (default) and light theme — persisted across sessions |
+| **Legacy Command Map** | Toggle to see deprecated AzureAD/MSOL equivalents alongside Graph commands |
+| **Keyboard Navigation** | Arrow keys to browse commands, Enter to expand, Ctrl+K to search |
 | **Expanded How-To Guide** | Tabbed guide with prerequisites, troubleshooting, tips, and common patterns |
-| **Favorites** | Star commands you use often — persisted in your browser |
-| **Search & Filter** | Filter by category, module, risk level, or free-text search (Ctrl+K) |
+| **Favorites & History** | Star commands and track recently copied commands — both persisted |
+| **Collapsible Sidebar** | Toggle sidebar on desktop and mobile — optimized for all screen sizes |
 | **Fully Offline** | Single HTML file, no dependencies, works without internet |
 
 ## 🚀 Quick Start
