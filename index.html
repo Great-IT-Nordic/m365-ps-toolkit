@@ -753,6 +753,109 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 }
 .suggest-link:hover { text-decoration: underline; }
 
+/* Connection String Generator */
+.conn-gen-toggle {
+  display: flex; align-items: center; gap: 8px; padding: 12px 16px;
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius); cursor: pointer; transition: all 0.2s; margin-bottom: 20px;
+}
+.conn-gen-toggle:hover { border-color: var(--accent); background: var(--accent-glow); }
+.conn-gen-toggle .cg-icon { font-size: 18px; }
+.conn-gen-toggle .cg-label { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.conn-gen-toggle .cg-sub { font-size: 12px; color: var(--text-secondary); margin-left: auto; }
+.conn-gen-toggle .cg-chevron { color: var(--text-dim); transition: transform 0.2s; }
+.conn-gen-toggle.open .cg-chevron { transform: rotate(90deg); }
+.conn-gen-panel {
+  display: none; margin-top: -21px; margin-bottom: 20px;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+  padding: 16px; animation: slideDown 0.2s ease;
+}
+.conn-gen-panel.visible { display: block; }
+.scope-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 6px; margin-bottom: 16px;
+}
+.scope-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  cursor: pointer; transition: all 0.2s; user-select: none; font-size: 12px;
+}
+.scope-item:hover { border-color: var(--accent); }
+.scope-item.selected { border-color: var(--accent); background: var(--accent-glow); }
+.scope-item input { accent-color: var(--accent); cursor: pointer; }
+.scope-item .scope-name { font-weight: 600; color: var(--text-primary); }
+.scope-item .scope-desc { font-size: 11px; color: var(--text-secondary); }
+.conn-output {
+  background: var(--bg-code); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 12px 14px;
+  font-family: var(--font-mono); font-size: 12px; color: var(--green);
+  overflow-x: auto; min-height: 42px; white-space: pre-wrap;
+}
+.conn-output .dim { color: var(--text-dim); }
+
+/* Command notes */
+.cmd-note-section {
+  margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border);
+}
+.cmd-note-row {
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.cmd-note-input {
+  flex: 1; background: var(--bg-elevated); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 6px 10px;
+  font-family: var(--font-body); font-size: 12px;
+  color: var(--text-primary); resize: vertical; min-height: 32px; max-height: 120px;
+}
+.cmd-note-input:focus { outline: none; border-color: var(--accent); }
+.cmd-note-input::placeholder { color: var(--text-dim); }
+.cmd-note-save {
+  background: var(--accent-glow); color: var(--accent); border: 1px solid rgba(59,130,246,0.2);
+  border-radius: var(--radius-sm); padding: 6px 12px; cursor: pointer;
+  font-size: 11px; font-family: var(--font-body); transition: all 0.2s; white-space: nowrap;
+}
+.cmd-note-save:hover { background: rgba(59,130,246,0.25); }
+.cmd-note-saved {
+  font-size: 11px; color: var(--text-dim); padding: 4px 0;
+  display: flex; align-items: center; gap: 6px;
+}
+.cmd-note-saved .note-text { color: var(--text-secondary); font-style: italic; }
+.cmd-note-saved .note-edit { color: var(--accent); cursor: pointer; font-size: 10px; }
+.cmd-note-saved .note-delete { color: var(--text-dim); cursor: pointer; font-size: 10px; }
+.cmd-note-saved .note-delete:hover { color: var(--red); }
+
+/* Workflow progress tracking */
+.workflow-step.completed .workflow-step-num {
+  background: var(--green); color: #fff;
+}
+.workflow-step.completed .workflow-step-text {
+  text-decoration: line-through; opacity: 0.6;
+}
+.workflow-step { cursor: pointer; transition: opacity 0.2s; }
+.workflow-step:hover { opacity: 0.85; }
+.wf-progress-bar {
+  display: flex; align-items: center; gap: 10px; margin-top: 12px;
+  padding: 10px 0; border-top: 1px solid var(--border);
+}
+.wf-progress-track {
+  flex: 1; height: 6px; background: var(--bg-elevated);
+  border-radius: 3px; overflow: hidden;
+}
+.wf-progress-fill {
+  height: 100%; background: var(--green); border-radius: 3px;
+  transition: width 0.3s ease;
+}
+.wf-progress-text {
+  font-size: 11px; color: var(--text-secondary); white-space: nowrap;
+}
+.wf-reset-btn {
+  background: none; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  color: var(--text-dim); cursor: pointer; padding: 3px 8px;
+  font-size: 10px; font-family: var(--font-body); transition: all 0.2s;
+}
+.wf-reset-btn:hover { border-color: var(--red); color: var(--red); }
+
 /* Keyboard navigation focus */
 .cmd-card.kbd-focus {
   outline: 2px solid var(--accent); outline-offset: -2px;
@@ -1101,6 +1204,24 @@ Import-Csv "users.csv" | ForEach-Object {
           </div>
         </div>
       </div>
+
+      <!-- Connection String Generator -->
+      <div class="conn-gen-toggle" id="connGenToggle" onclick="toggleConnGen()">
+        <span class="cg-icon">🔌</span>
+        <span class="cg-label">Connection Builder</span>
+        <span class="cg-sub">Generate Connect-MgGraph with the right scopes</span>
+        <svg class="cg-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+      <div class="conn-gen-panel" id="connGenPanel">
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">Select what you need to do — the required Graph API scopes are calculated automatically.</p>
+        <div class="scope-grid" id="scopeGrid"></div>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+          <strong style="font-size:12px;color:var(--text-primary)">Generated command:</strong>
+          <span id="connGenCopyBtn"></span>
+        </div>
+        <div class="conn-output" id="connGenOutput"><span class="dim"># Select tasks above to generate your connection command</span></div>
+      </div>
+
       <div class="builder-indicator" id="builderIndicator">
         <span class="pulse"></span>
         <span><strong>Script Builder active</strong> — Check commands to add them to your script. View the script in the panel below.</span>
@@ -1112,7 +1233,7 @@ Import-Csv "users.csv" | ForEach-Object {
 
       <!-- Footer -->
       <div class="app-footer">
-        M365 PowerShell Toolkit v1.3 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
+        M365 PowerShell Toolkit v1.4 · <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit" target="_blank">GitHub</a> · 
         Built by <a href="https://github.com/Great-IT-Nordic" target="_blank">Great IT Nordic</a> · 
         MIT License ·
         <a href="https://github.com/Great-IT-Nordic/m365-ps-toolkit/issues/new?title=Command+suggestion:+&labels=enhancement&body=**Command+name:**%0A%0A**PowerShell+command:**%0A%60%60%60powershell%0A%0A%60%60%60%0A%0A**Category:**%0A%0A**Description:**" target="_blank" class="suggest-link">💡 Suggest a command</a>
@@ -1936,8 +2057,28 @@ function renderCommands() {
   // Workflow banner
   const wb = document.getElementById('workflowBanner');
   if(activeWorkflow) {
+    // Find workflow ID
+    const wfId = Object.entries(WORKFLOWS).find(([k,v]) => v === activeWorkflow)?.[0] || '';
+    const progress = getWfProgress(wfId);
+    const totalSteps = activeWorkflow.steps.length;
+    const completedSteps = progress.length;
+    const pct = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
+    
     wb.classList.add('visible');
-    wb.innerHTML = `<h3>${activeWorkflow.name}</h3><p>${activeWorkflow.desc}</p><div class="workflow-steps">${activeWorkflow.steps.map((s,i)=>`<div class="workflow-step"><div class="workflow-step-num">${i+1}</div><div class="workflow-step-text">${s}</div></div>`).join('')}</div><button class="wf-export-btn" onclick="exportWorkflow()">📄 Export as Markdown</button>`;
+    let wbHtml = `<h3>${activeWorkflow.name}</h3><p>${activeWorkflow.desc}</p>`;
+    wbHtml += `<div class="workflow-steps">`;
+    activeWorkflow.steps.forEach((s, i) => {
+      const done = progress.includes(i);
+      wbHtml += `<div class="workflow-step${done ? ' completed' : ''}" onclick="toggleWfStep('${wfId}',${i})"><div class="workflow-step-num">${done ? '✓' : i+1}</div><div class="workflow-step-text">${s}</div></div>`;
+    });
+    wbHtml += `</div>`;
+    wbHtml += `<div class="wf-progress-bar">`;
+    wbHtml += `<div class="wf-progress-track"><div class="wf-progress-fill" style="width:${pct}%"></div></div>`;
+    wbHtml += `<span class="wf-progress-text">${completedSteps}/${totalSteps} (${pct}%)</span>`;
+    if(completedSteps > 0) wbHtml += `<button class="wf-reset-btn" onclick="resetWfProgress('${wfId}')">↺ Reset</button>`;
+    wbHtml += `</div>`;
+    wbHtml += `<button class="wf-export-btn" onclick="exportWorkflow()">📄 Export as Markdown</button>`;
+    wb.innerHTML = wbHtml;
   } else {
     wb.classList.remove('visible');
   }
@@ -2014,6 +2155,10 @@ function renderCommands() {
       // Copy as full script
       const fullScript = `# ${c.name}\n${applyParams(mod.install)}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
       html += `<div style="margin-top:6px">${cb(fullScript,'Copy as Full Script (Install + Connect + Command)')}</div>`;
+
+      // Personal notes
+      html += noteSection(c);
+
       html += `</div></div>`;
     });
     html += '</div>';
@@ -2337,6 +2482,178 @@ function exportWorkflow() {
 }
 
 // ═══════════════════════════════════════════════
+//  CONNECTION STRING GENERATOR
+// ═══════════════════════════════════════════════
+const SCOPE_TASKS = [
+  { id: 'users-read', label: 'Read users', desc: 'List, search, view user profiles', scopes: ['User.Read.All'] },
+  { id: 'users-write', label: 'Manage users', desc: 'Create, update, delete users', scopes: ['User.ReadWrite.All'] },
+  { id: 'groups-read', label: 'Read groups', desc: 'List groups and memberships', scopes: ['Group.Read.All'] },
+  { id: 'groups-write', label: 'Manage groups', desc: 'Create, update groups and members', scopes: ['Group.ReadWrite.All'] },
+  { id: 'ca-read', label: 'Read CA policies', desc: 'View Conditional Access policies', scopes: ['Policy.Read.All'] },
+  { id: 'ca-write', label: 'Manage CA policies', desc: 'Create, update CA policies', scopes: ['Policy.ReadWrite.ConditionalAccess'] },
+  { id: 'devices-read', label: 'Read devices', desc: 'View managed devices and compliance', scopes: ['Device.Read.All', 'DeviceManagementManagedDevices.Read.All'] },
+  { id: 'devices-write', label: 'Manage devices', desc: 'Wipe, retire, sync devices', scopes: ['DeviceManagementManagedDevices.ReadWrite.All'] },
+  { id: 'mail-read', label: 'Read mailbox settings', desc: 'View mail configs and rules', scopes: ['MailboxSettings.Read'] },
+  { id: 'mail-write', label: 'Manage mailbox settings', desc: 'Update mail forwarding, OOO', scopes: ['MailboxSettings.ReadWrite'] },
+  { id: 'audit', label: 'Audit & sign-in logs', desc: 'View sign-in and audit logs', scopes: ['AuditLog.Read.All', 'Directory.Read.All'] },
+  { id: 'security', label: 'Security alerts', desc: 'Risky users, risky sign-ins', scopes: ['IdentityRiskyUser.Read.All', 'IdentityRiskEvent.Read.All'] },
+  { id: 'roles', label: 'Directory roles', desc: 'Read admin role assignments', scopes: ['RoleManagement.Read.Directory'] },
+  { id: 'roles-write', label: 'Manage roles (PIM)', desc: 'Activate and assign roles', scopes: ['RoleManagement.ReadWrite.Directory'] },
+  { id: 'apps', label: 'App registrations', desc: 'View app registrations and consents', scopes: ['Application.Read.All'] },
+  { id: 'reports', label: 'Usage reports', desc: 'M365 usage and activity reports', scopes: ['Reports.Read.All'] },
+  { id: 'licenses', label: 'License management', desc: 'Assign and remove licenses', scopes: ['User.ReadWrite.All', 'Directory.ReadWrite.All'] },
+  { id: 'spo', label: 'SharePoint sites', desc: 'Read SharePoint site info via Graph', scopes: ['Sites.Read.All'] },
+];
+
+let selectedScopes = new Set();
+
+function toggleConnGen() {
+  const toggle = document.getElementById('connGenToggle');
+  const panel = document.getElementById('connGenPanel');
+  toggle.classList.toggle('open');
+  panel.classList.toggle('visible');
+  if(panel.classList.contains('visible') && !panel.dataset.built) {
+    buildScopeGrid();
+    panel.dataset.built = 'true';
+  }
+}
+
+function buildScopeGrid() {
+  const grid = document.getElementById('scopeGrid');
+  grid.innerHTML = SCOPE_TASKS.map(t => 
+    `<label class="scope-item" id="scope-${t.id}">
+      <input type="checkbox" onchange="toggleScope('${t.id}')">
+      <div><div class="scope-name">${t.label}</div><div class="scope-desc">${t.desc}</div></div>
+    </label>`
+  ).join('');
+}
+
+function toggleScope(id) {
+  const task = SCOPE_TASKS.find(t => t.id === id);
+  if(!task) return;
+  const item = document.getElementById('scope-' + id);
+  const isChecked = item.querySelector('input').checked;
+  
+  if(isChecked) {
+    task.scopes.forEach(s => selectedScopes.add(s));
+    item.classList.add('selected');
+  } else {
+    task.scopes.forEach(s => {
+      // Only remove if no other selected task needs this scope
+      const stillNeeded = SCOPE_TASKS.some(t => 
+        t.id !== id && 
+        document.getElementById('scope-' + t.id)?.querySelector('input')?.checked && 
+        t.scopes.includes(s)
+      );
+      if(!stillNeeded) selectedScopes.delete(s);
+    });
+    item.classList.remove('selected');
+  }
+  updateConnGen();
+}
+
+function updateConnGen() {
+  const output = document.getElementById('connGenOutput');
+  const copySpan = document.getElementById('connGenCopyBtn');
+  
+  if(selectedScopes.size === 0) {
+    output.innerHTML = '<span class="dim"># Select tasks above to generate your connection command</span>';
+    copySpan.innerHTML = '';
+    return;
+  }
+  
+  const scopes = [...selectedScopes].sort();
+  const cmd = `Connect-MgGraph -Scopes "${scopes.join('","')}"`;
+  output.textContent = cmd;
+  copySpan.innerHTML = cb(cmd, 'Copy');
+}
+
+// ═══════════════════════════════════════════════
+//  COMMAND NOTES
+// ═══════════════════════════════════════════════
+function getCmdNotes() {
+  try { return JSON.parse(localStorage.getItem('m365_notes') || '{}'); } catch(e) { return {}; }
+}
+
+function saveNote(cmdName) {
+  const input = document.getElementById('note-input-' + CSS.escape(cmdName));
+  if(!input) return;
+  const text = input.value.trim();
+  const notes = getCmdNotes();
+  if(text) {
+    notes[cmdName] = text;
+  } else {
+    delete notes[cmdName];
+  }
+  localStorage.setItem('m365_notes', JSON.stringify(notes));
+  renderCommands();
+}
+
+function deleteNote(cmdName) {
+  const notes = getCmdNotes();
+  delete notes[cmdName];
+  localStorage.setItem('m365_notes', JSON.stringify(notes));
+  renderCommands();
+}
+
+function editNote(cmdName) {
+  // Toggle to edit mode by re-rendering with an edit flag
+  const notes = getCmdNotes();
+  // Temporarily mark for editing
+  window._editingNote = cmdName;
+  renderCommands();
+}
+
+function noteSection(c) {
+  const notes = getCmdNotes();
+  const existing = notes[c.name];
+  const safeName = c.name.replace(/'/g, "\\'");
+  const inputId = 'note-input-' + c.name;
+  
+  let html = '<div class="cmd-note-section">';
+  
+  if(existing && window._editingNote !== c.name) {
+    // Show saved note
+    html += `<div class="cmd-note-saved">
+      <span>📝</span>
+      <span class="note-text">${esc(existing)}</span>
+      <span class="note-edit" onclick="event.stopPropagation();editNote('${safeName}')">✏️ Edit</span>
+      <span class="note-delete" onclick="event.stopPropagation();deleteNote('${safeName}')">🗑️</span>
+    </div>`;
+  } else {
+    // Show input
+    html += `<div class="cmd-note-row">
+      <textarea class="cmd-note-input" id="${inputId}" placeholder="Add a personal note..." onclick="event.stopPropagation()">${existing ? esc(existing) : ''}</textarea>
+      <button class="cmd-note-save" onclick="event.stopPropagation();window._editingNote=null;saveNote('${safeName}')">💾 Save</button>
+    </div>`;
+  }
+  
+  html += '</div>';
+  return html;
+}
+
+// ═══════════════════════════════════════════════
+//  WORKFLOW PROGRESS
+// ═══════════════════════════════════════════════
+function getWfProgress(wfId) {
+  try { return JSON.parse(localStorage.getItem('m365_wf_' + wfId) || '[]'); } catch(e) { return []; }
+}
+
+function toggleWfStep(wfId, stepIdx) {
+  const progress = getWfProgress(wfId);
+  const idx = progress.indexOf(stepIdx);
+  if(idx >= 0) progress.splice(idx, 1);
+  else progress.push(stepIdx);
+  localStorage.setItem('m365_wf_' + wfId, JSON.stringify(progress));
+  renderCommands();
+}
+
+function resetWfProgress(wfId) {
+  localStorage.removeItem('m365_wf_' + wfId);
+  renderCommands();
+}
+
+// ═══════════════════════════════════════════════
 //  KEYBOARD NAVIGATION
 // ═══════════════════════════════════════════════
 function handleKeyboardNav(e) {
@@ -2390,6 +2707,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('guideToggle').classList.remove('open');
       document.getElementById('portalsPanel').classList.remove('visible');
       document.getElementById('portalsToggle').classList.remove('open');
+      document.getElementById('connGenPanel').classList.remove('visible');
+      document.getElementById('connGenToggle').classList.remove('open');
       kbdFocusIdx = -1;
       document.querySelectorAll('.cmd-card').forEach(c => c.classList.remove('kbd-focus'));
     }
