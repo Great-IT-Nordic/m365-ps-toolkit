@@ -394,6 +394,36 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 }
 .cb:hover { background: var(--bg-elevated); color: var(--text-secondary); border-color: var(--border-hover); }
 .cb.copied { color: var(--green); border-color: rgba(52,211,153,0.3); }
+.cb.copied-warn { color: var(--red); border-color: rgba(239,68,68,0.3); }
+.fullscript-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.submod-tag { font-family: var(--font-mono); font-size: 10px; background: var(--accent-glow); color: var(--accent); padding: 2px 8px; border-radius: 4px; margin-left: 4px; }
+/* PS Syntax Highlighting */
+.cmd-code .ps-cmdlet { color: #60a5fa; }
+.cmd-code .ps-param { color: #94a3b8; }
+.cmd-code .ps-string { color: #f59e0b; }
+.cmd-code .ps-variable { color: #34d399; }
+.cmd-code .ps-comment { color: #4a5568; font-style: italic; }
+.cmd-code .ps-operator { color: #c084fc; }
+.cmd-code .ps-number { color: #f472b6; }
+.cmd-code .ps-type { color: #38bdf8; }
+[data-theme="light"] .cmd-code .ps-cmdlet { color: #2563eb; }
+[data-theme="light"] .cmd-code .ps-param { color: #64748b; }
+[data-theme="light"] .cmd-code .ps-string { color: #b45309; }
+[data-theme="light"] .cmd-code .ps-variable { color: #059669; }
+[data-theme="light"] .cmd-code .ps-comment { color: #94a3b8; }
+[data-theme="light"] .cmd-code .ps-operator { color: #7c3aed; }
+[data-theme="light"] .cmd-code .ps-number { color: #db2777; }
+[data-theme="light"] .cmd-code .ps-type { color: #0284c7; }
+/* Parameter hints */
+.param-hint { display: flex; align-items: center; gap: 6px; margin-top: 6px; padding: 6px 10px; font-size: 11px; color: var(--amber); background: var(--amber-glow); border-radius: var(--radius-sm); border: 1px solid rgba(245,158,11,0.15); }
+.param-hint svg { flex-shrink: 0; }
+/* Export/Import settings */
+.settings-row { display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap; }
+.settings-btn { display: inline-flex; align-items: center; gap: 5px; padding: 6px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-code); color: var(--text-secondary); font-size: 11px; font-family: var(--font-body); cursor: pointer; transition: all 0.15s; }
+.settings-btn:hover { background: var(--bg-elevated); color: var(--text-primary); border-color: var(--border-hover); }
+/* Prereq checker */
+.prereq-btn { background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1)); border-color: rgba(59,130,246,0.3); color: var(--accent); font-weight: 600; }
+.prereq-btn:hover { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(139,92,246,0.2)); }
 
 /* Script Builder Drawer */
 .builder-drawer {
@@ -970,7 +1000,7 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
       </button>
       <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input class="search-input" id="searchInput" placeholder="Search commands... (Ctrl+K)" oninput="onSearch()">
+        <input class="search-input" id="searchInput" placeholder="Search... (risk: module: perm: cat:) Ctrl+K" oninput="onSearch()">
       </div>
       <div class="toolbar-actions">
         <button class="tool-btn" id="paramToggle" onclick="toggleParams()">
@@ -1161,6 +1191,19 @@ Get-Module Microsoft.Graph -ListAvailable | Where-Object {$_.Version -ne (Get-Mo
             </ul>
           </div>
           <div class="guide-section">
+            <h5>🆕 v1.5 Features</h5>
+            <ul>
+              <li>🎨 <strong>Syntax highlighting</strong> — PowerShell code blocks now have color-coded cmdlets, parameters, strings, variables, and comments</li>
+              <li>📥 <strong>Two-button scripts</strong> — "Install + Import + Connect" for first-time setup, "Import + Connect" for daily use</li>
+              <li>🎯 <strong>Precise imports</strong> — each command maps to its exact Graph sub-module (e.g. <code>Microsoft.Graph.Users</code>) instead of importing everything</li>
+              <li>⚠️ <strong>Destructive warnings</strong> — copying a 🔴 destructive command shows a red warning toast instead of green</li>
+              <li>💡 <strong>Param hints</strong> — commands with placeholders like "group-id" now show a hint telling you which command to run first</li>
+              <li>🔍 <strong>Search operators</strong> — type <code>risk:destructive</code>, <code>module:exchange</code>, <code>perm:User.Read</code>, or <code>cat:teams</code> for filtered search</li>
+              <li>💾 <strong>Export/Import settings</strong> — backup & restore favorites, notes, profiles, and progress to a JSON file (in Module Setup panel)</li>
+              <li>🔧 <strong>Prerequisite checker</strong> — one-click script that checks all modules are installed and offers to install missing ones (in Module Setup panel)</li>
+            </ul>
+          </div>
+          <div class="guide-section">
             <h5>🔄 Common Patterns</h5>
             <pre># Export any command output to CSV
 Get-MgUser -All | Export-Csv "users.csv" -NoTypeInformation
@@ -1326,9 +1369,9 @@ const WORKFLOWS = {
       "Set calendar permissions (default visibility)",
       "Assign manager in Entra ID",
       "Add to relevant Teams",
-      "Verify Conditional Access policies apply"
+      "Verify Conditional Access policies apply to the user"
     ],
-    commands: ["Create new user","Assign license to user","Add user to group","Add team member","Set mailbox timezone","Set calendar permissions","Set user manager","Get user sign-in activity"]
+    commands: ["Create new user","Assign license to user","Add user to group","Set mailbox timezone","Set calendar permissions","Set user manager","Add team member","Get all CA policies"]
   },
   "wf-offboarding": {
     name: "🔒 User Offboarding",
@@ -1336,14 +1379,15 @@ const WORKFLOWS = {
     steps: [
       "Disable the user's sign-in immediately",
       "Revoke all active sessions and tokens",
+      "Check and remove any mail forwarding rules",
+      "Review inbox rules for suspicious forwards",
       "Set Out of Office auto-reply",
       "Convert mailbox to shared (to keep email access)",
       "Grant manager/delegate Full Access to shared mailbox",
-      "Remove all license assignments",
       "Remove from all groups",
-      "Check and remove any mail forwarding rules"
+      "Remove all license assignments"
     ],
-    commands: ["Disable user account","Revoke user sessions","Set Out of Office","Convert to shared mailbox","Grant Full Access","Remove license from user","Get forwarding rules","Get inbox rules (user)"]
+    commands: ["Disable user account","Revoke user sessions","Get forwarding rules","Get inbox rules (user)","Set Out of Office","Convert to shared mailbox","Grant Full Access","Remove user from group","Remove license from user"]
   },
   "wf-security-audit": {
     name: "🛡️ Security Audit",
@@ -1373,7 +1417,8 @@ const WORKFLOWS = {
       "Review SharePoint storage usage",
       "Check stale/inactive devices",
       "Review self-service purchase policies",
-      "Check verified domains and tenant config"
+      "Check organization details and tenant config",
+      "Verify registered domains"
     ],
     commands: ["Get all licenses in tenant","Get unlicensed users","Get active users report","Get all mailbox sizes","Get site storage usage","Get stale devices","Disable self-service purchases","Get organization details","Get verified domains"]
   },
@@ -1386,11 +1431,11 @@ const WORKFLOWS = {
       "Identify disabled users still consuming licenses",
       "Check license assignment paths (direct vs group-based)",
       "Review users with specific high-cost licenses",
-      "Block self-service purchases",
       "Get user sign-in activity to find inactive licensed users",
-      "Remove licenses from disabled/inactive accounts"
+      "Remove licenses from disabled/inactive accounts",
+      "Block self-service purchases"
     ],
-    commands: ["Get all licenses in tenant","Get unlicensed users","Get disabled users","Get license assignment paths","Get users with specific license","Disable self-service purchases","Get user sign-in activity","Remove license from user","Get tenant SKUs overview"]
+    commands: ["Get all licenses in tenant","Get unlicensed users","Get disabled users","Get license assignment paths","Get users with specific license","Get user sign-in activity","Remove license from user","Disable self-service purchases"]
   },
   "wf-mail-hygiene": {
     name: "📧 Mail Hygiene Review",
@@ -1403,7 +1448,8 @@ const WORKFLOWS = {
       "Review anti-spam policy settings",
       "Review quarantined messages",
       "Check blocked senders list",
-      "Review Safe Links and Safe Attachments policies",
+      "Review Safe Links policies",
+      "Review Safe Attachments policies",
       "Review anti-phishing policies"
     ],
     commands: ["Get forwarding rules","Get inbox rules (user)","Get transport rules","Get DKIM config","Get anti-spam policy","Get quarantined messages","Get blocked senders","Get Safe Links policies","Get Safe Attachments policies","Get anti-phishing policies"]
@@ -1665,6 +1711,85 @@ const LEGACY_MAP = {
   "Get all devices": { old: "Get-AzureADDevice -All $true", mod: "AzureAD" },
 };
 
+
+// Graph SDK v2 sub-module map — used for precise Import-Module
+const GRAPH_SUBMODULE = {
+  'Get-MgUser': 'Microsoft.Graph.Users',
+  'New-MgUser': 'Microsoft.Graph.Users',
+  'Update-MgUser': 'Microsoft.Graph.Users',
+  'Remove-MgUser': 'Microsoft.Graph.Users',
+  'Get-MgUserManager': 'Microsoft.Graph.Users',
+  'Set-MgUserManagerByRef': 'Microsoft.Graph.Users',
+  'Get-MgUserLicenseDetail': 'Microsoft.Graph.Users',
+  'Set-MgUserLicense': 'Microsoft.Graph.Users',
+  'Get-MgUserAuthenticationMethod': 'Microsoft.Graph.Users',
+  'Get-MgUserMemberOf': 'Microsoft.Graph.Users',
+  'Revoke-MgUserSignInSession': 'Microsoft.Graph.Users.Actions',
+  'Get-MgGroup': 'Microsoft.Graph.Groups',
+  'New-MgGroup': 'Microsoft.Graph.Groups',
+  'Remove-MgGroup': 'Microsoft.Graph.Groups',
+  'Get-MgGroupMember': 'Microsoft.Graph.Groups',
+  'New-MgGroupMember': 'Microsoft.Graph.Groups',
+  'Remove-MgGroupMemberByRef': 'Microsoft.Graph.Groups',
+  'Get-MgGroupOwner': 'Microsoft.Graph.Groups',
+  'Get-MgDirectoryRole': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgDirectoryRoleMember': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgDirectoryRoleTemplate': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgDirectoryDeletedItemAsUser': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Restore-MgDirectoryDeletedItem': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgOrganization': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgDevice': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Remove-MgDevice': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgSubscribedSku': 'Microsoft.Graph.Identity.DirectoryManagement',
+  'Get-MgOauth2PermissionGrant': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgRiskyUser': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgRiskySignIn': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgIdentityConditionalAccessPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'New-MgIdentityConditionalAccessPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'Update-MgIdentityConditionalAccessPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'Remove-MgIdentityConditionalAccessPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgIdentityConditionalAccessNamedLocation': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgPolicyAuthenticationMethodPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgPolicyAuthorizationPolicy': 'Microsoft.Graph.Identity.SignIns',
+  'Get-MgAuditLogSignIn': 'Microsoft.Graph.Reports',
+  'Get-MgAuditLogDirectoryAudit': 'Microsoft.Graph.Reports',
+  'Get-MgReportAuthenticationMethodUserRegistrationDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportMailboxUsageDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportOneDriveUsageAccountDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportSharePointSiteUsageDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportTeamUserActivityUserDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportOffice365ActiveUserDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportEmailActivityUserDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportM365AppUserDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportYammerActivityUserDetail': 'Microsoft.Graph.Reports',
+  'Get-MgReportOffice365GroupsActivityDetail': 'Microsoft.Graph.Reports',
+  'Get-MgApplication': 'Microsoft.Graph.Applications',
+  'Get-MgServicePrincipal': 'Microsoft.Graph.Applications',
+  'Get-MgRoleManagementDirectoryRoleEligibilityScheduleInstance': 'Microsoft.Graph.Identity.Governance',
+  'Get-MgRoleManagementDirectoryRoleAssignmentScheduleInstance': 'Microsoft.Graph.Identity.Governance',
+  'Get-MgIdentityGovernanceAccessReviewDefinition': 'Microsoft.Graph.Identity.Governance',
+  'Get-MgDeviceManagementManagedDevice': 'Microsoft.Graph.DeviceManagement',
+  'Get-MgDeviceManagementDeviceCompliancePolicy': 'Microsoft.Graph.DeviceManagement',
+  'Get-MgDeviceManagementDeviceConfiguration': 'Microsoft.Graph.DeviceManagement',
+  'Get-MgDeviceManagementDeviceCategory': 'Microsoft.Graph.DeviceManagement',
+  'Get-MgDeviceManagementDetectedApp': 'Microsoft.Graph.DeviceManagement',
+  'Get-MgDeviceManagementWindowsAutopilotDeviceIdentity': 'Microsoft.Graph.DeviceManagement.Enrollment',
+  'Get-MgDeviceManagementWindowsAutopilotDeploymentProfile': 'Microsoft.Graph.DeviceManagement.Enrollment',
+  'Invoke-MgDeviceManagementManagedDeviceSyncDevice': 'Microsoft.Graph.DeviceManagement.Actions',
+  'Invoke-MgDeviceManagementManagedDeviceWipe': 'Microsoft.Graph.DeviceManagement.Actions',
+  'Get-MgDeviceAppManagementManagedAppPolicy': 'Microsoft.Graph.Devices.CorporateManagement',
+  'Get-MgBetaReportBrowserUserDetail': 'Microsoft.Graph.Beta.Reports',
+};
+
+// Resolve Graph sub-module for a command
+function getGraphSubmodule(cmd) {
+  if (!cmd) return null;
+  const firstLine = cmd.split('\n')[0];
+  const m = firstLine.match(/((?:Get|Set|New|Remove|Update|Invoke|Revoke|Restore|Enable|Disable)-Mg[A-Za-z]+)/);
+  if (m && GRAPH_SUBMODULE[m[1]]) return GRAPH_SUBMODULE[m[1]];
+  return null;
+}
+
 let showLegacy = false;
 
 // ═══════════════════════════════════════════════
@@ -1703,6 +1828,39 @@ function riskBadge(risk) {
   return `<span class="risk-badge risk-${risk}"><span class="risk-dot"></span>${RISK_LABELS[risk]}</span>`;
 }
 
+// ── PowerShell Syntax Highlighting ──
+function highlightPS(code) {
+  let h = esc(code);
+  // Order matters: comments first, then strings, then the rest
+  h = h.replace(/(#[^\n]*)/g, '<span class="ps-comment">$1</span>');
+  h = h.replace(/(&quot;(?:[^&]|&(?!quot;))*?&quot;|&#039;(?:[^&]|&(?!#039;))*?&#039;|'[^'\n]*'|"[^"\n]*")/g, '<span class="ps-string">$1</span>');
+  h = h.replace(/(\$[A-Za-z_]\w*(?:\.\w+)*)/g, '<span class="ps-variable">$1</span>');
+  h = h.replace(/\b((?:Get|Set|New|Remove|Add|Update|Invoke|Enable|Disable|Connect|Disconnect|Search|Start|Stop|Export|Import|Revoke|Grant|Restore|Sync|Clear|Undo|Archive|Release|Register|Unregister|Where|ForEach|Select|Sort|Group|Measure|Format|Out|Write|Read|Test|Find|Save|Send|Move|Copy|Rename|Enter|Exit|Wait|Limit|Split|Join|Compare|ConvertTo|ConvertFrom|Switch)-[A-Za-z]\w+)\b/g, '<span class="ps-cmdlet">$1</span>');
+  h = h.replace(/\s(-[A-Za-z]\w+)/g, ' <span class="ps-param">$1</span>');
+  h = h.replace(/\b(\d+)\b/g, '<span class="ps-number">$1</span>');
+  h = h.replace(/(@\{|\}|\||\-eq\b|\-ne\b|\-gt\b|\-lt\b|\-ge\b|\-le\b|\-like\b|\-match\b|\-not\b|\-and\b|\-or\b)/g, '<span class="ps-operator">$1</span>');
+  h = h.replace(/\[([A-Za-z]+(?:\[\])?)\]/g, '[<span class="ps-type">$1</span>]');
+  return h;
+}
+
+// ── Parameter Value Hints ──
+const PARAM_HINTS = {
+  '"group-id"': 'Run "Get all groups" to find the GroupId',
+  '"user-id"': 'Run "Get all users" or "Get specific user" to find the UserId (ObjectId)',
+  '"object-id"': 'Run the related Get command to find the ObjectId',
+  '"manager-id"': 'Get the manager\'s UserId with "Get specific user"',
+  '{manager-id}': 'Get the manager\'s UserId with "Get specific user"',
+  '"guest-object-id"': 'Run "Get guest users" to find the ObjectId',
+};
+
+function getParamHints(cmd) {
+  const hints = [];
+  for (const [placeholder, hint] of Object.entries(PARAM_HINTS)) {
+    if (cmd.includes(placeholder)) hints.push(hint);
+  }
+  return [...new Set(hints)];
+}
+
 let _cc = 0;
 function cb(text, label='Copy', cmdName='') {
   const id = 'cb'+(_cc++);
@@ -1714,7 +1872,19 @@ function cb(text, label='Copy', cmdName='') {
 function doCopy(text, btnId, cmdName) {
   navigator.clipboard.writeText(text);
   const b = document.getElementById(btnId);
-  if(b){ b.classList.add('copied'); b.innerHTML=svgCheck+' Copied!'; setTimeout(()=>{b.classList.remove('copied');b.innerHTML=svgCopy+' Copy';},1500); }
+  // Check if this command is destructive
+  const isDestructive = cmdName && COMMANDS.find(c => c.name === cmdName && c.risk === 'destructive');
+  if(b){
+    if(isDestructive) {
+      b.classList.add('copied-warn');
+      b.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> ⚠️ Destructive — copied!';
+      setTimeout(()=>{b.classList.remove('copied-warn');b.innerHTML=svgCopy+' Copy';},2500);
+    } else {
+      b.classList.add('copied');
+      b.innerHTML=svgCheck+' Copied!';
+      setTimeout(()=>{b.classList.remove('copied');b.innerHTML=svgCopy+' Copy';},1500);
+    }
+  }
   
   // Track history
   if(cmdName) {
@@ -1831,12 +2001,146 @@ function buildModulePanel() {
   const p = document.getElementById('modulePanel');
   const all = Object.values(MODULES).filter(m=>!m.install.startsWith('#')).map(m=>m.install).join('\n');
   let h = `<h3>Module Installation & Connection</h3><p class="sub">Run in an elevated PowerShell 7 session.</p>`;
+
+  // Prerequisite checker script
+  h += `<div class="mod-card" style="border-left:3px solid var(--accent)"><div class="mod-card-header"><span class="mod-card-name" style="color:var(--accent)">🔍 Prerequisite Checker</span>${cb(generatePrereqScript(),'📋 Copy Script')}</div><p class="sub" style="margin:6px 0 0">Paste this script in PowerShell to check all modules are installed and at the right version. Installs any missing modules automatically.</p></div>`;
+
   h += `<div class="mod-card"><div class="mod-card-header"><span class="mod-card-name" style="color:var(--accent)">Install All Modules</span>${cb(all,'Copy All')}</div><pre>${esc(all)}</pre></div>`;
   Object.entries(MODULES).forEach(([n,m]) => {
     const docBtn = m.docs ? `<a href="${m.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>` : '';
     h += `<div class="mod-card" style="border-left:3px solid ${m.color}"><div class="mod-card-header"><span class="mod-card-name" style="color:${m.color}">${m.short} <span class="dim">— ${n}</span></span>${docBtn}</div><div class="mod-btns">${cb(applyParams(m.install),'📦 Install')} ${m.importMod?cb(applyParams(m.importMod),'📥 Import'):''} ${cb(applyParams(m.connect),'🔌 Connect')} ${m.disconnect?cb(m.disconnect,'🔌 Disconnect'):''}</div></div>`;
   });
+
+  // Export/Import settings
+  h += `<div class="mod-card" style="border-left:3px solid var(--green)"><div class="mod-card-header"><span class="mod-card-name" style="color:var(--green)">💾 Backup & Restore Settings</span></div><p class="sub" style="margin:4px 0 8px">Export your favorites, notes, profiles, theme and workflow progress as a JSON file. Import on another device or browser to restore.</p><div class="settings-row"><button class="settings-btn" onclick="exportSettings()">⬇️ Export Settings</button><button class="settings-btn" onclick="document.getElementById('importFile').click()">⬆️ Import Settings</button><input type="file" id="importFile" accept=".json" style="display:none" onchange="importSettings(event)"></div></div>`;
+
   p.innerHTML = h;
+}
+
+// Feature 7: Generate prerequisite checker script
+function generatePrereqScript() {
+  const modules = Object.entries(MODULES).filter(([n,m]) => !m.install.startsWith('#'));
+  let lines = [
+    '#═══════════════════════════════════════════════════',
+    '# M365 Module Prerequisite Checker',
+    '# Generated: ' + new Date().toISOString().split('T')[0],
+    '#═══════════════════════════════════════════════════',
+    '',
+    'Write-Host "🔍 Checking M365 PowerShell modules..." -ForegroundColor Cyan',
+    'Write-Host ""',
+    '$missing = @()',
+    '$installed = @()',
+    ''
+  ];
+
+  modules.forEach(([name, mod]) => {
+    // For multi-line install (Intune), get primary module name
+    const primaryName = name === 'Microsoft.Graph.Intune' ? 'Microsoft.Graph.DeviceManagement' : 
+                        name === 'AzureAD (Graph)' ? 'Microsoft.Graph.Identity.DirectoryManagement' : name;
+    lines.push(`# Check ${mod.short}`);
+    lines.push(`if (Get-Module -ListAvailable -Name ${primaryName}) {`);
+    lines.push(`    $ver = (Get-Module -ListAvailable -Name ${primaryName} | Sort Version -Desc | Select -First 1).Version`);
+    lines.push(`    Write-Host "  ✅ ${mod.short} (${primaryName}) v$ver" -ForegroundColor Green`);
+    lines.push(`    $installed += "${primaryName}"`);
+    lines.push('} else {');
+    lines.push(`    Write-Host "  ❌ ${mod.short} (${primaryName}) — NOT INSTALLED" -ForegroundColor Red`);
+    lines.push(`    $missing += "${primaryName}"`);
+    lines.push('}');
+    lines.push('');
+  });
+
+  lines.push('Write-Host ""');
+  lines.push('Write-Host "─────────────────────────────────────────" -ForegroundColor DarkGray');
+  lines.push('Write-Host "Installed: $($installed.Count)/$(' + modules.length + ') modules" -ForegroundColor Cyan');
+  lines.push('');
+  lines.push('if ($missing.Count -gt 0) {');
+  lines.push('    Write-Host "Missing $($missing.Count) module(s): $($missing -join \', \')" -ForegroundColor Yellow');
+  lines.push('    $confirm = Read-Host "Install missing modules? (Y/N)"');
+  lines.push('    if ($confirm -eq "Y") {');
+  lines.push('        foreach ($mod in $missing) {');
+  lines.push('            Write-Host "  Installing $mod..." -ForegroundColor Cyan');
+  lines.push('            Install-Module -Name $mod -Scope CurrentUser -Force -AllowClobber');
+  lines.push('        }');
+  lines.push('        Write-Host "✅ All modules installed!" -ForegroundColor Green');
+  lines.push('    }');
+  lines.push('} else {');
+  lines.push('    Write-Host "✅ All modules installed and ready!" -ForegroundColor Green');
+  lines.push('}');
+  lines.push('');
+  lines.push('# Import common modules');
+  lines.push('Write-Host ""');
+  lines.push('Write-Host "Importing modules..." -ForegroundColor Cyan');
+  
+  modules.forEach(([name, mod]) => {
+    if (mod.importMod) {
+      mod.importMod.split('\n').forEach(imp => {
+        lines.push(imp + ' -ErrorAction SilentlyContinue');
+      });
+    }
+  });
+  
+  lines.push('Write-Host "✅ Modules imported. Ready to connect." -ForegroundColor Green');
+
+  return lines.join('\n');
+}
+
+// Feature 6: Export/Import settings
+function exportSettings() {
+  const data = {
+    _version: '1.5',
+    _exported: new Date().toISOString(),
+    favorites: JSON.parse(localStorage.getItem('m365_favs') || '[]'),
+    history: JSON.parse(localStorage.getItem('m365_history') || '[]'),
+    profiles: JSON.parse(localStorage.getItem('m365_profiles') || '{}'),
+    theme: localStorage.getItem('m365_theme') || 'dark',
+    notes: JSON.parse(localStorage.getItem('m365_notes') || '{}'),
+    workflows: {}
+  };
+  // Gather workflow progress
+  Object.keys(WORKFLOWS).forEach(id => {
+    const prog = localStorage.getItem('m365_wf_' + id);
+    if (prog) data.workflows[id] = JSON.parse(prog);
+  });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'M365-Toolkit-Settings-' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+}
+
+function importSettings(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data._version) { alert('Invalid settings file.'); return; }
+      if (data.favorites) localStorage.setItem('m365_favs', JSON.stringify(data.favorites));
+      if (data.history) localStorage.setItem('m365_history', JSON.stringify(data.history));
+      if (data.profiles) localStorage.setItem('m365_profiles', JSON.stringify(data.profiles));
+      if (data.theme) localStorage.setItem('m365_theme', data.theme);
+      if (data.notes) localStorage.setItem('m365_notes', JSON.stringify(data.notes));
+      if (data.workflows) {
+        Object.entries(data.workflows).forEach(([id, prog]) => {
+          localStorage.setItem('m365_wf_' + id, JSON.stringify(prog));
+        });
+      }
+      // Reload
+      favorites = JSON.parse(localStorage.getItem('m365_favs') || '[]');
+      commandHistory = JSON.parse(localStorage.getItem('m365_history') || '[]');
+      const t = localStorage.getItem('m365_theme');
+      if(t) document.documentElement.setAttribute('data-theme', t);
+      loadProfiles();
+      buildSidebar();
+      renderCommands();
+      alert('✅ Settings imported successfully! (' + (data.favorites?.length||0) + ' favorites, ' + Object.keys(data.notes||{}).length + ' notes, ' + Object.keys(data.profiles||{}).length + ' profiles)');
+    } catch(err) {
+      alert('Error reading settings file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 function toggleModulePanel() {
@@ -1934,7 +2238,27 @@ function generateScript() {
       } else {
         lines.push(applyParams(mod.install));
       }
-      if(mod.importMod) {
+    }
+  });
+  lines.push('');
+
+  // Precise sub-module imports for Graph commands
+  lines.push('# ── Import Modules ──');
+  const subModules = new Set();
+  cmds.forEach(c => {
+    if (c.module === 'Microsoft.Graph' || c.module === 'Microsoft.Graph.Intune') {
+      const sub = getGraphSubmodule(c.cmd);
+      if (sub) subModules.add(sub);
+    }
+  });
+  if (subModules.size > 0) {
+    [...subModules].sort().forEach(s => lines.push(`Import-Module ${s}`));
+  }
+  // Non-Graph module imports
+  mods.forEach(m => {
+    if (m !== 'Microsoft.Graph' && m !== 'Microsoft.Graph.Intune') {
+      const mod = MODULES[m];
+      if (mod && mod.importMod) {
         mod.importMod.split('\n').forEach(imp => lines.push(applyParams(imp)));
       }
     }
@@ -2054,11 +2378,29 @@ function getFiltered() {
   }
 
   if(!q) return pool;
+  // Enhanced search operators
+  if(q.startsWith('risk:')) {
+    const r = q.slice(5).trim();
+    return pool.filter(c => c.risk && c.risk.startsWith(r));
+  }
+  if(q.startsWith('module:') || q.startsWith('mod:')) {
+    const m = q.includes(':') ? q.split(':')[1].trim() : '';
+    return pool.filter(c => c.module.toLowerCase().includes(m));
+  }
+  if(q.startsWith('perm:')) {
+    const p = q.slice(5).trim();
+    return pool.filter(c => c.perms && c.perms.toLowerCase().includes(p));
+  }
+  if(q.startsWith('cat:')) {
+    const cat = q.slice(4).trim();
+    return pool.filter(c => c.cat.toLowerCase().includes(cat));
+  }
   return pool.filter(c =>
     c.name.toLowerCase().includes(q) ||
     c.cmd.toLowerCase().includes(q) ||
     c.desc.toLowerCase().includes(q) ||
-    c.module.toLowerCase().includes(q)
+    c.module.toLowerCase().includes(q) ||
+    (c.perms && c.perms.toLowerCase().includes(q))
   );
 }
 
@@ -2132,8 +2474,18 @@ function renderCommands() {
       html += `</div>`;
 
       // Detail
-      html += `<div class="cmd-detail"><div class="cmd-code"><span class="copy-float">${cb(cmdText, 'Copy', c.name)}</span>${esc(cmdText)}</div>`;
-      html += `<div class="cmd-mod-row"><span class="lbl">Module:</span><code style="color:${mod.color}">${c.module}</code>${cb(applyParams(mod.install),'Install')} ${cb(applyParams(mod.connect),'Connect')}${mod.docs?` <a href="${mod.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>`:''}</div>`;
+      html += `<div class="cmd-detail"><div class="cmd-code"><span class="copy-float">${cb(cmdText, 'Copy', c.name)}</span>${highlightPS(cmdText)}</div>`;
+      // Parameter hints
+      const hints = getParamHints(c.cmd);
+      if(hints.length > 0) {
+        hints.forEach(hint => {
+          html += `<div class="param-hint"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg> <span>${hint}</span></div>`;
+        });
+      }
+      const subMod = (c.module === 'Microsoft.Graph' || c.module === 'Microsoft.Graph.Intune') ? getGraphSubmodule(c.cmd) : null;
+      const subModHtml = subMod ? `<code class="submod-tag">↳ ${subMod}</code>` : '';
+      const importCmd = subMod ? `Import-Module ${subMod}` : (mod.importMod ? applyParams(mod.importMod) : '');
+      html += `<div class="cmd-mod-row"><span class="lbl">Module:</span><code style="color:${mod.color}">${c.module}</code>${subModHtml}${cb(applyParams(mod.install),'📦 Install')} ${importCmd?cb(importCmd,'📥 Import'):''} ${cb(applyParams(mod.connect),'🔌 Connect')}${mod.docs?` <a href="${mod.docs}" target="_blank" class="doc-link"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Docs</a>`:''}</div>`;
 
       // Legacy comparison
       const legacy = LEGACY_MAP[c.name];
@@ -2166,10 +2518,12 @@ function renderCommands() {
         html += `</div>`;
       }
 
-      // Copy as full script
-      const importLine = mod.importMod ? `\n${applyParams(mod.importMod)}` : '';
-      const fullScript = `# ${c.name}\n${applyParams(mod.install)}${importLine}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
-      html += `<div style="margin-top:6px">${cb(fullScript,'Copy as Full Script (Install + Import + Connect + Command)')}</div>`;
+      // Copy as full script — two variants
+      const cmdSubMod = (c.module === 'Microsoft.Graph' || c.module === 'Microsoft.Graph.Intune') ? getGraphSubmodule(c.cmd) : null;
+      const preciseImport = cmdSubMod ? `\nImport-Module ${cmdSubMod}` : (mod.importMod ? `\n${applyParams(mod.importMod)}` : '');
+      const fullInstall = `# ${c.name}\n# First-time setup: install, import & connect\n${applyParams(mod.install)}${preciseImport}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
+      const quickRun = `# ${c.name}${preciseImport}\n${applyParams(mod.connect)}\n\n${cmdText}\n\n${mod.disconnect||''}`;
+      html += `<div class="fullscript-row">${cb(fullInstall,'📦 Install + Import + Connect')} ${cb(quickRun,'📥 Import + Connect')}</div>`;
 
       // Personal notes
       html += noteSection(c);
