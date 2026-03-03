@@ -1,6 +1,6 @@
 # M365 PowerShell Toolkit
 
-> 224 ready-to-use PowerShell commands for Microsoft 365 administration — in a single, self-contained HTML file.
+> 223 ready-to-use PowerShell commands for Microsoft 365 administration — in a single, self-contained HTML file.
 
 **[🚀 Open the Toolkit](https://great-it-nordic.github.io/m365-ps-toolkit/)** · Built by [Great IT Nordic](https://greatit.se/en/)
 
@@ -41,16 +41,16 @@ Get-MgUser -All | Select DisplayName, UserPrincipalName, AccountEnabled
 | Conditional Access | 14 | Policies, named locations, auth strengths, create/delete/export |
 | Entra ID Governance | 11 | Access packages, access reviews, lifecycle workflows, PIM, ToU |
 | Device Management | 25 | Intune devices, compliance, apps, Autopilot, remote actions |
-| Reports & Auditing | 13 | Usage reports, sign-in logs, audit logs, MFA registration |
+| Reports & Auditing | 12 | Usage reports, sign-in logs, audit logs, MFA registration |
 | Tenant Configuration | 9 | Org details, domains, auth methods, password policy, sync status |
 
-**Total: 224 commands** — 167 read · 45 modify · 12 destructive
+**Total: 223 commands** — 166 read · 45 modify · 12 destructive
 
 ## Features
 
 ### Core
 
-- **Search** — full-text across names, descriptions, PowerShell syntax, modules, and permissions. Supports operators: `risk:destructive`, `module:exchange`, `perm:User.Read`, `cat:teams`
+- **Search** — full-text across names, descriptions, PowerShell syntax, modules, and permissions. Supports operators: `risk:destructive`, `module:exchange`, `perm:User.Read`, `cat:teams`, `role:exchange`
 - **Risk indicators** — every command tagged 🟢 Read, 🟡 Modify, or 🔴 Destructive
 - **Permissions** — Graph API scopes displayed per command
 - **Tenant profiles** — save domain, admin UPN, and SPO URL per client for instant switching
@@ -157,15 +157,20 @@ Command structure:
 
 ### v2.0
 
-- **48 new commands** (176 → 224) across Defender, Intune, Entra Governance, Exchange, SharePoint, Teams
+- **48 new commands** (176 → 223) across Defender, Intune, Entra Governance, Exchange, SharePoint, Teams
 - **Entra ID Governance** — new category with 11 commands (access packages, reviews, lifecycle workflows, PIM)
 - **Permissions Calculator** — auto-generates minimal `Connect-MgGraph -Scopes` from selected commands
 - **Custom Workflows** — create, save, and track your own step-by-step workflows
+- **Admin role tags** — 55 non-Graph commands now show required admin role (Exchange, Teams, SharePoint, Security Administrator)
+- **Related commands** — 151 of 223 commands (68%) now link to related commands for discoverability
+- **16 parameter hints** — expanded from 6; covers policy-id, device-id, app-id, site-url, TeamName, etc.
+- **Connection Builder** — expanded from 18 to 22 task categories (Intune apps, config, Governance, auth methods, Secure Score)
+- **Legacy map slimmed** — reduced from 22 to 5 reference entries; AzureAD/MSOnline modules are retired
+- **Search operator `role:`** — filter commands by required admin role (e.g. `role:exchange`)
 - Security & Compliance expanded with Secure Score, threat alerts, eDiscovery, risky user actions
 - Intune expanded with managed apps, remote lock/restart, encryption status, Settings Catalog
 - Exchange expanded with shared/room mailboxes, permissions, delegates, Send As
-- SharePoint expanded with hub sites, site permissions, recycle bin
-- Teams expanded with meeting/messaging/app setup policies, guest config
+- Removed Beta browser usage report (requires separate Beta module install)
 
 ### v1.5
 
@@ -193,4 +198,4 @@ MIT
 
 ---
 
-Built with ❤️ by [Great IT Nordic](https://greatit.se/en/) — Microsoft 365 specialists based in Sweden.
+Built by [Great IT Nordic](https://greatit.se/en/) — Microsoft 365 specialists based in Sweden.
