@@ -332,18 +332,33 @@ body { background: var(--bg-root); color: var(--text-primary); font-family: var(
 .cat-title {
   font-size: 11px; font-weight: 600; color: var(--text-dim);
   text-transform: uppercase; letter-spacing: 1.5px;
-  padding-bottom: 8px; margin-bottom: 8px;
-  border-bottom: 1px solid var(--border);
+  padding: 10px 12px 10px 14px; margin-bottom: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
   cursor: pointer; user-select: none;
+  transition: all 0.15s;
 }
-.cat-title:hover { color: var(--text-secondary); }
+.cat-title:hover { border-color: var(--border-hover); color: var(--text-secondary); }
 .cat-title .cat-chevron {
   transition: transform 0.2s; color: var(--text-dim); flex-shrink: 0; margin-left: auto;
 }
+.cat-title.collapsed { margin-bottom: 4px; }
 .cat-title.collapsed .cat-chevron { transform: rotate(-90deg); }
 .cat-cards { transition: all 0.2s; }
 .cat-cards.collapsed { display: none; }
+.expand-all-row {
+  display: flex; gap: 8px; margin-bottom: 16px; align-items: center;
+}
+.expand-all-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 5px 12px; border-radius: var(--radius-sm);
+  background: var(--bg-elevated); border: 1px solid var(--border);
+  color: var(--text-secondary); font-size: 11px; font-family: var(--font-body);
+  font-weight: 500; cursor: pointer; transition: all 0.15s;
+}
+.expand-all-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
 .cat-title .cnt {
   font-size: 10px; font-weight: 500; letter-spacing: 0;
   text-transform: none;
@@ -2030,7 +2045,7 @@ let showLegacy = false;
 //  STATE
 // ═══════════════════════════════════════════════
 let expandedId = null;
-let collapsedCats = new Set();
+let collapsedCats = new Set(CATEGORIES);
 let builderMode = false;
 let selectedCmds = new Set();
 let favorites = JSON.parse(localStorage.getItem('m365_favs') || '[]');
@@ -2221,6 +2236,7 @@ function setFilter(id) {
     activeWorkflow = null;
   }
   expandedId = null;
+  collapsedCats.clear();
   document.getElementById('searchInput').value = '';
   highlightNav();
   renderCommands();
@@ -2609,7 +2625,7 @@ function copyScript() {
 // ═══════════════════════════════════════════════
 //  RENDER
 // ═══════════════════════════════════════════════
-function onSearch() { expandedId = null; activeFilter = 'All'; activeWorkflow = null; highlightNav(); renderCommands(); updateUrlParams(); }
+function onSearch() { expandedId = null; activeFilter = 'All'; activeWorkflow = null; collapsedCats.clear(); highlightNav(); renderCommands(); updateUrlParams(); }
 
 function getFiltered() {
   const q = document.getElementById('searchInput').value.toLowerCase();
@@ -2734,6 +2750,14 @@ function renderCommands() {
   filtered.forEach(c => { if(!grouped[c.cat]) grouped[c.cat]=[]; grouped[c.cat].push(c); });
 
   let html = '';
+  const catNames = Object.keys(grouped);
+  if(catNames.length > 1) {
+    html += `<div class="expand-all-row">`;
+    html += `<button class="expand-all-btn" onclick="expandAllCats()">▼ Expand All</button>`;
+    html += `<button class="expand-all-btn" onclick="collapseAllCats()">▲ Collapse All</button>`;
+    html += `<span style="font-size:11px;color:var(--text-dim);margin-left:4px">${catNames.length} categories · ${filtered.length} commands</span>`;
+    html += `</div>`;
+  }
   Object.entries(grouped).forEach(([cat, cmds]) => {
     const catId = cat.replace(/[^a-zA-Z0-9]/g, '_');
     const isCollapsed = collapsedCats.has(cat);
@@ -2836,6 +2860,16 @@ function toggleCard(id) { expandedId = expandedId===id?null:id; renderCommands()
 function toggleCatCollapse(cat) {
   if(collapsedCats.has(cat)) collapsedCats.delete(cat);
   else collapsedCats.add(cat);
+  renderCommands();
+}
+
+function expandAllCats() {
+  collapsedCats.clear();
+  renderCommands();
+}
+
+function collapseAllCats() {
+  CATEGORIES.forEach(c => collapsedCats.add(c));
   renderCommands();
 }
 
